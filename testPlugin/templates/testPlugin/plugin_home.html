@@ -1,0 +1,226 @@
+{% extends "baseTemplate/index.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Test Plugin - CyberPanel" %}{% endblock %}
+
+{% block content %}
+{% include "pluginHolder/cpui_head.html" %}
+<div class="cpui" id="cpuiApp">
+  <div class="cpui-hero">
+    <h1>Test Plugin home</h1>
+    <p>Plugin home shell for testing.</p>
+    <div class="cpui-meta"><span class="cpui-chip">Test</span></div>
+  </div>
+  <div class="cpui-section">
+<div class="test-plugin-wrapper">
+    <div class="test-plugin-container">
+        <!-- Plugin Header -->
+        <div class="plugin-header">
+            <h1>
+                <div class="icon">
+                    <i class="fas fa-vial"></i>
+                </div>
+                {% trans "Test Plugin" %}
+            </h1>
+            <p>{% trans "A comprehensive test plugin with enable/disable functionality, test button, and popup messages" %}</p>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div class="control-row">
+                <div class="control-group">
+                    <label for="plugin-toggle" style="font-weight: 600; color: var(--text-primary, #2f3640);">
+                        {% trans "Enable Plugin" %}
+                    </label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="plugin-toggle" {% if plugin_enabled %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="control-group">
+                    <button class="btn-test" id="test-button" {% if not plugin_enabled %}disabled{% endif %}>
+                        <i class="fas fa-play"></i>
+                        {% trans "Test Button" %}
+                    </button>
+                    
+                    <a href="{% url 'testPlugin:plugin_settings' %}" class="btn-secondary">
+                        <i class="fas fa-cog"></i>
+                        {% trans "Settings" %}
+                    </a>
+                    
+                    <a href="{% url 'testPlugin:plugin_logs' %}" class="btn-secondary">
+                        <i class="fas fa-list"></i>
+                        {% trans "Logs" %}
+                    </a>
+                    
+        <a href="{% url 'testPlugin:plugin_docs' %}" class="btn-secondary">
+            <i class="fas fa-book"></i>
+            {% trans "Documentation" %}
+        </a>
+        
+        <a href="{% url 'testPlugin:security_info' %}" class="btn-secondary">
+            <i class="fas fa-shield-alt"></i>
+            {% trans "Security Info" %}
+        </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="test-count">{{ settings.test_count|default:0 }}</div>
+                <div class="stat-label">{% trans "Test Clicks" %}</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">
+                    {% if plugin_enabled %}
+                        <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                    {% else %}
+                        <i class="fas fa-times-circle" style="color: #ef4444;"></i>
+                    {% endif %}
+                </div>
+                <div class="stat-label">{% trans "Plugin Status" %}</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">{{ recent_logs|length }}</div>
+                <div class="stat-label">{% trans "Recent Activities" %}</div>
+            </div>
+        </div>
+
+        <!-- Recent Logs -->
+        <div class="logs-section">
+            <h3 style="margin-bottom: 20px; color: var(--text-primary, #2f3640);">
+                <i class="fas fa-history" style="margin-right: 8px; color: #5856d6;"></i>
+                {% trans "Recent Activity" %}
+            </h3>
+            
+            <div class="logs-list">
+                {% for log in recent_logs %}
+                <div class="log-item">
+                    <div class="log-icon {% if 'error' in log.action %}warning{% elif 'success' in log.action or 'click' in log.action %}success{% else %}info{% endif %}">
+                        {% if 'click' in log.action %}
+                            <i class="fas fa-mouse-pointer"></i>
+                        {% elif 'toggle' in log.action %}
+                            <i class="fas fa-toggle-on"></i>
+                        {% elif 'settings' in log.action %}
+                            <i class="fas fa-cog"></i>
+                        {% else %}
+                            <i class="fas fa-info-circle"></i>
+                        {% endif %}
+                    </div>
+                    <div class="log-content">
+                        <div class="log-action">{{ log.action|title }}</div>
+                        <div class="log-message">{{ log.message }}</div>
+                    </div>
+                    <div class="log-time">{{ log.timestamp|date:"M d, H:i" }}</div>
+                </div>
+                {% empty %}
+                <div style="text-align: center; padding: 40px; color: var(--text-secondary, #64748b);">
+                    <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                    <p>{% trans "No recent activity" %}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popup Message Container -->
+<div id="popup-container"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleSwitch = document.getElementById('plugin-toggle');
+    const testButton = document.getElementById('test-button');
+    const testCountElement = document.getElementById('test-count');
+    
+    // Toggle switch functionality
+    toggleSwitch.addEventListener('change', function() {
+        fetch('{% url "testPlugin:toggle_plugin" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 1) {
+                testButton.disabled = !data.enabled;
+                showPopup('success', 'Plugin Toggle', data.message);
+                location.reload(); // Refresh to update UI
+            } else {
+                showPopup('error', 'Error', data.error_message);
+            }
+        })
+        .catch(error => {
+            showPopup('error', 'Error', 'Failed to toggle plugin');
+        });
+    });
+    
+    // Test button functionality
+    testButton.addEventListener('click', function() {
+        if (testButton.disabled) return;
+        
+        testButton.disabled = true;
+        testButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+        
+        fetch('{% url "testPlugin:test_button" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 1) {
+                testCountElement.textContent = data.test_count;
+                showPopup(data.popup_message.type, data.popup_message.title, data.popup_message.message);
+            } else {
+                showPopup('error', 'Error', data.error_message);
+            }
+        })
+        .catch(error => {
+            showPopup('error', 'Error', 'Failed to execute test');
+        })
+        .finally(() => {
+            testButton.disabled = false;
+            testButton.innerHTML = '<i class="fas fa-play"></i> Test Button';
+        });
+    });
+    
+    // Popup message function
+    function showPopup(type, title, message) {
+        const popupContainer = document.getElementById('popup-container');
+        const popup = document.createElement('div');
+        popup.className = `popup-message ${type}`;
+        
+        popup.innerHTML = `
+            <button class="popup-close" onclick="this.parentElement.remove()">&times;</button>
+            <div class="popup-title">${title}</div>
+            <div class="popup-content">${message}</div>
+            <div class="popup-time">${new Date().toLocaleTimeString()}</div>
+        `;
+        
+        popupContainer.appendChild(popup);
+        
+        // Show popup
+        setTimeout(() => popup.classList.add('show'), 100);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            popup.classList.remove('show');
+            setTimeout(() => popup.remove(), 300);
+        }, 5000);
+    }
+});
+</script>
+  </div>
+</div>
+{% endblock %}

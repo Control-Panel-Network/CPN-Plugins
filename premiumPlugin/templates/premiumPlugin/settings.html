@@ -1,0 +1,170 @@
+{% extends "baseTemplate/index.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Premium Plugin Settings - CyberPanel" %}{% endblock %}
+
+{% block content %}
+{% include "pluginHolder/cpui_head.html" %}
+<div class="cpui" id="cpuiApp">
+  <div class="cpui-hero">
+    <h1>Premium settings</h1>
+    <p>Configure the premium plugin demo.</p>
+    <div class="cpui-meta"><span class="cpui-chip">Premium</span></div>
+  </div>
+  <div class="cpui-section">
+<div class="premium-plugin-container">
+    <div class="settings-form">
+        <span class="premium-badge">{% trans "Premium Plugin" %}</span>
+        <h1>{% trans "Premium Plugin Settings" %}</h1>
+
+        {% if show_payment_ui %}
+        <!-- Activate Premium Access -->
+        <div style="background: #e6f7ff; border: 2px solid #17a2b8; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+            <h3 style="color: #17a2b8; margin-top: 0;"><i class="fas fa-key"></i> {% trans "Activate Premium Access" %}</h3>
+            <p style="color: #495057;">{% trans "If you have an activation key, enter it below." %}</p>
+            <div id="activation-msg" style="display: none; margin-bottom: 10px; padding: 10px; border-radius: 6px;"></div>
+            <form id="activation-form" style="display: flex; gap: 10px; align-items: flex-end;">
+                {% csrf_token %}
+                <input type="text" id="activation-key" name="activation_key" placeholder="PREMIUMPLUGIN-XXXX-XXXX-XXXX" style="flex: 1; padding: 10px; border: 2px solid #17a2b8; border-radius: 6px; font-family: monospace; text-transform: uppercase;" />
+                <button type="submit" class="btn btn-primary" id="activate-btn"><i class="fas fa-check-circle"></i> {% trans "Activate" %}</button>
+            </form>
+        </div>
+        <!-- Payment Method Preference -->
+        <div style="margin-bottom: 25px;">
+            <label style="font-weight: 600;">{% trans "Payment Method Preference" %}</label>
+            <form id="payment-method-form" method="post" action="{% url 'premiumPlugin:save_payment_method' %}" style="display: inline-block; margin-left: 10px;">
+                {% csrf_token %}
+                <select name="payment_method" onchange="this.form.submit()" style="padding: 8px 12px; border-radius: 6px;">
+                    <option value="both" {% if config.payment_method == 'both' %}selected{% endif %}>{% trans "Check Both (Patreon or PayPal)" %}</option>
+                    <option value="patreon" {% if config.payment_method == 'patreon' %}selected{% endif %}>{% trans "Patreon Only" %}</option>
+                    <option value="paypal" {% if config.payment_method == 'paypal' %}selected{% endif %}>{% trans "PayPal Only" %}</option>
+                </select>
+            </form>
+        </div>
+        {% else %}
+        <div style="background: #d4edda; border: 2px solid #28a745; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+            <i class="fas fa-check-circle" style="color: #28a745;"></i> <strong>{% trans "Premium Access Active" %}</strong> — {% trans "Access granted via Plugin Grants or activation key." %}
+        </div>
+        {% endif %}
+        
+        <!-- Plugin Information Section - Always Visible -->
+        <div class="plugin-info-section" style="background: #d1ecf1 !important; border: 1px solid #bee5eb !important; border-radius: 8px !important; padding: 15px 20px !important; margin-bottom: 25px !important; display: block !important; visibility: visible !important; opacity: 1 !important;">
+            <i class="fas fa-info-circle" style="color: #0c5460; margin-right: 8px;"></i>
+            <strong style="color: #0c5460; font-weight: 600;">{% trans "Plugin Information" %}</strong>
+            <ul style="list-style: none !important; padding-left: 0 !important; margin-top: 10px !important; margin-bottom: 0 !important;">
+                <li style="margin-bottom: 8px;"><strong>{% trans "Name" %}:</strong> {{ plugin_name|default:"Premium Plugin Example" }}</li>
+                <li style="margin-bottom: 8px;"><strong>{% trans "Version" %}:</strong> {{ version|default:"1.0.0" }}</li>
+                <li style="margin-bottom: 0;">
+                    <strong>{% trans "Status" %}:</strong> 
+                    <span class="badge" style="background: {% if has_access %}#28a745{% else %}#6c757d{% endif %} !important; color: white !important; padding: 4px 10px !important; border-radius: 4px !important; font-size: 12px !important; font-weight: 600 !important; display: inline-block !important;">
+                        {{ plugin_status|default:status|default:"Active" }}
+                    </span>
+                </li>
+            </ul>
+        </div>
+        
+        <p>{{ description }}</p>
+        
+        <form method="post" id="settings-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>{% trans "Setting 1" %}</label>
+                <input type="text" class="form-control" name="setting1" value="" placeholder="{% trans 'Enter setting value' %}">
+            </div>
+            
+            <div class="form-group">
+                <label>{% trans "Setting 2" %}</label>
+                <input type="text" class="form-control" name="setting2" value="" placeholder="{% trans 'Enter setting value' %}">
+            </div>
+            
+            <div class="form-group">
+                <label>{% trans "Setting 3 (Advanced)" %}</label>
+                <textarea class="form-control" name="setting3" rows="4" placeholder="{% trans 'Enter advanced configuration' %}"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="enable_feature">
+                    {% trans "Enable Premium Feature" %}
+                </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> {% trans "Save Settings" %}
+            </button>
+        </form>
+
+        {% if show_payment_ui %}
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            async function persistActivationInCyberPanel(pluginName, activationKey) {
+                try {
+                    if (!activationKey) return;
+                    const formEl = document.getElementById('activation-form');
+                    const tok = formEl ? formEl.querySelector('[name=csrfmiddlewaretoken]') : null;
+                    await fetch('/plugins/api/store-activation/' + encodeURIComponent(pluginName) + '/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': tok ? tok.value : ''
+                        },
+                        body: JSON.stringify({ activation_key: activationKey })
+                    });
+                } catch (e) {
+                    console.warn('Activation persistence hook failed:', e);
+                }
+            }
+            const form = document.getElementById('activation-form');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const key = document.getElementById('activation-key').value.trim().toUpperCase();
+                    if (!key) return;
+                    const btn = document.getElementById('activate-btn');
+                    const msg = document.getElementById('activation-msg');
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Activating...';
+                    try {
+                        const res = await fetch('/plugins/premiumPlugin/activate-key/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value },
+                            body: JSON.stringify({ activation_key: key })
+                        });
+                        const raw = await res.text();
+                        const ct = (res.headers.get('content-type') || '').toLowerCase();
+                        let data;
+                        if (ct.indexOf('application/json') !== -1) {
+                            try { data = JSON.parse(raw); } catch (e) { throw new Error('Invalid response from server. Please reload the page.'); }
+                        } else {
+                            var s = raw.trim(); if (s.indexOf('<!DOCTYPE') === 0 || s.indexOf('<html') === 0) {
+                                throw new Error('Session expired or server returned a page instead of data. Reload and try again.');
+                            }
+                            throw new Error('Could not activate. Check your network and try again.');
+                        }
+                        msg.textContent = data.success ? '✅ ' + data.message : '❌ ' + (data.message || 'Invalid activation key for this plugin.');
+                        msg.style.display = 'block';
+                        msg.style.background = data.success ? '#d4edda' : '#f8d7da';
+                        msg.style.color = data.success ? '#155724' : '#721c24';
+                        if (data.success) {
+                            await persistActivationInCyberPanel('premiumPlugin', key);
+                            document.getElementById('activation-key').value = '';
+                            setTimeout(function() { location.reload(); }, 2000);
+                        }
+                    } catch (err) {
+                        msg.textContent = '❌ ' + (err && err.message ? err.message : 'Activation failed.');
+                        msg.style.display = 'block';
+                        msg.style.background = '#f8d7da';
+                        msg.style.color = '#721c24';
+                    }
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i> Activate';
+                });
+            }
+        });
+        </script>
+        {% endif %}
+    </div>
+</div>
+  </div>
+</div>
+{% endblock %}

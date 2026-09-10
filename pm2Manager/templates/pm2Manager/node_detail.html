@@ -1,0 +1,116 @@
+{% extends "baseTemplate/index.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "PM2 Node Details - CyberPanel" %}{% endblock %}
+
+{% block content %}
+{% include "pluginHolder/cpui_head.html" %}
+<div class="cpui" id="cpuiApp">
+  <div class="cpui-hero">
+    <h1>PM2 process</h1>
+    <p>Inspect a single Node.js / PM2 process.</p>
+    <div class="cpui-meta"><span class="cpui-chip">Node</span></div>
+  </div>
+  <div class="cpui-section">
+<div class="node-detail">
+    <div class="detail-header">
+        <div>
+            <a href="/plugins/pm2Manager/" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                {% trans "Back to Dashboard" %}
+            </a>
+            <h1 class="detail-title" style="margin-top: 15px;">
+                <i class="fas fa-server"></i>
+                {{ app_name }}
+            </h1>
+        </div>
+        <div class="action-buttons">
+            <button class="action-btn btn-start" onclick="startApp('{{ app_name }}')" id="btnStart" style="display: none;">
+                <i class="fas fa-play"></i> Start
+            </button>
+            <button class="action-btn btn-stop" onclick="stopApp('{{ app_name }}')" id="btnStop" style="display: none;">
+                <i class="fas fa-stop"></i> Stop
+            </button>
+            <button class="action-btn btn-restart" onclick="restartApp('{{ app_name }}')" id="btnRestart" style="display: none;">
+                <i class="fas fa-redo"></i> Restart
+            </button>
+        </div>
+    </div>
+    
+    <div class="detail-grid">
+        <div class="detail-card">
+            <h3 class="card-title">
+                <i class="fas fa-info-circle"></i>
+                {% trans "Application Information" %}
+            </h3>
+            <div id="appInfo">
+                <div class="info-row">
+                    <span class="info-label">{% trans "Loading..." %}</span>
+                    <span class="info-value"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="detail-card">
+            <h3 class="card-title">
+                <i class="fas fa-chart-line"></i>
+                {% trans "Resource Usage" %}
+            </h3>
+            <div id="resourceUsage">
+                <div class="info-row">
+                    <span class="info-label">{% trans "Loading..." %}</span>
+                    <span class="info-value"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="detail-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 class="card-title" style="margin: 0;">
+                <i class="fas fa-file-alt"></i>
+                {% trans "Application Logs" %}
+            </h3>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="typeof window.copyAllLogs === 'function' && window.copyAllLogs();" id="btnCopyLogs" style="padding: 8px 16px; background: #64748b; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    <i class="fas fa-copy"></i> Copy all
+                </button>
+                <button onclick="refreshLogs()" style="padding: 8px 16px; background: #5856d6; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+        <div class="logs-container" id="logsContainer">
+            <div class="log-line">{% trans "Loading logs..." %}</div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'pm2Manager/js/node_detail.js' %}?v=4"></script>
+<script>
+    const appName = '{{ app_name|escapejs }}';
+    (function() {
+        function copyLogs() {
+            var c = document.getElementById('logsContainer');
+            var btn = document.getElementById('btnCopyLogs');
+            if (!c || !btn) return;
+            var t = (c.innerText || c.textContent || '').trim();
+            if (!t) {
+                btn.innerHTML = '<i class="fas fa-copy"></i> Nothing to copy';
+                setTimeout(function() { btn.innerHTML = '<i class="fas fa-copy"></i> Copy all'; }, 1500);
+                return;
+            }
+            navigator.clipboard.writeText(t).then(function() {
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(function() { btn.innerHTML = '<i class="fas fa-copy"></i> Copy all'; }, 2000);
+            }).catch(function() {
+                btn.innerHTML = '<i class="fas fa-copy"></i> Copy failed';
+                setTimeout(function() { btn.innerHTML = '<i class="fas fa-copy"></i> Copy all'; }, 1500);
+            });
+        }
+        window.copyAllLogs = window.copyAllLogs || copyLogs;
+    })();
+</script>
+  </div>
+</div>
+{% endblock %}

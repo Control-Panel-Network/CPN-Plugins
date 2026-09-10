@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>CSP Manager</name>
+    <type>Security</type>
+    <version>1.0.3</version>
+    <description>Manages Content Security Policy headers for CyberPanel. Supports Google Analytics, Tag Manager, Discord Auth, and all required resources. Ensures consistent CSP across domain and IP access.</description>
+    <author>master3395</author>
+    <website>https://github.com/master3395/cyberpanel-plugins</website>
+    <license>MIT</license>
+    <dependencies>
+        <python>3.6+</python>
+        <django>2.2+</django>
+        <cyberpanel>2.5.5+</cyberpanel>
+    </dependencies>
+    <compatibility>
+        <min_version>2.5.5</min_version>
+        <max_version>3.0.0</max_version>
+    </compatibility>
+    <permissions>
+        <admin>true</admin>
+        <user>false</user>
+    </permissions>
+    <url>/plugins/cspManager/</url>
+    <settings_url>/plugins/cspManager/settings/</settings_url>
+</plugin>

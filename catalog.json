@@ -1,0 +1,94 @@
+﻿{
+    "schema_version":  1,
+    "plugins":  [
+                    {
+                        "id":  "autoBanSecurityAlerts",
+                        "path":  "autoBanSecurityAlerts"
+                    },
+                    {
+                        "id":  "contaboAutoSnapshot",
+                        "path":  "contaboAutoSnapshot"
+                    },
+                    {
+                        "id":  "cspManager",
+                        "path":  "cspManager"
+                    },
+                    {
+                        "id":  "discordAuth",
+                        "path":  "discordAuth"
+                    },
+                    {
+                        "id":  "discordWebhooks",
+                        "path":  "discordWebhooks"
+                    },
+                    {
+                        "id":  "emailMarketing",
+                        "path":  "emailMarketing"
+                    },
+                    {
+                        "id":  "examplePlugin",
+                        "path":  "examplePlugin"
+                    },
+                    {
+                        "id":  "fail2ban",
+                        "path":  "fail2ban"
+                    },
+                    {
+                        "id":  "googleTagManager",
+                        "path":  "googleTagManager"
+                    },
+                    {
+                        "id":  "limitedPhpmyAdmin",
+                        "path":  "limitedPhpmyAdmin"
+                    },
+                    {
+                        "id":  "memcacheManager",
+                        "path":  "memcacheManager"
+                    },
+                    {
+                        "id":  "panelAccess",
+                        "path":  "panelAccess"
+                    },
+                    {
+                        "id":  "paypalPremiumPlugin",
+                        "path":  "paypalPremiumPlugin"
+                    },
+                    {
+                        "id":  "pm2Manager",
+                        "path":  "pm2Manager"
+                    },
+                    {
+                        "id":  "port_manager",
+                        "path":  "port_manager"
+                    },
+                    {
+                        "id":  "postgresManager",
+                        "path":  "postgresManager"
+                    },
+                    {
+                        "id":  "premiumPlugin",
+                        "path":  "premiumPlugin"
+                    },
+                    {
+                        "id":  "redisManager",
+                        "path":  "redisManager"
+                    },
+                    {
+                        "id":  "roundcubeWebmail",
+                        "path":  "roundcubeWebmail"
+                    },
+                    {
+                        "id":  "snappymailAdmin",
+                        "path":  "snappymailAdmin"
+                    },
+                    {
+                        "id":  "snappymailWebmail",
+                        "path":  "snappymailWebmail"
+                    },
+                    {
+                        "id":  "testPlugin",
+                        "path":  "testPlugin"
+                    }
+                ],
+    "catalog":  "CPN-Plugins"
+}

@@ -1,0 +1,184 @@
+{% extends "baseTemplate/index.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "PM2 Manager - CyberPanel" %}{% endblock %}
+
+{% block content %}
+{% include "pluginHolder/cpui_head.html" %}
+<div class="cpui" id="cpuiApp">
+  <div class="cpui-hero">
+    <h1>PM2 Manager</h1>
+    <p>Manage Node.js processes with PM2.</p>
+    <div class="cpui-meta"><span class="cpui-chip">Node</span></div>
+  </div>
+  <div class="cpui-section">
+<div class="pm2-dashboard">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">
+            <i class="fas fa-server"></i>
+            {% trans "PM2 Manager" %}
+            <span class="realtime-indicator">
+                <span class="pulse-dot"></span>
+                <span>{% trans "Live" %}</span>
+            </span>
+            {% if pm2_status %}
+            <span id="pm2StatusBadge" class="status-badge {% if pm2_status.running %}status-online{% else %}status-stopped{% endif %}" style="margin-left: 12px; font-size: 11px;">
+                {% if pm2_status.running %}{% trans "PM2 running" %}{% elif pm2_status.installed %}{% trans "PM2 daemon not running" %}{% else %}{% trans "PM2 not installed" %}{% endif %}
+            </span>
+            {% endif %}
+        </h1>
+        <div class="action-buttons">
+            <button class="btn-add-app" onclick="showAddAppModal()">
+                <i class="fas fa-plus"></i>
+                {% trans "Add App" %}
+            </button>
+            <button class="btn-add-app" onclick="refreshApps()" style="background: #5856d6;">
+                <i class="fas fa-sync-alt"></i>
+                {% trans "Refresh" %}
+            </button>
+        </div>
+    </div>
+    
+    <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+            <div class="stat-icon" style="color: #5856d6;">
+                <i class="fas fa-cube"></i>
+            </div>
+            <div class="stat-label">{% trans "Total Apps" %}</div>
+            <div class="stat-value" id="totalApps">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="color: #10b981;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-label">{% trans "Running" %}</div>
+            <div class="stat-value" id="runningApps">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="color: #ef4444;">
+                <i class="fas fa-stop-circle"></i>
+            </div>
+            <div class="stat-label">{% trans "Stopped" %}</div>
+            <div class="stat-value" id="stoppedApps">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="color: #f59e0b;">
+                <i class="fas fa-microchip"></i>
+            </div>
+            <div class="stat-label">{% trans "Avg CPU" %}</div>
+            <div class="stat-value" id="avgCpu">0%</div>
+        </div>
+    </div>
+    
+    <div class="apps-table-wrapper">
+        <!-- One table: thead + tbody are siblings; colgroup forces column widths so headers and cells align -->
+        <table class="apps-table">
+            <colgroup>
+                <col class="col-id" style="width: 40px;">
+                <col class="col-name" style="width: 140px;">
+                <col class="col-namespace" style="width: 80px;">
+                <col class="col-version" style="width: 60px;">
+                <col class="col-mode" style="width: 60px;">
+                <col class="col-status" style="width: 90px;">
+                <col class="col-cpu" style="width: 80px;">
+                <col class="col-memory" style="width: 100px;">
+                <col class="col-uptime" style="width: 80px;">
+                <col class="col-restarts" style="width: 55px;">
+                <col class="col-user" style="width: 80px;">
+                <col class="col-watching" style="width: 65px;">
+                <col class="col-actions" style="width: 270px;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="sortable-column col-id" data-sort-key="pm_id" style="width:40px;">{% trans "ID" %}</th>
+                    <th class="sortable-column col-name" data-sort-key="name" style="width:140px;">{% trans "App Name" %}</th>
+                    <th class="sortable-column col-namespace" data-sort-key="namespace" style="width:80px;">{% trans "Namespace" %}</th>
+                    <th class="sortable-column col-version" data-sort-key="version" style="width:60px;">{% trans "Version" %}</th>
+                    <th class="sortable-column col-mode" data-sort-key="mode" style="width:60px;">{% trans "Mode" %}</th>
+                    <th class="sortable-column col-status" data-sort-key="status" style="width:90px;">{% trans "Status" %}</th>
+                    <th class="sortable-column col-cpu" data-sort-key="cpu" style="width:80px;">{% trans "CPU" %}</th>
+                    <th class="sortable-column col-memory" data-sort-key="memory" style="width:100px;">{% trans "Memory" %}</th>
+                    <th class="sortable-column col-uptime" data-sort-key="uptime" style="width:80px;">{% trans "Uptime" %}</th>
+                    <th class="sortable-column col-restarts" data-sort-key="restarts" style="width:55px;">{% trans "Restarts" %}</th>
+                    <th class="sortable-column col-user" data-sort-key="user" style="width:80px;">{% trans "User" %}</th>
+                    <th class="sortable-column col-watching" data-sort-key="watching" style="width:65px;">{% trans "Watching" %}</th>
+                    <th class="col-actions" style="width:270px;">{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody id="appsTableBody">
+                <tr>
+                    <td colspan="13" class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <div>{% trans "Checking PM2 status and loading applications..." %}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add App Modal -->
+<div id="addAppModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+    <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+        <h2 style="margin-top: 0;">{% trans "Add New PM2 Application" %}</h2>
+        <form id="addAppForm">
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">{% trans "Application Name" %} *</label>
+                <input type="text" name="name" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">{% trans "Script Path" %} *</label>
+                <input type="text" name="script_path" required placeholder="/path/to/script.js" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">{% trans "Arguments" %}</label>
+                <input type="text" name="args" placeholder="--port 3000" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">{% trans "Instances" %}</label>
+                <input type="number" name="instances" value="1" min="1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">{% trans "Execution Mode" %}</label>
+                <select name="exec_mode" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                    <option value="fork">Fork</option>
+                    <option value="cluster">Cluster</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">{% trans "Memory Limit" %}</label>
+                <input type="text" name="max_memory_restart" placeholder="e.g., 500M, 1G (optional)" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                <small style="color: #64748b; font-size: 12px;">{% trans "Restart app when memory exceeds this limit (e.g., 500M, 1G)" %}</small>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">{% trans "Auto Restart" %}</label>
+                <select name="autorestart" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                    <option value="true">{% trans "Enabled" %}</option>
+                    <option value="false">{% trans "Disabled" %}</option>
+                </select>
+                <small style="color: #64748b; font-size: 12px;">{% trans "Automatically restart app on crash" %}</small>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">{% trans "Working Directory (CWD)" %}</label>
+                <input type="text" name="cwd" placeholder="/path/to/working/directory (optional)" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                <small style="color: #64748b; font-size: 12px;">{% trans "Current working directory for the process" %}</small>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">{% trans "Interpreter" %}</label>
+                <input type="text" name="interpreter" placeholder="e.g., node, python, ruby (optional)" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                <small style="color: #64748b; font-size: 12px;">{% trans "Interpreter to use (default: node)" %}</small>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button type="button" onclick="closeAddAppModal()" style="padding: 10px 20px; border: 1px solid #ddd; background: white; border-radius: 6px; cursor: pointer;">{% trans "Cancel" %}</button>
+                <button type="submit" style="padding: 10px 20px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">{% trans "Add App" %}</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'pm2Manager/js/dashboard.js' %}?v=15"></script>
+  </div>
+</div>
+{% endblock %}

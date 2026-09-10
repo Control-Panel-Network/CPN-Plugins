@@ -1,0 +1,115 @@
+{% extends "baseTemplate/index.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Snapshot History - {{ title }}{% endblock %}
+
+{% block content %}
+{% include "pluginHolder/cpui_head.html" %}
+<div class="cpui" id="cpuiApp">
+  <div class="cpui-hero">
+    <h1>Snapshot history</h1>
+    <p>Recent Contabo snapshot jobs and results.</p>
+    <div class="cpui-meta"><span class="cpui-chip">Backup</span></div>
+  </div>
+  <div class="cpui-section">
+<div class="settings-container">
+    <div class="page-header">
+        <h1>📸 Snapshot History</h1>
+        <p>View all snapshot creation history</p>
+    </div>
+
+    <div class="card">
+        <p><a href="{% url 'contaboAutoSnapshot:settings' %}">← Back to Settings</a></p>
+        
+        {% if snapshots %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Snapshot Name</th>
+                    <th>VPS ID</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Completed</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for snapshot in snapshots %}
+                <tr>
+                    <td><strong>{{ snapshot.snapshot_name }}</strong></td>
+                    <td><code>{{ snapshot.vps_id }}</code></td>
+                    <td>
+                        <span class="status-badge status-{{ snapshot.status }}">
+                            {{ snapshot.get_status_display }}
+                        </span>
+                        {% if snapshot.error_message %}
+                            <br><small style="color: #e53e3e;">{{ snapshot.error_message|truncatechars:50 }}</small>
+                        {% endif %}
+                    </td>
+                    <td>{{ snapshot.created_at|date:"Y-m-d H:i:s" }}</td>
+                    <td>
+                        {% if snapshot.completed_at %}
+                            {{ snapshot.completed_at|date:"Y-m-d H:i:s" }}
+                        {% else %}
+                            <span style="color: #a0aec0;">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteSnapshot({{ snapshot.id }})" title="Delete">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">
+            No snapshots in history yet.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function deleteSnapshot(snapshotId) {
+    if (!confirm('Are you sure you want to delete this snapshot from history?')) return;
+    
+    fetch(`/plugins/contaboAutoSnapshot/snapshot/${snapshotId}/delete/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error deleting snapshot');
+    });
+}
+</script>
+  </div>
+</div>
+{% endblock %}
