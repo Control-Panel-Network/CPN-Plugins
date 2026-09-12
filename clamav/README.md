@@ -2,8 +2,6 @@
 
 CPN Panel catalog plugin. Installs **ClamAV** on the host so **Security → Malware scan** can use the free local engine (`clamscan` / `clamd`).
 
-This package is for **CPN Panel** (Control Panel Network). It is not branded as CyberPanel.
-
 ## What it does
 
 1. Catalog install copies this folder to `/home/<domain>/plugins/clamav/`.
@@ -55,5 +53,4 @@ sudo cpn plugin remove --domain example.com --id clamav --yes
 
 ## Security
 
-- No API keys in this package.
 - Definition updates use your OS ClamAV/freshclam configuration only.

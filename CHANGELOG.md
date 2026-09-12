@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-09-12] - Drop CyberPanel disclaimer boilerplate
+
+### Changed
+- Removed repeated "not CyberPanel" / "no API keys in package" disclaimer lines from root README, `clamav` README, `ntMalwareApi` README/`meta.xml`, and `fail2ban/CPN.md`. Install and entitlement docs kept.
+
 ## [2026-09-12] - ClamAV and paid malware API catalog packages
 
 ### Added
