@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>ClamAV (free malware scanner)</name>
+    <type>Security</type>
+    <version>1.0.0</version>
+    <description>Free on-host ClamAV packages for CPN Panel. Installs clamav/clamd via the host package manager so Security → Malware scan can detect clamscan/clamd. No third-party paid brands.</description>
+    <author>master3395</author>
+    <website>https://newstargeted.com</website>
+    <license>MIT</license>
+    <category>Security</category>
+    <paid>false</paid>
+    <pricing>free</pricing>
+    <compatibility>
+        <min_version>0.2.0</min_version>
+    </compatibility>
+    <requirements>
+        <os>AlmaLinux 8+</os>
+        <os>AlmaLinux 9+</os>
+        <os>AlmaLinux 10+</os>
+        <software>clamav</software>
+    </requirements>
+    <features>
+        <feature>Install ClamAV CLI and daemon packages</feature>
+        <feature>Enable clamd when available</feature>
+        <feature>Unlocks CPN Security → Malware scan free path</feature>
+    </features>
+</plugin>

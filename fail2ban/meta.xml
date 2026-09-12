@@ -2,8 +2,10 @@
 <plugin>
     <name>Fail2ban Security Manager</name>
     <type>Security</type>
-    <version>1.4.1</version>
-    <description>Advanced fail2ban management plugin for CyberPanel with modern UI, real-time monitoring, and comprehensive security features.</description>
+    <version>1.4.2</version>
+    <description>Fail2ban host package helper and management tree for CPN Panel. Run install-host.sh as root so Security → Fail2ban can probe fail2ban-client. Includes jail and IP management assets.</description>
+    <paid>false</paid>
+    <pricing>free</pricing>
     <author>Master3395</author>
     <website>https://newstargeted.com</website>
     <license>MIT</license>

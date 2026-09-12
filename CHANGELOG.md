@@ -1,9 +1,22 @@
-# Changelog - CyberPanel Plugins
+# Changelog - CPN-Plugins
 
 All notable changes to this repository will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2026-09-12] - ClamAV and paid malware API catalog packages
+
+### Added
+- **clamav** (1.0.0): Free host ClamAV install package (`install-host.sh` / `uninstall-host.sh`) for CPN Security → Malware scan.
+- **ntMalwareApi** (1.0.0): Paid News Targeted malware API docs and `malware.json.example` (no secrets). Token path: `/var/lib/cpn/malware.json`.
+- **fail2ban** (1.4.1 → **1.4.2**): CPN host install helper (`install-host.sh`), `CPN.md`, CPN-facing `meta.xml` description.
+- `catalog.json` entries for `clamav` and `ntMalwareApi`.
+- `to-do/HOST-SECURITY-PLUGINS.md` epic notes.
+
+### Changed
+- Root README lists security host plugins and catalog cache refresh.
+- Changelog title clarified as CPN-Plugins (historical entries may still mention older hosts).
 
 ## [2026-08-05] - Fail2ban 1.4.1 Security Logs polish
 
