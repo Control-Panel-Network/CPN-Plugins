@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>News Targeted Hosting Commerce (paid)</name>
+    <type>Billing</type>
+    <version>1.0.0</version>
+    <description>Paid CPN hosting business layer: clients, packages, orders, invoices, subscriptions, site ownership, and client account recovery. Entitlement via api.newstargeted.com.</description>
+    <author>master3395</author>
+    <website>https://newstargeted.com</website>
+    <license>MIT</license>
+    <category>Billing</category>
+    <paid>true</paid>
+    <pricing>paid</pricing>
+    <compatibility>
+        <min_version>0.2.0</min_version>
+    </compatibility>
+    <requirements>
+        <software>php</software>
+        <software>cpn-panel</software>
+    </requirements>
+    <features>
+        <feature>Client accounts linked to CPN usernames or invite email</feature>
+        <feature>Products and packages mapped to CPN package names</feature>
+        <feature>Orders, invoices, and subscription status</feature>
+        <feature>Site ownership and permissions per client</feature>
+        <feature>Manual mark paid plus PayPal checkout hooks</feature>
+        <feature>Client password recovery by email</feature>
+        <feature>Paid license check via api.newstargeted.com</feature>
+    </features>
+</plugin>

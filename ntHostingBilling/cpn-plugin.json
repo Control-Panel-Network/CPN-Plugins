@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "ntHostingBilling",
+  "name": "News Targeted Hosting Commerce (paid)",
+  "category": "Billing",
+  "version": "1.0.0",
+  "description": "Paid hosting commerce for CPN: clients, packages, orders, invoices, subscriptions, site ownership, billing, and client recovery. License via api.newstargeted.com.",
+  "author": "master3395",
+  "pricing": "paid",
+  "show_in_sidebar": true,
+  "has_dashboard": true,
+  "settings_fields": [
+    {
+      "key": "public_path",
+      "label": "Public commerce path (under site docroot)",
+      "field_type": "text",
+      "default": "/nt-billing"
+    },
+    {
+      "key": "operator_email",
+      "label": "Operator / billing contact email",
+      "field_type": "text",
+      "default": ""
+    },
+    {
+      "key": "api_base_hint",
+      "label": "API base (informational; secrets in config.php)",
+      "field_type": "text",
+      "default": "https://api.newstargeted.com"
+    },
+    {
+      "key": "paypal_enabled",
+      "label": "Enable PayPal payment links",
+      "field_type": "checkbox",
+      "default": "1"
+    }
+  ]
+}

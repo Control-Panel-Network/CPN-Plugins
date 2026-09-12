@@ -1,0 +1,5 @@
+config.php
+data/
+*.sqlite
+entitlement.local.json
+last_recovery_link.txt

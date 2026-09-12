@@ -1,0 +1,4 @@
+RewriteEngine On
+# Deny config and data from web if this tree is ever exposed directly
+RewriteRule ^(config\.php|data/|modules/|sql/|views/) - [F,L]
+DirectoryIndex index.php

@@ -1,0 +1,150 @@
+<?php
+/**
+ * API Router
+ * Handles routing for API endpoints
+ */
+
+// Get the request path
+$requestUri = $_SERVER['REQUEST_URI'];
+$path = parse_url($requestUri, PHP_URL_PATH);
+
+// Remove the domain and base path
+$basePath = '/api';
+if (strpos($path, $basePath) === 0) {
+    $path = substr($path, strlen($basePath));
+}
+
+// Clean the path
+$path = trim($path, '/');
+
+// Route the request
+if (empty($path)) {
+    // Root API path - return API info
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => true,
+        'api_name' => 'NewsTargeted API',
+        'version' => '4.0.0',
+        'endpoints' => [
+            '/api/verify-patreon-membership' => 'Verify Patreon membership for paid plugins',
+            '/api/cmsms/plugin-grants/verify' => 'Verify CMSMS grant entitlement for AdminThemeStudio',
+            '/api/social-downloads/v1/resolve' => 'Resolve TikTok, Instagram, Facebook, or X URLs (GET or POST)',
+            '/api/social-downloads/v1/platforms' => 'Supported social download platforms',
+            '/api/social-downloads/v1/bookmark' => 'Bookmarklet and shortcut metadata',
+            '/api/social-downloads/v1/health' => 'Social downloads API health check',
+            '/api/cpn-plugins/v1/catalog' => 'Paid CPN plugins catalog metadata',
+            '/api/cpn-plugins/v1/checkout' => 'Checkout / purchase hints for a paid CPN plugin',
+        ]
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+// Public contact form (SPA)
+if ($path === 'contact' || $path === 'contact.php') {
+    require __DIR__ . '/contact.php';
+    exit;
+}
+
+// Internal transactional mail relay (POST + Bearer). See api/internal/mail-send.php
+if ($path === 'internal/mail-send' || $path === 'internal/mail-send.php') {
+    require __DIR__ . '/internal/mail-send.php';
+    exit;
+}
+
+if ($path === 'internal/cloudflare' || $path === 'internal/cloudflare.php') {
+    require __DIR__ . '/internal/cloudflare.php';
+    exit;
+}
+
+// HD-Admin Bridge: /api/hd-admin, /api/hd-admin/poll, /api/hd-admin/subscription-purchase, /api/hd-admin/register-place
+$hdAdminPrefix = 'hd-admin/';
+if (strpos($path, $hdAdminPrefix) === 0 || $path === 'hd-admin') {
+    $sub = $path === 'hd-admin' ? '' : substr($path, strlen($hdAdminPrefix));
+    $file = $sub === '' ? 'index.php' : (preg_replace('/[^a-z0-9\-]/', '', $sub) ?: 'index') . '.php';
+    $filePath = __DIR__ . '/hd-admin/' . $file;
+    if ($file !== '.php' && file_exists($filePath)) {
+        include $filePath;
+        exit;
+    }
+}
+
+
+// Social Downloads API v1: /api/social-downloads/v1/*
+$socialDownloadsPrefix = 'social-downloads/v1/';
+if (strpos($path, $socialDownloadsPrefix) === 0) {
+    $sub = substr($path, strlen($socialDownloadsPrefix));
+    $file = preg_replace('/[^a-z0-9\-]/', '', $sub);
+    if ($file !== '') {
+        $filePath = dirname(__DIR__) . '/social-downloads/v1/' . $file . '.php';
+        if (file_exists($filePath)) {
+            include $filePath;
+            exit;
+        }
+    }
+}
+
+// CPN paid plugins catalog / checkout: /api/cpn-plugins/v1/*
+$cpnPluginsPrefix = 'cpn-plugins/v1/';
+if (strpos($path, $cpnPluginsPrefix) === 0) {
+    $sub = substr($path, strlen($cpnPluginsPrefix));
+    $sub = preg_replace('/\.php$/i', '', $sub);
+    $file = preg_replace('/[^a-z0-9\-]/', '', (string) $sub);
+    if ($file !== '') {
+        $filePath = __DIR__ . '/cpn-plugins/v1/' . $file . '.php';
+        if (file_exists($filePath)) {
+            include $filePath;
+            exit;
+        }
+    }
+}
+
+// Map endpoints to files
+$endpointMap = [
+    'verify-patreon-membership' => 'verify-patreon-membership.php',
+    'verify-patreon-membership.php' => 'verify-patreon-membership.php',
+    'verify-paypal-payment' => 'verify-paypal-payment.php',
+    'verify-paypal-payment.php' => 'verify-paypal-payment.php',
+    'verify-plugin-grant' => 'verify-plugin-grant.php',
+    'verify-plugin-grant.php' => 'verify-plugin-grant.php',
+    'activate-plugin-key' => 'activate-plugin-key.php',
+    'activate-plugin-key.php' => 'activate-plugin-key.php',
+    'verify-entitlement' => 'verify-entitlement.php',
+    'verify-entitlement.php' => 'verify-entitlement.php',
+    'cmsms/plugin-grants/verify' => 'cmsms/plugin-grants/verify.php',
+    'cmsms/plugin-grants/verify.php' => 'cmsms/plugin-grants/verify.php',
+    'cmsms/webhooks/paypal-grant' => 'cmsms/webhooks/paypal-grant.php',
+    'cmsms/webhooks/paypal-grant.php' => 'cmsms/webhooks/paypal-grant.php',
+    'get-webhook-url' => 'get-webhook-url.php',
+    'get-webhook-url.php' => 'get-webhook-url.php',
+];
+
+if (isset($endpointMap[$path])) {
+    $filePath = __DIR__ . '/' . $endpointMap[$path];
+    if (file_exists($filePath)) {
+        // Include the endpoint file
+        include $filePath;
+        exit;
+    }
+}
+
+// If no match found, return 404
+http_response_code(404);
+header('Content-Type: application/json');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+echo json_encode([
+    'success' => false,
+    'error' => 'ENDPOINT_NOT_FOUND',
+    'message' => 'API endpoint not found',
+    'available_endpoints' => [
+        '/api/verify-patreon-membership',
+        '/api/cmsms/plugin-grants/verify',
+        '/api/social-downloads/v1/resolve',
+        '/api/social-downloads/v1/platforms',
+        '/api/social-downloads/v1/bookmark',
+        '/api/social-downloads/v1/health',
+        '/api/cpn-plugins/v1/catalog',
+        '/api/cpn-plugins/v1/checkout',
+    ],
+    'timestamp' => date('c'),
+    'status' => 404
+], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

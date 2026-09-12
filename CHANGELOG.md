@@ -5,6 +5,12 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-09-13] - News Targeted Hosting Commerce (paid)
+
+### Added
+- **ntHostingBilling** (1.0.0): Paid hosting business layer for CPN (clients linked to CPN users, products/packages, orders, invoices, subscriptions, site ownership, manual + PayPal billing, client password recovery). Entitlement via `api.newstargeted.com`. Public UI under site `/nt-billing` after `install-host.sh`.
+- `catalog.json` entry for `ntHostingBilling`.
+
 ## [2026-09-12] - Drop CyberPanel disclaimer boilerplate
 
 ### Changed

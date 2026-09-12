@@ -1,0 +1,2 @@
+# Deny direct access to this folder listing; PHP endpoints are allowed.
+Options -Indexes

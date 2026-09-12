@@ -23,6 +23,7 @@ sudo cpn plugin list --catalog
 | `fail2ban` | free | Host fail2ban; see `fail2ban/CPN.md` and `install-host.sh` |
 | `clamav` | free | Host ClamAV for Security → Malware scan |
 | `ntMalwareApi` | paid | Documents `api.newstargeted.com` entitlement; secrets only in `/var/lib/cpn/malware.json` |
+| `ntHostingBilling` | paid | Hosting commerce (clients, invoices, subscriptions, ownership); license via `api.newstargeted.com` |
 
 Host packages such as MariaDB, OpenLiteSpeed, and phpMyAdmin stay on the panel **Plugins → Host packages** tab (`cpn app`), not as separate catalog folders unless a site-scoped drop-in exists.
 

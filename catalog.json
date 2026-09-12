@@ -14,6 +14,7 @@
     { "id": "limitedPhpmyAdmin", "path": "limitedPhpmyAdmin" },
     { "id": "memcacheManager", "path": "memcacheManager" },
     { "id": "ntMalwareApi", "path": "ntMalwareApi" },
+    { "id": "ntHostingBilling", "path": "ntHostingBilling" },
     { "id": "panelAccess", "path": "panelAccess" },
     { "id": "paypalPremiumPlugin", "path": "paypalPremiumPlugin" },
     { "id": "pm2Manager", "path": "pm2Manager" },

@@ -1,0 +1,26 @@
+<?php
+/**
+ * Example config for ntHostingBilling.
+ * Copy to config.php next to this file (or under /var/lib/cpn/nt-hosting-billing/config.php).
+ * Never commit real secrets.
+ */
+return [
+    'api_base' => 'https://api.newstargeted.com',
+    // Optional local entitlement token after activation / grant
+    'entitlement_token' => '',
+    // Optional activation key from News Targeted shop
+    'activation_key' => '',
+    // Operator identity used in grant / entitlement checks
+    'license_email' => '',
+    'server_fingerprint' => '',
+    // PayPal (optional): payment link or PayPal.me
+    'paypal_me_url' => 'https://paypal.me/KimBS?locale.x=en_US&country.x=NO',
+    'paypal_payment_link' => '',
+    // Outbound mail for client recovery (uses PHP mail() when unset)
+    'mail_from' => 'noreply@example.com',
+    'mail_from_name' => 'News Targeted Hosting',
+    // Admin session password for the commerce UI (change after install)
+    'admin_password' => 'CHANGE_ME',
+    // SQLite path override (default: data/billing.sqlite under plugin)
+    'sqlite_path' => '',
+];

@@ -1,0 +1,59 @@
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --err: #f87171;
+  --line: #334155;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 10% -10%, #1d4ed8 0%, transparent 50%),
+    radial-gradient(900px 500px at 100% 0%, #0ea5e9 0%, transparent 40%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; }
+header.app {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+header.app h1 { margin: 0; font-size: 1.45rem; letter-spacing: 0.02em; }
+nav { display: flex; flex-wrap: wrap; gap: 10px; }
+nav a, .btn {
+  display: inline-block; padding: 8px 12px; border-radius: 8px;
+  background: var(--card); border: 1px solid var(--line); color: var(--text);
+}
+.btn-primary { background: #0369a1; border-color: #0284c7; }
+.btn-ok { background: #065f46; border-color: #059669; }
+.card {
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px;
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.stat strong { display: block; font-size: 1.4rem; }
+.muted { color: var(--muted); }
+.notice { padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; }
+.notice.ok { background: #064e3b; }
+.notice.err { background: #7f1d1d; }
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+label { display: block; margin: 8px 0 4px; font-size: 0.9rem; color: var(--muted); }
+input, select, textarea {
+  width: 100%; max-width: 420px; padding: 8px 10px; border-radius: 8px;
+  border: 1px solid var(--line); background: #0b1220; color: var(--text);
+}
+form.inline { display: inline; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.78rem; background: #334155; }
+.badge.active, .badge.paid { background: #065f46; }
+.badge.unpaid, .badge.pending { background: #92400e; }
+.badge.suspended, .badge.cancelled { background: #7f1d1d; }
+footer { margin-top: 28px; color: var(--muted); font-size: 0.85rem; }
