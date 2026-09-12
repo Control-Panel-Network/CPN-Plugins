@@ -25,6 +25,13 @@ sudo cpn plugin list --catalog
 | `ntMalwareApi` | paid | Documents `api.newstargeted.com` entitlement; secrets only in `/var/lib/cpn/malware.json` |
 | `ntHostingBilling` | paid | Hosting commerce (clients, invoices, subscriptions, ownership); license via `api.newstargeted.com` |
 
+## Email enablement plugins
+
+| Id | Pricing | Role |
+|----|---------|------|
+| `mtaSts` | free | Unlocks Email → MTA-STS in CPN Panel |
+| `bimi` | free | Unlocks Email → BIMI in CPN Panel |
+
 Host packages such as MariaDB, OpenLiteSpeed, and phpMyAdmin stay on the panel **Plugins → Host packages** tab (`cpn app`), not as separate catalog folders unless a site-scoped drop-in exists.
 
 ## License

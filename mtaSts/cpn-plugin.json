@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "mtaSts",
+  "name": "MTA-STS (Email TLS policy)",
+  "category": "Email",
+  "version": "1.0.0",
+  "description": "Unlocks Email → MTA-STS in CPN Panel (policy, DNS helpers, optional Cloudflare push). Free.",
+  "author": "master3395",
+  "pricing": "free",
+  "show_in_sidebar": false,
+  "has_dashboard": false,
+  "settings_fields": [
+    {
+      "key": "notes",
+      "label": "Operator notes (optional)",
+      "field_type": "text",
+      "default": ""
+    }
+  ]
+}

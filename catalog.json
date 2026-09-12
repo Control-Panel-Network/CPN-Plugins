@@ -2,6 +2,7 @@
   "schema_version": 1,
   "plugins": [
     { "id": "autoBanSecurityAlerts", "path": "autoBanSecurityAlerts" },
+    { "id": "bimi", "path": "bimi" },
     { "id": "clamav", "path": "clamav" },
     { "id": "contaboAutoSnapshot", "path": "contaboAutoSnapshot" },
     { "id": "cspManager", "path": "cspManager" },
@@ -13,6 +14,7 @@
     { "id": "googleTagManager", "path": "googleTagManager" },
     { "id": "limitedPhpmyAdmin", "path": "limitedPhpmyAdmin" },
     { "id": "memcacheManager", "path": "memcacheManager" },
+    { "id": "mtaSts", "path": "mtaSts" },
     { "id": "ntMalwareApi", "path": "ntMalwareApi" },
     { "id": "ntHostingBilling", "path": "ntHostingBilling" },
     { "id": "panelAccess", "path": "panelAccess" },

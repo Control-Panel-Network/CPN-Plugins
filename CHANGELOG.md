@@ -5,6 +5,14 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-09-13] - MTA-STS and BIMI email enablement plugins
+
+### Added
+- **mtaSts** (1.0.0): Free Email plugin that unlocks CPN **Email → MTA-STS** (policy/DNS UI already in the panel).
+- **bimi** (1.0.0): Free Email plugin that unlocks CPN **Email → BIMI**.
+- `catalog.json` entries for `mtaSts` and `bimi`.
+- Optional `install-host.sh` / `uninstall-host.sh` write or clear `/var/lib/cpn/features/*.enabled`.
+
 ## [2026-09-13] - News Targeted Hosting Commerce (paid)
 
 ### Added

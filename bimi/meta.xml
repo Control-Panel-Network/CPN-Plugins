@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>BIMI (Brand Indicators for Message Identification)</name>
+    <type>Email</type>
+    <version>1.0.0</version>
+    <description>Unlocks Email → BIMI in CPN Panel: HTTPS SVG logo URL, recommended default._bimi TXT, and optional Cloudflare add-only push. Install this free plugin for a site to show the sidebar item and enable the page.</description>
+    <author>master3395</author>
+    <website>https://newstargeted.com</website>
+    <license>MIT</license>
+    <category>Email</category>
+    <paid>false</paid>
+    <pricing>free</pricing>
+    <compatibility>
+        <min_version>0.2.0</min_version>
+    </compatibility>
+    <requirements>
+        <software>cpn-panel</software>
+    </requirements>
+    <features>
+        <feature>Enables CPN Email → BIMI UI</feature>
+        <feature>Recommended BIMI DNS records</feature>
+        <feature>Optional Cloudflare DNS push (add/update only)</feature>
+    </features>
+    <url>/email/bimi</url>
+    <settings_url>/email/bimi</settings_url>
+</plugin>

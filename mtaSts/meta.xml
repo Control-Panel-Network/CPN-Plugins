@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>MTA-STS (Email TLS policy)</name>
+    <type>Email</type>
+    <version>1.0.0</version>
+    <description>Unlocks Email → MTA-STS in CPN Panel: policy file, recommended DNS (_mta-sts / mta-sts), and optional Cloudflare add-only push. Install this free plugin for a site to show the sidebar item and enable the page.</description>
+    <author>master3395</author>
+    <website>https://newstargeted.com</website>
+    <license>MIT</license>
+    <category>Email</category>
+    <paid>false</paid>
+    <pricing>free</pricing>
+    <compatibility>
+        <min_version>0.2.0</min_version>
+    </compatibility>
+    <requirements>
+        <software>cpn-panel</software>
+    </requirements>
+    <features>
+        <feature>Enables CPN Email → MTA-STS UI</feature>
+        <feature>Policy storage and recommended DNS records</feature>
+        <feature>Optional Cloudflare DNS push (add/update only)</feature>
+    </features>
+    <url>/email/mta-sts</url>
+    <settings_url>/email/mta-sts</settings_url>
+</plugin>
