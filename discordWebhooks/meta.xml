@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cyberpanelPluginConfig>
+<CPNPluginConfig>
     <name>Discord Webhooks</name>
     <type>Utility</type>
     <description>Send server notifications (SSH logins, security warnings, server usage) to Discord via webhooks</description>
@@ -11,4 +11,8 @@
     <author>Master3395</author>
     <url>/plugins/discordWebhooks/</url>
     <settings_url>/plugins/discordWebhooks/settings/</settings_url>
-</cyberpanelPluginConfig>
+    <released>2024-07-01</released>
+    <updated>2026-04-01</updated>
+    <install_count>38</install_count>
+    <featured>false</featured>
+</CPNPluginConfig>

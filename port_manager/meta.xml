@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cyberpanelPluginConfig>
-    <name>CyberPanel Port Manager</name>
+<CPNPluginConfig>
+    <name>CPN Panel Port Manager</name>
     <type>Utility</type>
     <description>Local and public port discovery with process, Docker, and firewall control.</description>
     <version>1.0.1</version>
@@ -12,4 +12,8 @@
     <url>/plugins/port_manager/</url>
     <settings_url>/plugins/port_manager/</settings_url>
     <paid>false</paid>
-</cyberpanelPluginConfig>
+    <released>2024-04-01</released>
+    <updated>2026-05-01</updated>
+    <install_count>40</install_count>
+    <featured>false</featured>
+</CPNPluginConfig>

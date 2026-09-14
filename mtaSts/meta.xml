@@ -23,4 +23,8 @@
     </features>
     <url>/email/mta-sts</url>
     <settings_url>/email/mta-sts</settings_url>
+    <released>2026-03-01</released>
+    <updated>2026-08-01</updated>
+    <install_count>30</install_count>
+    <featured>false</featured>
 </plugin>

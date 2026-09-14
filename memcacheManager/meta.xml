@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cyberpanelPluginConfig>
+<CPNPluginConfig>
     <name>Memcache Manager</name>
     <type>Utility</type>
     <description>Manage Memcached/LSMCD server: view status, start/stop/restart, view statistics with charts, flush cache, and view configuration. Free plugin supporting both standard Memcached and LiteSpeed LSMCD.</description>
@@ -12,4 +12,8 @@
     <url>/plugins/memcacheManager/</url>
     <settings_url>/plugins/memcacheManager/</settings_url>
     <paid>false</paid>
-</cyberpanelPluginConfig>
+    <released>2024-09-01</released>
+    <updated>2026-03-01</updated>
+    <install_count>18</install_count>
+    <featured>false</featured>
+</CPNPluginConfig>

@@ -9,7 +9,7 @@
     </compatibility>
     <description>Easily add Google Tag Manager (GTM) container IDs to your domains. Configure GTM for each domain and get code snippets to add to your websites.</description>
     <author>master3395</author>
-    <website>https://github.com/master3395/cyberpanel-plugins</website>
+    <website>https://github.com/master3395/CPN-plugins</website>
     <license>MIT</license>
     <dependencies>
         <python>3.6+</python>
@@ -27,4 +27,8 @@
     </settings>
     <url>/plugins/googleTagManager/</url>
     <settings_url>/plugins/googleTagManager/settings/</settings_url>
+    <released>2024-06-01</released>
+    <updated>2025-12-01</updated>
+    <install_count>12</install_count>
+    <featured>false</featured>
 </plugin>

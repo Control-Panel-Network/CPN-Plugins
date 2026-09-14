@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cyberpanelPluginConfig>
+<CPNPluginConfig>
   <name>Email Marketing</name>
   <type>Email</type>
-  <description>Email Marketing plugin for CyberPanel.</description>
+  <description>Email Marketing plugin for CPN Panel.</description>
   <version>1.0.3</version>
     <url>/emailMarketing/</url>
     <settings_url>/emailMarketing/settings/</settings_url>
@@ -11,4 +11,8 @@
         <max_version>3.0.0</max_version>
     </compatibility>
   <author>master3395</author>
-</cyberpanelPluginConfig>
+    <released>2025-01-01</released>
+    <updated>2026-03-01</updated>
+    <install_count>22</install_count>
+    <featured>false</featured>
+</CPNPluginConfig>

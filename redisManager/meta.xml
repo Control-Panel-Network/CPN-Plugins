@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cyberpanelPluginConfig>
+<CPNPluginConfig>
     <name>Redis Manager</name>
     <type>Utility</type>
     <description>Manage Redis server: view status, start/stop/restart, view INFO stats, and flush cache. Free plugin.</description>
@@ -12,4 +12,8 @@
     <url>/plugins/redisManager/</url>
     <settings_url>/plugins/redisManager/</settings_url>
     <paid>false</paid>
-</cyberpanelPluginConfig>
+    <released>2024-09-01</released>
+    <updated>2026-06-01</updated>
+    <install_count>45</install_count>
+    <featured>false</featured>
+</CPNPluginConfig>

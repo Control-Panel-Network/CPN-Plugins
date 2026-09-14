@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cyberpanelPluginConfig>
+<CPNPluginConfig>
     <name>PM2 Manager</name>
     <type>Development</type>
-    <description>Comprehensive PM2 process manager for CyberPanel with real-time monitoring, node management, and application control. Monitor CPU, memory, and process status with WebSocket support.</description>
+    <description>Comprehensive PM2 process manager for CPN Panel with real-time monitoring, node management, and application control. Monitor CPU, memory, and process status with WebSocket support.</description>
     <version>1.2.1</version>
     <author>Master3395</author>
     <url>/plugins/pm2Manager/</url>
@@ -29,4 +29,8 @@
         <feature>Working directory (CWD) configuration</feature>
         <feature>Custom interpreter selection</feature>
     </features>
-</cyberpanelPluginConfig>
+    <released>2024-10-01</released>
+    <updated>2026-02-01</updated>
+    <install_count>15</install_count>
+    <featured>false</featured>
+</CPNPluginConfig>

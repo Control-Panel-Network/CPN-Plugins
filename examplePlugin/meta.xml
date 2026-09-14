@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cyberpanelPluginConfig>
+<CPNPluginConfig>
     <name>examplePlugin</name>
     <type>Utility</type>
     <description>This is an example plugin</description>
@@ -9,4 +9,8 @@
         <max_version>3.0.0</max_version>
     </compatibility>
     <author>master3395</author>
-</cyberpanelPluginConfig>
+    <released>2024-01-01</released>
+    <updated>2025-01-01</updated>
+    <install_count>5</install_count>
+    <featured>false</featured>
+</CPNPluginConfig>

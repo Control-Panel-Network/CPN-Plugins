@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cyberpanelPluginConfig>
+<CPNPluginConfig>
     <name>Panel Access (Custom Domain)</name>
     <type>Utility</type>
-    <description>Configure custom domain(s) for accessing CyberPanel behind a reverse proxy. Fixes 403 CSRF errors on POST (e.g. Ban IP) and optionally sets up OpenLiteSpeed proxy so the panel is reachable at your domain without manual OLS config. Detects panel port from bind.conf (2087/8090).</description>
+    <description>Configure custom domain(s) for accessing CPN Panel behind a reverse proxy. Fixes 403 CSRF errors on POST (e.g. Ban IP) and optionally sets up OpenLiteSpeed proxy so the panel is reachable at your domain without manual OLS config. Detects panel port from bind.conf (2087/8090).</description>
     <version>1.0.2</version>
     <compatibility>
         <min_version>2.5.5</min_version>
@@ -12,4 +12,8 @@
     <url>/plugins/panelAccess/</url>
     <settings_url>/plugins/panelAccess/</settings_url>
     <paid>false</paid>
-</cyberpanelPluginConfig>
+    <released>2025-05-01</released>
+    <updated>2026-06-01</updated>
+    <install_count>20</install_count>
+    <featured>false</featured>
+</CPNPluginConfig>

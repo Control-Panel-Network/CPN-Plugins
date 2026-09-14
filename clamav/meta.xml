@@ -24,4 +24,8 @@
         <feature>Enable clamd when available</feature>
         <feature>Unlocks CPN Security → Malware scan free path</feature>
     </features>
+    <released>2024-05-01</released>
+    <updated>2026-07-15</updated>
+    <install_count>80</install_count>
+    <featured>false</featured>
 </plugin>
