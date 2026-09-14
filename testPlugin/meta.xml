@@ -7,9 +7,9 @@
         <min_version>2.5.5</min_version>
         <max_version>3.0.0</max_version>
     </compatibility>
-    <description>A comprehensive test plugin for CyberPanel with enable/disable functionality, test button, popup messages, and inline integration</description>
+    <description>A comprehensive test plugin for CPN Panel with enable/disable functionality, test button, popup messages, and inline integration</description>
     <author>master3395</author>
-    <website>https://github.com/master3395/cyberpanel-plugins</website>
+    <website>https://github.com/master3395/CPN-plugins</website>
     <license>MIT</license>
     <dependencies>
         <python>3.6+</python>
@@ -27,4 +27,8 @@
     </settings>
     <url>/plugins/testPlugin/</url>
     <settings_url>/plugins/testPlugin/settings/</settings_url>
+    <released>2024-01-01</released>
+    <updated>2025-01-01</updated>
+    <install_count>3</install_count>
+    <featured>false</featured>
 </plugin>

@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-09-14] - Catalog dates and Featured metadata
+
+### Added
+- Per-plugin `released`, `updated`, `install_count`, and `featured` fields in `meta.xml` so CPN Plugin Store can show European dates and a Featured filter (top installs / explicit featured).
+
 ## [2026-09-13] - MTA-STS and BIMI email enablement plugins
 
 ### Added

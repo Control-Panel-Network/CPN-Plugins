@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cyberpanelPluginConfig>
+<CPNPluginConfig>
     <name>PostgreSQL Manager</name>
     <type>Utility</type>
-    <description>Install and manage PostgreSQL from CyberPanel, and open a bundled Adminer PostgreSQL web console similar to phpMyAdmin. Free plugin.</description>
+    <description>Install and manage PostgreSQL from CPN Panel, and open a bundled Adminer PostgreSQL web console similar to phpMyAdmin. Free plugin.</description>
     <version>1.0.0</version>
     <author>KraoESPfan1n</author>
-    <website>https://github.com/master3395/cyberpanel-plugins</website>
+    <website>https://github.com/master3395/CPN-plugins</website>
     <compatibility>
         <min_version>2.5.5</min_version>
         <max_version>3.0.0</max_version>
@@ -17,4 +17,8 @@
     <url>/plugins/postgresManager/</url>
     <settings_url>/plugins/postgresManager/</settings_url>
     <paid>false</paid>
-</cyberpanelPluginConfig>
+    <released>2025-11-01</released>
+    <updated>2026-07-20</updated>
+    <install_count>32</install_count>
+    <featured>false</featured>
+</CPNPluginConfig>

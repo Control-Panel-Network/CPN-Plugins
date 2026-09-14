@@ -34,4 +34,8 @@
     <enable_url>/plugins/fail2ban/api/toggle-plugin/</enable_url>
     <restart_url>/plugins/fail2ban/api/restart/</restart_url>
     <restart_litespeed_url>/plugins/fail2ban/api/restart-litespeed/</restart_litespeed_url>
+    <released>2024-03-01</released>
+    <updated>2026-08-20</updated>
+    <install_count>140</install_count>
+    <featured>true</featured>
 </plugin>

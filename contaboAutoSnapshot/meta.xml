@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cyberpanelPluginConfig>
+<CPNPluginConfig>
     <name>Auto Snapshot for Contabo</name>
     <type>Backup</type>
     <description>Automatically create snapshots for Contabo VPS instances on a schedule. Configure snapshot schedules, retention policies, and monitor snapshot creation history.</description>
@@ -12,8 +12,12 @@
     <url>/plugins/contaboAutoSnapshot/</url>
     <settings_url>/plugins/contaboAutoSnapshot/settings/</settings_url>
     <paid>true</paid>
-    <patreon_tier>CyberPanel Paid Plugin</patreon_tier>
+    <patreon_tier>CPN Panel Paid Plugin</patreon_tier>
     <patreon_url>https://www.patreon.com/membership/27789984</patreon_url>
     <paypal_me_url>https://paypal.me/KimBS?locale.x=en_US&amp;country.x=NO</paypal_me_url>
     <paypal_payment_link></paypal_payment_link>
-</cyberpanelPluginConfig>
+    <released>2025-02-01</released>
+    <updated>2026-07-01</updated>
+    <install_count>48</install_count>
+    <featured>false</featured>
+</CPNPluginConfig>
