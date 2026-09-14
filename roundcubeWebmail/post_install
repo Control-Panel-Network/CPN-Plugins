@@ -1,30 +1,21 @@
 #!/bin/bash
-# Roundcube Webmail plugin post-install: deploy app, config.inc.php, OLS context.
+# Roundcube Webmail catalog entry: redirect to CPN host package install.
+# Legacy CyberPanel paths are intentionally not used.
 set -euo pipefail
 
-PLUGIN_HOME="/usr/local/CyberCP/roundcubeWebmail"
-LOG="/var/log/cyberpanel/roundcubeWebmail_post_install.log"
-mkdir -p "$(dirname "$LOG")" /home/cyberpanel/plugins
-
+LOG="/var/log/cpn/roundcubeWebmail_post_install.log"
+mkdir -p "$(dirname "$LOG")"
 exec >>"$LOG" 2>&1
-echo "[$(date -Iseconds)] roundcubeWebmail post_install start"
+echo "[$(date -Iseconds)] roundcubeWebmail post_install: host-package redirect"
 
-if [ ! -d "$PLUGIN_HOME" ]; then
-  echo "ERROR: plugin home missing: $PLUGIN_HOME"
+if command -v cpn >/dev/null 2>&1; then
+  if cpn app install --name roundcube; then
+    echo "Installed Roundcube via host package (cpn app install --name roundcube)."
+    exit 0
+  fi
+  echo "WARNING: cpn app install --name roundcube failed; open Plugins > Host packages (Email)."
   exit 1
 fi
 
-/usr/local/CyberCP/bin/python - <<'PY'
-import sys
-sys.path.insert(0, '/usr/local/CyberCP')
-from roundcubeWebmail import utils
-ok, message = utils.post_install_tasks()
-print(message)
-sys.exit(0 if ok else 1)
-PY
-
-if command -v systemctl >/dev/null 2>&1 && systemctl is-active --quiet lsws 2>/dev/null; then
-  systemctl restart lsws || true
-fi
-
-echo "[$(date -Iseconds)] roundcubeWebmail post_install done"
+echo "ERROR: Roundcube is a CPN Email host package. Install from Plugins > Host packages (Email), or install a CPN panel build that provides: cpn app install --name roundcube"
+exit 1

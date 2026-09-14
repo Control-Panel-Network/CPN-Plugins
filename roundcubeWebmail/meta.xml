@@ -2,17 +2,17 @@
 <CPNPluginConfig>
     <name>Roundcube Webmail</name>
     <type>Email</type>
-    <description>Optional standalone Roundcube webmail for CPN Panel. Deploys Roundcube under /usr/local/CyberCP/public/roundcube/ with IMAP localhost:993 and configures OpenLiteSpeed to serve /roundcube/.</description>
-    <version>1.0.0</version>
+    <description>Roundcube is an Email host package (not a site plugin). Install from Plugins &gt; Host packages (Email), or run: cpn app install --name roundcube. Deploys under /opt/cpn-webmail/roundcube with panel proxy /roundcube/ (IMAP localhost:143). This Plugin Store card does not install files.</description>
+    <version>1.1.0</version>
     <compatibility>
-        <min_version>3.0.5</min_version>
+        <min_version>0.2.6</min_version>
     </compatibility>
     <author>master3395</author>
-    <url>/plugins/roundcubeWebmail/</url>
-    <settings_url>/plugins/roundcubeWebmail/settings/</settings_url>
+    <url>/plugins?view=host&amp;category=Email</url>
+    <settings_url>/plugins?view=host&amp;category=Email</settings_url>
     <paid>false</paid>
     <released>2024-08-01</released>
-    <updated>2026-08-09</updated>
+    <updated>2026-09-14</updated>
     <install_count>70</install_count>
     <featured>false</featured>
 </CPNPluginConfig>

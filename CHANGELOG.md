@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-09-14] - Roundcube host-package redirect
+
+### Changed
+- **roundcubeWebmail** (1.0.0 → **1.1.0**): Catalog entry no longer deploys under legacy panel public paths. Description and install hooks redirect operators to **Plugins > Host packages (Email)** / `cpn app install --name roundcube` (`/opt/cpn-webmail/roundcube`, panel proxy `/roundcube/`). Removed CyberPanel path strings from `meta.xml` and path helpers.
+
 ## [2026-09-14] - Catalog dates and Featured metadata
 
 ### Added
