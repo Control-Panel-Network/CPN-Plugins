@@ -1,1 +1,1 @@
-# Roundcube Webmail plugin for CyberPanel
+# Roundcube Webmail catalog entry for CPN Panel (host-package redirect).

@@ -1,2 +1,5 @@
-#!/usr/local/CyberCP/bin/python
-print('roundcubeWebmail pre_install: no-op')
+#!/bin/bash
+# Roundcube Webmail: no site-plugin prep; host package owns the install.
+set -euo pipefail
+echo "roundcubeWebmail pre_install: use Plugins > Host packages (Email) or cpn app install --name roundcube"
+exit 0
