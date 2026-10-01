@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Memcache Manager Plugin - Free
-Manage Memcached/LSMCD server status, control, stats, and configuration from CyberPanel.
+Manage Memcached/LSMCD server status, control, stats, and configuration from CPN.
 Supports both standard Memcached and LiteSpeed LSMCD with auto-detection.
 """
 

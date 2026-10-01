@@ -11,17 +11,17 @@ import subprocess
 import time
 
 PLUGIN_NAME = 'snappymailWebmail'
-SETTINGS_FILE = '/home/cyberpanel/plugins/snappymailWebmail_settings.json'
-DISABLE_MARKER = '/usr/local/CyberCP/public/snappymail/.cp_webmail_disabled'
+SETTINGS_FILE = '/home/cpn/plugins/snappymailWebmail_settings.json'
+DISABLE_MARKER = '/usr/local/cpn/public/snappymail/.cp_webmail_disabled'
 
-SNAPPY_PUBLIC = '/usr/local/CyberCP/public/snappymail'
-SNAPPY_LSCP = '/usr/local/lscp/cyberpanel/snappymail'
-SNAPPY_DATA = '/usr/local/lscp/cyberpanel/snappymail/data/'
-SNAPPY_VERSION_FILE = '/etc/cyberpanel/snappymail_version'
+SNAPPY_PUBLIC = '/usr/local/cpn/public/snappymail'
+SNAPPY_LSCP = '/usr/local/lscp/cpn/snappymail'
+SNAPPY_DATA = '/usr/local/lscp/cpn/snappymail/data/'
+SNAPPY_VERSION_FILE = '/etc/cpn/snappymail_version'
 SNAPPY_FALLBACK_VERSION = '2.38.2'
 
 LSWS_ROOT = '/usr/local/lsws'
-VHOST_DIR = os.path.join(LSWS_ROOT, 'conf', 'vhosts', 'CyberPanel')
+VHOST_DIR = os.path.join(LSWS_ROOT, 'conf', 'vhosts', 'CPN')
 VHOST_CONF = os.path.join(VHOST_DIR, 'vhost.conf')
 HTTPD_CONFIG = os.path.join(LSWS_ROOT, 'conf', 'httpd_config.conf')
 BIND_CONF = '/usr/local/lscp/conf/bind.conf'
@@ -29,8 +29,8 @@ BIND_CONF = '/usr/local/lscp/conf/bind.conf'
 
 def _log(msg):
     try:
-        from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter
-        CyberCPLogFileWriter.writeToFile('[snappymailWebmail] ' + str(msg))
+        from plogical.CPNLogFileWriter import CPNLogFileWriter
+        CPNLogFileWriter.writeToFile('[snappymailWebmail] ' + str(msg))
     except Exception:
         pass
     print('[snappymailWebmail] ' + str(msg))
@@ -67,7 +67,7 @@ def save_settings(settings):
         handle.write('\n')
     try:
         os.chmod(SETTINGS_FILE, 0o600)
-        subprocess.run(['chown', 'cyberpanel:cyberpanel', SETTINGS_FILE], capture_output=True, timeout=10)
+        subprocess.run(['chown', 'cpn:cpn', SETTINGS_FILE], capture_output=True, timeout=10)
     except Exception:
         pass
     return payload
@@ -150,7 +150,7 @@ def _ensure_snappy_data_path(include_path):
 
 
 def ensure_snappymail_public_tree():
-    """Keep SnappyMail under CyberCP vhRoot (restrained=1 blocks /usr/local/lscp symlinks)."""
+    """Keep SnappyMail under CPN vhRoot (restrained=1 blocks /usr/local/lscp symlinks)."""
     public = SNAPPY_PUBLIC
     lscp = SNAPPY_LSCP
     index_public = os.path.join(public, 'index.php')
@@ -206,14 +206,14 @@ def _resolve_snappy_version():
 
 def deploy_snappymail(force=False):
     """Download and deploy SnappyMail app files; preserve shared data directory."""
-    os.makedirs('/usr/local/CyberCP/public', exist_ok=True)
+    os.makedirs('/usr/local/cpn/public', exist_ok=True)
     index_public = os.path.join(SNAPPY_PUBLIC, 'index.php')
     if os.path.isfile(index_public) and not force:
         ensure_snappymail_public_tree()
         return True, 'SnappyMail already deployed'
 
     version = _resolve_snappy_version()
-    work_dir = '/usr/local/CyberCP/public'
+    work_dir = '/usr/local/cpn/public'
     archive = os.path.join(work_dir, 'snappymail-%s.zip' % version)
     url = 'https://github.com/the-djmaze/snappymail/releases/download/v%s/snappymail-%s.zip' % (version, version)
 
@@ -278,18 +278,18 @@ context %s {
   indexFiles              index.php
   addDefaultCharset       off
   scripthandler  {
-    add                     lsapi:cyberpanelphp php
+    add                     lsapi:cpnphp php
   }
 }
 """ % (path_prefix, location)
 
 
-def _cyberpanelphp_ext_block(php_ver=None):
+def _cpnphp_ext_block(php_ver=None):
     php_ver = php_ver or detect_lsphp_version()
     return """
-extprocessor cyberpanelphp {
+extprocessor cpnphp {
   type                    lsapi
-  address                 UDS://tmp/lshttpd/cyberpanelphp.sock
+  address                 UDS://tmp/lshttpd/cpnphp.sock
   maxConns                10
   env                     LSAPI_CHILDREN=10
   initTimeout             60
@@ -317,13 +317,13 @@ def patch_vhost_snappymail_context(vhost_path):
         return False
 
     changed = False
-    if 'extprocessor cyberpanelphp' not in content:
+    if 'extprocessor cpnphp' not in content:
         if 'extprocessor panelbackend' in content:
-            content = content.replace('extprocessor panelbackend', _cyberpanelphp_ext_block() + '\nextprocessor panelbackend', 1)
+            content = content.replace('extprocessor panelbackend', _cpnphp_ext_block() + '\nextprocessor panelbackend', 1)
         elif 'context /snappymail/' in content:
-            content = content.replace('context /snappymail/', _cyberpanelphp_ext_block() + '\ncontext /snappymail/', 1)
+            content = content.replace('context /snappymail/', _cpnphp_ext_block() + '\ncontext /snappymail/', 1)
         else:
-            content = _cyberpanelphp_ext_block() + '\n' + content
+            content = _cpnphp_ext_block() + '\n' + content
         changed = True
 
     if 'context /snappymail/' not in content:
@@ -349,7 +349,7 @@ def ensure_ols_context():
     vhosts_root = os.path.join(LSWS_ROOT, 'conf', 'vhosts')
     if os.path.isdir(vhosts_root):
         for name in os.listdir(vhosts_root):
-            if name in ('CyberPanel', 'Example'):
+            if name in ('CPN', 'Example'):
                 continue
             patch_vhost_snappymail_context(os.path.join(vhosts_root, name, 'vhost.conf'))
     return True

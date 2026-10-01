@@ -1,13 +1,13 @@
 # Auto Ban Security Alerts Plugin
 
-A premium CyberPanel plugin that automatically bans IP addresses from Security Alerts Detected in Recent SSH Logs, eliminating the need for manual "Ban IP Permanently" clicks.
+A premium CPN plugin that automatically bans IP addresses from Security Alerts Detected in Recent SSH Logs, eliminating the need for manual "Ban IP Permanently" clicks.
 
 ## Features
 
 - **Automatic IP Banning**: Automatically bans IPs that appear in Security Alerts Detected
 - **IP Whitelist Management**: Whitelist IPs that should never be auto-banned
-- **System IP Protection**: CyberPanel machine IP is automatically whitelisted and cannot be deleted
-- **Auto-whitelist on IP Change**: If the machine IP changes in `/etc/cyberpanel/machineIP`, it's automatically whitelisted
+- **System IP Protection**: CPN machine IP is automatically whitelisted and cannot be deleted
+- **Auto-whitelist on IP Change**: If the machine IP changes in `/etc/cpn/machineIP`, it's automatically whitelisted
 - **Configurable Ban Duration**: Choose from 1 hour, 24 hours, 7 days, 30 days, or permanent
 - **Customizable Check Interval**: Set how often to check for Security Alerts (minimum 30 seconds)
 - **Ban History**: View recent auto-bans with details
@@ -15,10 +15,10 @@ A premium CyberPanel plugin that automatically bans IP addresses from Security A
 
 ## Installation
 
-1. Copy the plugin directory to `/home/cyberpanel-plugins/autoBanSecurityAlerts/`
-2. Install via CyberPanel Plugin Manager or manually:
+1. Copy the plugin directory to `/home/cpn-plugins/autoBanSecurityAlerts/`
+2. Install via CPN Plugin Manager or manually:
    ```bash
-   cd /usr/local/CyberCP
+   cd /usr/local/cpn
    python3 manage.py migrate autoBanSecurityAlerts
    ```
 3. Access the plugin at: `https://your-domain:8090/plugins/autoBanSecurityAlerts/settings/`
@@ -28,7 +28,7 @@ A premium CyberPanel plugin that automatically bans IP addresses from Security A
 ### Payment Methods
 
 The plugin supports:
-- **Patreon Subscription**: Subscribe to "CyberPanel Paid Plugin" tier
+- **Patreon Subscription**: Subscribe to "CPN Paid Plugin" tier
 - **PayPal Payment**: One-time payment via PayPal.me
 - **Activation Key**: Enter a valid activation key if you have one
 
@@ -41,7 +41,7 @@ The plugin supports:
 
 ### IP Whitelist
 
-- **System IP**: The CyberPanel machine IP (from `/etc/cyberpanel/machineIP`) is automatically whitelisted
+- **System IP**: The CPN machine IP (from `/etc/cpn/machineIP`) is automatically whitelisted
 - **User IPs**: Add custom IPs to the whitelist that should never be banned
 - **System IP Protection**: The system IP cannot be deleted from the whitelist
 
@@ -63,7 +63,7 @@ The plugin monitors for:
 
 ## Requirements
 
-- CyberPanel 2.5.5+
+- CPN 2.5.5+
 - Python 3.6+
 - Django 2.2+
 - Premium subscription (Patreon or PayPal)

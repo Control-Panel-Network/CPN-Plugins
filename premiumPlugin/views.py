@@ -10,7 +10,7 @@ from django.views.decorators.http import require_http_methods
 from plogical.mailUtilities import mailUtilities
 from plogical.httpProc import httpProc
 from plogical.plugin_acl import require_manage_plugins_api
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from functools import wraps
 import urllib.request
 import urllib.error
@@ -30,7 +30,7 @@ REMOTE_VERIFICATION_PLUGIN_GRANT_URL = 'https://api.newstargeted.com/api/verify-
 REMOTE_ACTIVATION_KEY_URL = 'https://api.newstargeted.com/api/activate-plugin-key.php'
 REMOTE_ENTITLEMENT_VERIFY_URL = 'https://api.newstargeted.com/api/verify-entitlement.php'
 
-PATREON_TIER = 'CyberPanel Paid Plugin'
+PATREON_TIER = 'CPN Paid Plugin'
 PATREON_URL = 'https://www.patreon.com/membership/27789984'
 PAYPAL_ME_URL = 'https://paypal.me/KimBS?locale.x=en_US&country.x=NO'
 PAYPAL_PAYMENT_LINK = ''
@@ -64,9 +64,9 @@ def _resolve_user_identity(request, override_email=''):
     return ''
 
 
-def _persist_activation_in_cyberpanel_db(request, activation_key):
+def _persist_activation_in_cpn_db(request, activation_key):
     """
-    Save activation key in CyberPanel pluginHolder DB storage for upgrade resilience.
+    Save activation key in CPN pluginHolder DB storage for upgrade resilience.
     """
     key_value = (activation_key or '').strip()
     if not key_value:
@@ -111,7 +111,7 @@ def _persist_activation_in_cyberpanel_db(request, activation_key):
     return saved_any
 
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
@@ -130,7 +130,7 @@ def _api_request(url, data, timeout=10):
     try:
         body, extra_headers = api_encryption.encrypt_payload(data)
         headers = {
-            'User-Agent': f'CyberPanel-Plugin/{PLUGIN_VERSION}',
+            'User-Agent': f'CPN-Plugin/{PLUGIN_VERSION}',
             'X-Plugin-Name': PLUGIN_NAME
         }
         headers.update(extra_headers)
@@ -407,7 +407,7 @@ def unified_verification_required(view_func):
                                 config.activation_key = activation_key_str
                                 config.save(update_fields=['activation_key', 'updated_at'])
                                 _persist_entitlement_from_response(config, response_data)
-                                _persist_activation_in_cyberpanel_db(request, activation_key_str)
+                                _persist_activation_in_cpn_db(request, activation_key_str)
                             except Exception as e:
                                 logging.writeToFile(f"Premium Plugin: Could not persist activation key: {str(e)}")
                         elif not response_data.get('success') and activation_key_str:
@@ -513,13 +513,13 @@ def unified_verification_required(view_func):
     return _wrapped_view
 
 
-@cyberpanel_login_required
+@cpn_login_required
 def main_view(request):
     mailUtilities.checkHome()
     return redirect('premiumPlugin:settings')
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @unified_verification_required
 def settings_view(request):
     mailUtilities.checkHome()
@@ -554,7 +554,7 @@ def settings_view(request):
     return proc.render()
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["POST"])
 def activate_key(request):
     try:
@@ -589,7 +589,7 @@ def activate_key(request):
                 config.activation_key = activation_key
                 config.save(update_fields=['activation_key', 'updated_at'])
                 _persist_entitlement_from_response(config, response_data)
-                _persist_activation_in_cyberpanel_db(request, activation_key)
+                _persist_activation_in_cpn_db(request, activation_key)
             except Exception as e:
                 logging.writeToFile(f"Premium Plugin: Could not persist activation key: {str(e)}")
 
@@ -619,7 +619,7 @@ def activate_key(request):
         }, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @require_http_methods(["POST"])
 def save_payment_method(request):
@@ -635,7 +635,7 @@ def save_payment_method(request):
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @unified_verification_required
 def api_status_view(request):

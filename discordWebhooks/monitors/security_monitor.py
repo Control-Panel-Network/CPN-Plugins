@@ -10,13 +10,13 @@ import time
 from datetime import datetime
 
 # Add parent directory to path for imports
-sys.path.insert(0, '/usr/local/CyberCP')
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CyberCP.settings')
+sys.path.insert(0, '/usr/local/cpn')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cpn.settings')
 
 import django
 django.setup()
 
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from discordWebhooks.models import DiscordWebhook, WebhookSettings
 from discordWebhooks.utils import send_to_all_webhooks, format_security_warning_embed
 

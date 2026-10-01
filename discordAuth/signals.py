@@ -7,7 +7,7 @@ Handles plugin installation and setup
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 from django.conf import settings
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 import os
 
 
@@ -21,7 +21,7 @@ def setup_discord_auth(sender, **kwargs):
     if sender.name == 'discordAuth':
         try:
             # Create config directory
-            config_dir = '/usr/local/CyberCP/discordAuth'
+            config_dir = '/usr/local/cpn/discordAuth'
             if not os.path.exists(config_dir):
                 os.makedirs(config_dir, mode=0o700)
                 logging.writeToFile("Created Discord auth config directory")

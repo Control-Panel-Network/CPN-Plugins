@@ -1,11 +1,11 @@
-# 🛡️ Fail2ban Security Manager Plugin for CyberPanel
+# 🛡️ Fail2ban Security Manager Plugin for CPN
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CyberPanel Compatible](https://img.shields.io/badge/CyberPanel-Compatible-blue.svg)](https://cyberpanel.net/)
+[![CPN Compatible](https://img.shields.io/badge/CPN-Compatible-blue.svg)](https://cpn.newstargeted.com/)
 [![AlmaLinux 9.6](https://img.shields.io/badge/AlmaLinux-9.6-red.svg)](https://almalinux.org/)
 [![OpenLiteSpeed](https://img.shields.io/badge/OpenLiteSpeed-Compatible-green.svg)](https://openlitespeed.org/)
 
-A comprehensive, modern, and mobile-friendly fail2ban management plugin for CyberPanel with OpenLiteSpeed integration. This plugin provides advanced threat protection, real-time monitoring, and intuitive IP management through a beautiful web interface.
+A comprehensive, modern, and mobile-friendly fail2ban management plugin for CPN with OpenLiteSpeed integration. This plugin provides advanced threat protection, real-time monitoring, and intuitive IP management through a beautiful web interface.
 
 ## ✨ Features
 
@@ -29,14 +29,14 @@ A comprehensive, modern, and mobile-friendly fail2ban management plugin for Cybe
 
 ### 🔧 **Technical Features**
 - **OpenLiteSpeed Integration**: Native support for OpenLiteSpeed logs
-- **CyberPanel Integration**: Seamless integration with CyberPanel
+- **CPN Integration**: Seamless integration with CPN
 - **Firewall Integration**: Uses firewall-cmd rich rules
 - **Database Support**: SQLite/MySQL/PostgreSQL compatible
 
 ## 📋 Requirements
 
 - **Operating System**: AlmaLinux 9.6 (recommended)
-- **CyberPanel**: Version 2.0.0 or higher
+- **CPN**: Version 2.0.0 or higher
 - **OpenLiteSpeed**: Any recent version
 - **Python**: 3.8 or higher
 - **Django**: 3.2 or higher
@@ -45,15 +45,15 @@ A comprehensive, modern, and mobile-friendly fail2ban management plugin for Cybe
 
 ## 🚀 Installation
 
-### Method 1: CyberPanel Plugin Installer (Recommended)
+### Method 1: CPN Plugin Installer (Recommended)
 
 1. **Download the Plugin**
    ```bash
    wget https://github.com/master3395/fail2ban-plugin/releases/latest/download/fail2ban-plugin.zip
    ```
 
-2. **Upload to CyberPanel**
-   - Log into your CyberPanel admin panel
+2. **Upload to CPN**
+   - Log into your CPN admin panel
    - Navigate to **Plugins** → **Plugin Installer**
    - Upload the `fail2ban-plugin.zip` file
    - Click **Install**
@@ -86,14 +86,14 @@ A comprehensive, modern, and mobile-friendly fail2ban management plugin for Cybe
 3. **Install the Plugin**
    ```bash
    # Copy plugin files
-   cp -r fail2ban_plugin /usr/local/CyberCP/pluginHolder/
+   cp -r fail2ban_plugin /usr/local/cpn/pluginHolder/
    
    # Set permissions
-   chown -R cyberpanel:cyberpanel /usr/local/CyberCP/pluginHolder/fail2ban_plugin
-   chmod -R 755 /usr/local/CyberCP/pluginHolder/fail2ban_plugin
+   chown -R cpn:cpn /usr/local/cpn/pluginHolder/fail2ban_plugin
+   chmod -R 755 /usr/local/cpn/pluginHolder/fail2ban_plugin
    
    # Run migrations
-   cd /usr/local/CyberCP
+   cd /usr/local/cpn
    python3 manage.py makemigrations fail2ban_plugin
    python3 manage.py migrate
    ```
@@ -120,7 +120,7 @@ A comprehensive, modern, and mobile-friendly fail2ban management plugin for Cybe
 The plugin comes with pre-configured jails for:
 - **SSH** (sshd)
 - **OpenLiteSpeed** (openlitespeed)
-- **CyberPanel** (cyberpanel)
+- **CPN** (cpn)
 
 ### Custom Configuration
 
@@ -195,7 +195,7 @@ The main dashboard provides:
 ## 🔧 API Reference
 
 ### Authentication
-All API endpoints require authentication via CyberPanel session.
+All API endpoints require authentication via CPN session.
 
 ### Endpoints
 
@@ -310,7 +310,7 @@ fail2ban-plugin/
 
 Run the test suite:
 ```bash
-cd /usr/local/CyberCP
+cd /usr/local/cpn
 python3 manage.py test fail2ban_plugin
 ```
 
@@ -338,7 +338,7 @@ python3 manage.py test fail2ban_plugin
 
 #### Plugin Not Loading
 ```bash
-# Check CyberPanel logs
+# Check CPN logs
 tail -f /usr/local/lscp/logs/error.log
 
 # Check Django logs
@@ -371,7 +371,7 @@ firewall-cmd --reload
 
 ### Debug Mode
 
-Enable debug mode in CyberPanel:
+Enable debug mode in CPN:
 1. Go to **Settings** → **Debug Mode**
 2. Enable debug logging
 3. Check logs for detailed error information
@@ -429,7 +429,7 @@ python manage.py test
 - Basic fail2ban management
 - Modern UI with mobile support
 - OpenLiteSpeed integration
-- CyberPanel compatibility
+- CPN compatibility
 - Real-time monitoring
 - IP whitelist/blacklist management
 
@@ -439,7 +439,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **CyberPanel Team** for the excellent hosting control panel
+- **CPN Team** for the excellent hosting control panel
 - **OpenLiteSpeed Team** for the high-performance web server
 - **fail2ban Community** for the robust intrusion prevention system
 - **Django Community** for the powerful web framework
@@ -465,6 +465,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ by [Master3395](https://github.com/master3395) for the CyberPanel community**
+**Made with ❤️ by [Master3395](https://github.com/master3395) for the CPN community**
 
 *Protect your server with the most advanced fail2ban management plugin available!*

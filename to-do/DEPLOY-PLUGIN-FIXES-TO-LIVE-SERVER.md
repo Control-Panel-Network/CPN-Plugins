@@ -1,8 +1,8 @@
 # Deploy Plugin Fixes to Live Server (84.247.184.182)
 
-After pushing the plugin fixes to `master3395/cyberpanel-plugins` (main), deploy on the live server using one of the following.
+After pushing the plugin fixes to `master3395/cpn-plugins` (main), deploy on the live server using one of the following.
 
-## Option A: Upgrade from CyberPanel Plugin Store (recommended)
+## Option A: Upgrade from CPN Plugin Store (recommended)
 
 1. Log in to the panel: https://84.247.184.182:2087/
 2. Go to **Plugins** → **Installed Plugins** (or Plugin Store).
@@ -22,11 +22,11 @@ Upgrade re-downloads the plugin from GitHub and runs the installer, which will n
 If you cannot upgrade from the store and only need to fix “table does not exist”:
 
 ```bash
-sudo -u lscpd bash -c 'cd /usr/local/CyberCP && python3 manage.py migrate contaboAutoSnapshot'
-sudo -u lscpd bash -c 'cd /usr/local/CyberCP && python3 manage.py migrate cspManager'
-sudo -u lscpd bash -c 'cd /usr/local/CyberCP && python3 manage.py migrate discordWebhooks'
-sudo -u lscpd bash -c 'cd /usr/local/CyberCP && python3 manage.py migrate fail2ban'
-sudo -u lscpd bash -c 'cd /usr/local/CyberCP && python3 manage.py migrate googleTagManager'
+sudo -u lscpd bash -c 'cd /usr/local/cpn && python3 manage.py migrate contaboAutoSnapshot'
+sudo -u lscpd bash -c 'cd /usr/local/cpn && python3 manage.py migrate cspManager'
+sudo -u lscpd bash -c 'cd /usr/local/cpn && python3 manage.py migrate discordWebhooks'
+sudo -u lscpd bash -c 'cd /usr/local/cpn && python3 manage.py migrate fail2ban'
+sudo -u lscpd bash -c 'cd /usr/local/cpn && python3 manage.py migrate googleTagManager'
 sudo systemctl restart lscpd
 ```
 

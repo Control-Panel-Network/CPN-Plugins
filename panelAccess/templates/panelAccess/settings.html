@@ -1,12 +1,12 @@
 {% extends "baseTemplate/index.html" %}
 {% load i18n %}
-{% block title %}{% trans "Panel Access (Custom Domain) - CyberPanel" %}{% endblock %}
+{% block title %}{% trans "Panel Access (Custom Domain) - CPN" %}{% endblock %}
 {% block content %}
 {% include "pluginHolder/cpui_head.html" %}
 <div class="cpui" id="cpuiApp">
   <div class="cpui-hero">
     <h1>Panel Access</h1>
-    <p>Serve the CyberPanel UI on a custom domain.</p>
+    <p>Serve the CPN UI on a custom domain.</p>
     <div class="cpui-meta"><span class="cpui-chip">Access</span></div>
   </div>
   <div class="cpui-section">
@@ -14,7 +14,7 @@
     <div class="page-container">
         <div class="page-header">
             <h1 class="page-title">{% trans "Panel Access (Custom Domain)" %}</h1>
-            <p class="page-subtitle">{% trans "Select domain(s) from your CyberPanel websites to use for accessing the panel behind a reverse proxy. This fixes 403 errors on POST requests (e.g. Ban IP) and CSRF verification." %}</p>
+            <p class="page-subtitle">{% trans "Select domain(s) from your CPN websites to use for accessing the panel behind a reverse proxy. This fixes 403 errors on POST requests (e.g. Ban IP) and CSRF verification." %}</p>
         </div>
         <div class="content-card">
             <h2 class="card-title">{% trans "Trusted origins" %}</h2>
@@ -39,7 +39,7 @@
                 <button type="submit" class="btn-primary" style="margin-top: 16px;">{% trans "Save" %}</button>
             </form>
             <div class="info-box">
-                <p><strong>{% trans "Note:" %}</strong> {% trans "Save will restart the CyberPanel backend (lscpd) automatically so CSRF changes take effect. If restart fails (e.g. permissions), run systemctl restart lscpd manually. Config file: " %}<code>{{ config_path }}</code></p>
+                <p><strong>{% trans "Note:" %}</strong> {% trans "Save will restart the CPN backend (lscpd) automatically so CSRF changes take effect. If restart fails (e.g. permissions), run systemctl restart lscpd manually. Config file: " %}<code>{{ config_path }}</code></p>
             </div>
         </div>
     </div>

@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 ('ban_duration', models.IntegerField(default=3600)),
                 ('whitelist_ips', models.TextField(blank=True, default='')),
                 ('blacklist_ips', models.TextField(blank=True, default='')),
-                ('enabled_jails', models.TextField(blank=True, default='sshd,openlitespeed,cyberpanel')),
+                ('enabled_jails', models.TextField(blank=True, default='sshd,openlitespeed,cpn')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),

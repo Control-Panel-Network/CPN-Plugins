@@ -1,6 +1,6 @@
 import json
 from plogical.processUtilities import ProcessUtilities
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
 def list_docker_maps(include_stopped=False):
     cmd = 'docker ps -a --format "{{json .}}"' if include_stopped else 'docker ps --format "{{json .}}"'

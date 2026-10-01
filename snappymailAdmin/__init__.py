@@ -1,1 +1,1 @@
-# SnappyMail Admin Password plugin for CyberPanel
+# SnappyMail Admin Password plugin for CPN

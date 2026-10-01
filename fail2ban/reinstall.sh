@@ -13,21 +13,21 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Get the plugin directory
-PLUGIN_DIR="/home/cyberpanel/plugins/fail2ban_plugin"
+PLUGIN_DIR="/home/cpn/plugins/fail2ban_plugin"
 
 echo "📁 Plugin directory: $PLUGIN_DIR"
 
 # Check if plugin exists
 if [ ! -d "$PLUGIN_DIR" ]; then
     echo "❌ Plugin directory not found: $PLUGIN_DIR"
-    echo "Please run the uninstall script first, then reinstall from CyberPanel"
+    echo "Please run the uninstall script first, then reinstall from CPN"
     exit 1
 fi
 
 echo "🔄 Setting proper permissions..."
 
 # Set proper ownership
-chown -R cyberpanel:cyberpanel "$PLUGIN_DIR"
+chown -R cpn:cpn "$PLUGIN_DIR"
 
 # Set proper permissions
 find "$PLUGIN_DIR" -type f -exec chmod 644 {} \;

@@ -65,7 +65,7 @@ To create a paid plugin that requires Patreon subscription, add these fields:
     <url>/plugins/pluginName/</url>
     <settings_url>/plugins/pluginName/settings/</settings_url>
     <paid>true</paid>
-    <patreon_tier>CyberPanel Paid Plugin</patreon_tier>
+    <patreon_tier>CPN Paid Plugin</patreon_tier>
     <patreon_url>https://www.patreon.com/membership/27789984</patreon_url>
 </plugin>
 ```
@@ -73,7 +73,7 @@ To create a paid plugin that requires Patreon subscription, add these fields:
 ### Premium Plugin Fields
 
 - `<paid>true</paid>` - Marks the plugin as paid
-- `<patreon_tier>CyberPanel Paid Plugin</patreon_tier>` - The Patreon tier name users must subscribe to
+- `<patreon_tier>CPN Paid Plugin</patreon_tier>` - The Patreon tier name users must subscribe to
 - `<patreon_url>https://www.patreon.com/membership/27789984</patreon_url>` - Direct link to the Patreon membership page
 
 ### Visual Indicators
@@ -84,14 +84,14 @@ To create a paid plugin that requires Patreon subscription, add these fields:
 
 ## Requirements
 
-- CyberPanel 2.5.5-dev or higher
+- CPN 2.5.5-dev or higher
 - Python 3.6+
-- Django (as used by CyberPanel)
-- Compatible with CyberPanel plugin system
+- Django (as used by CPN)
+- Compatible with CPN plugin system
 
-## CyberPanel 2.5.5-dev Features
+## CPN 2.5.5-dev Features
 
-All plugins in this repository are compatible with CyberPanel 2.5.5-dev and support:
+All plugins in this repository are compatible with CPN 2.5.5-dev and support:
 
 - Enhanced plugin management interface
 - GitHub commit date tracking
@@ -105,7 +105,7 @@ All plugins in this repository are compatible with CyberPanel 2.5.5-dev and supp
 
 Contributions are welcome! Please ensure:
 
-- Code follows CyberPanel standards
+- Code follows CPN standards
 - Plugins are tested before submission
 - Documentation is updated
 - meta.xml is properly formatted

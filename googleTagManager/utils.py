@@ -46,7 +46,7 @@ def get_user_domains(userID, currentACL):
         
     except Exception as e:
         # Log error but return empty list
-        from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+        from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
         logging.writeToFile(f"Error getting user domains: {str(e)}")
     
     return domains

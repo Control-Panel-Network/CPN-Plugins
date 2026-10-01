@@ -27,7 +27,7 @@ class OSCompatibilityTester:
         
     def run_all_tests(self):
         """Run all compatibility tests"""
-        print("🔍 Testing OS Compatibility for CyberPanel Test Plugin")
+        print("🔍 Testing OS Compatibility for CPN Test Plugin")
         print("=" * 60)
         
         # Test 1: OS Detection
@@ -51,8 +51,8 @@ class OSCompatibilityTester:
         # Test 7: Network Connectivity
         self.test_network_connectivity()
         
-        # Test 8: CyberPanel Integration
-        self.test_cyberpanel_integration()
+        # Test 8: CPN Integration
+        self.test_cpn_integration()
         
         # Display results
         self.display_results()
@@ -251,11 +251,11 @@ class OSCompatibilityTester:
         
         try:
             # Test if we can create files in plugin directory
-            plugin_dir = "/home/cyberpanel/plugins"
-            cyberpanel_dir = "/usr/local/CyberCP"
+            plugin_dir = "/home/cpn/plugins"
+            cpn_dir = "/usr/local/cpn"
             
             can_create_plugin_dir = True
-            can_create_cyberpanel_dir = True
+            can_create_cpn_dir = True
             
             try:
                 os.makedirs(plugin_dir, exist_ok=True)
@@ -263,21 +263,21 @@ class OSCompatibilityTester:
                 can_create_plugin_dir = False
             
             try:
-                os.makedirs(f"{cyberpanel_dir}/test", exist_ok=True)
-                os.rmdir(f"{cyberpanel_dir}/test")
+                os.makedirs(f"{cpn_dir}/test", exist_ok=True)
+                os.rmdir(f"{cpn_dir}/test")
             except PermissionError:
-                can_create_cyberpanel_dir = False
+                can_create_cpn_dir = False
             
             self.test_results['file_permissions'] = {
-                'status': 'PASS' if can_create_plugin_dir and can_create_cyberpanel_dir else 'WARN',
+                'status': 'PASS' if can_create_plugin_dir and can_create_cpn_dir else 'WARN',
                 'can_create_plugin_dir': can_create_plugin_dir,
-                'can_create_cyberpanel_dir': can_create_cyberpanel_dir,
+                'can_create_cpn_dir': can_create_cpn_dir,
                 'plugin_dir': plugin_dir,
-                'cyberpanel_dir': cyberpanel_dir
+                'cpn_dir': cpn_dir
             }
             
             print(f"   {'✅' if can_create_plugin_dir else '⚠️'} Plugin Directory: {plugin_dir}")
-            print(f"   {'✅' if can_create_cyberpanel_dir else '⚠️'} CyberPanel Directory: {cyberpanel_dir}")
+            print(f"   {'✅' if can_create_cpn_dir else '⚠️'} CPN Directory: {cpn_dir}")
             
         except Exception as e:
             self.test_results['file_permissions'] = {
@@ -319,42 +319,42 @@ class OSCompatibilityTester:
             }
             print(f"   ❌ Error: {e}")
     
-    def test_cyberpanel_integration(self):
-        """Test CyberPanel integration"""
-        print("\n⚡ Testing CyberPanel Integration...")
+    def test_cpn_integration(self):
+        """Test CPN integration"""
+        print("\n⚡ Testing CPN Integration...")
         
         try:
-            cyberpanel_dir = "/usr/local/CyberCP"
+            cpn_dir = "/usr/local/cpn"
             
-            # Check if CyberPanel is installed
-            cyberpanel_installed = os.path.exists(cyberpanel_dir)
+            # Check if CPN is installed
+            cpn_installed = os.path.exists(cpn_dir)
             
             # Check if Django settings exist
-            settings_file = f"{cyberpanel_dir}/cyberpanel/settings.py"
+            settings_file = f"{cpn_dir}/cpn/settings.py"
             settings_exist = os.path.exists(settings_file)
             
             # Check if URLs file exists
-            urls_file = f"{cyberpanel_dir}/cyberpanel/urls.py"
+            urls_file = f"{cpn_dir}/cpn/urls.py"
             urls_exist = os.path.exists(urls_file)
             
             # Check if lscpd service exists
             lscpd_exists = os.path.exists("/usr/local/lscp/bin/lscpd")
             
-            self.test_results['cyberpanel_integration'] = {
-                'status': 'PASS' if cyberpanel_installed and settings_exist and urls_exist else 'WARN',
-                'cyberpanel_installed': cyberpanel_installed,
+            self.test_results['cpn_integration'] = {
+                'status': 'PASS' if cpn_installed and settings_exist and urls_exist else 'WARN',
+                'cpn_installed': cpn_installed,
                 'settings_exist': settings_exist,
                 'urls_exist': urls_exist,
                 'lscpd_exists': lscpd_exists
             }
             
-            print(f"   {'✅' if cyberpanel_installed else '⚠️'} CyberPanel Installed: {cyberpanel_installed}")
+            print(f"   {'✅' if cpn_installed else '⚠️'} CPN Installed: {cpn_installed}")
             print(f"   {'✅' if settings_exist else '⚠️'} Settings File: {settings_exist}")
             print(f"   {'✅' if urls_exist else '⚠️'} URLs File: {urls_exist}")
             print(f"   {'✅' if lscpd_exists else '⚠️'} LSCPD Service: {lscpd_exists}")
             
         except Exception as e:
-            self.test_results['cyberpanel_integration'] = {
+            self.test_results['cpn_integration'] = {
                 'status': 'FAIL',
                 'error': str(e)
             }

@@ -6,7 +6,7 @@ Automatically modifies login template to include Discord login button
 
 import os
 import re
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
 
 def install_discord_auth_integration():
@@ -14,7 +14,7 @@ def install_discord_auth_integration():
     Install Discord auth integration into login template
     Adds script tag to inject Discord login button
     """
-    login_template = '/usr/local/CyberCP/loginSystem/templates/loginSystem/login.html'
+    login_template = '/usr/local/cpn/loginSystem/templates/loginSystem/login.html'
     
     if not os.path.exists(login_template):
         logging.writeToFile(f"Login template not found: {login_template}")
@@ -145,7 +145,7 @@ def uninstall_discord_auth_integration():
     """
     Remove Discord auth integration from login template
     """
-    login_template = '/usr/local/CyberCP/loginSystem/templates/loginSystem/login.html'
+    login_template = '/usr/local/cpn/loginSystem/templates/loginSystem/login.html'
     
     if not os.path.exists(login_template):
         return True

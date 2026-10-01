@@ -94,7 +94,7 @@ class WhitelistedIP(models.Model):
     )
     is_system_ip = models.BooleanField(
         default=False,
-        help_text="System IP (CyberPanel machine IP) - cannot be deleted."
+        help_text="System IP (CPN machine IP) - cannot be deleted."
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

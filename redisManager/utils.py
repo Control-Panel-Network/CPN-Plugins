@@ -7,7 +7,7 @@ import shlex
 import os
 import re
 
-REDIS_MARKER = '/home/cyberpanel/redis'
+REDIS_MARKER = '/home/cpn/redis'
 REDIS_SERVICE = 'redis'
 REDIS_CLI = 'redis-cli'
 REDIS_HOST = '127.0.0.1'
@@ -21,11 +21,11 @@ REDIS_CONF_PATHS = [
     '/opt/redis/redis.conf',
     '/usr/local/redis/redis.conf',
     '/var/lib/redis/redis.conf',
-    '/usr/local/CyberCP/redis/redis.conf',
+    '/usr/local/cpn/redis/redis.conf',
 ]
 
 # File where we store user-set config path (one line, absolute path)
-REDIS_CUSTOM_PATH_FILE = '/home/cyberpanel/.redis_manager_config_path'
+REDIS_CUSTOM_PATH_FILE = '/home/cpn/.redis_manager_config_path'
 
 # Editable settings: key -> (label, type, default, help [, options for select]).
 EDITABLE_CONFIG = {

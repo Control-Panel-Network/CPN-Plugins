@@ -11,7 +11,7 @@ def get_panel_csrf_origins_file():
     """Path to the file where custom panel origins are stored (one per line)."""
     return os.environ.get(
         'PANEL_CSRF_ORIGINS_FILE',
-        '/home/cyberpanel/panel_csrf_origins.conf'
+        '/home/cpn/panel_csrf_origins.conf'
     )
 
 

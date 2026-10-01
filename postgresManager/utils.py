@@ -35,12 +35,12 @@ CREATEDB_CANDIDATES = (
     '/usr/pgsql-13/bin/createdb',
     'createdb',
 )
-STATE_DIR = '/usr/local/CyberCP/pluginState/postgresManager'
-PASSWORD_FILE = os.path.join(STATE_DIR, 'cyberpanel_pgadmin_password')
+STATE_DIR = '/usr/local/cpn/pluginState/postgresManager'
+PASSWORD_FILE = os.path.join(STATE_DIR, 'cpn_pgadmin_password')
 DATABASES_FILE = os.path.join(STATE_DIR, 'databases.json')
-ADMIN_ROLE = 'cyberpanel_pgadmin'
-ADMIN_DB = 'cyberpanel_postgres'
-ADMINER_DIR = '/usr/local/CyberCP/public/postgres-adminer'
+ADMIN_ROLE = 'cpn_pgadmin'
+ADMIN_DB = 'cpn_postgres'
+ADMINER_DIR = '/usr/local/cpn/public/postgres-adminer'
 HBA_CANDIDATES = (
     '/var/lib/pgsql/data/pg_hba.conf',
     '/etc/postgresql/*/main/pg_hba.conf',
@@ -167,15 +167,15 @@ def ensure_local_password_auth():
         with open(hba, 'r') as f:
             data = f.read()
         block = (
-            "# cyberpanel-postgres-manager begin\n"
+            "# cpn-postgres-manager begin\n"
             "host    %s             %s             127.0.0.1/32            md5\n"
             "host    %s             %s             ::1/128                 md5\n"
             "host    all              %s             127.0.0.1/32            md5\n"
             "host    all              %s             ::1/128                 md5\n"
-            "# cyberpanel-postgres-manager end\n\n"
+            "# cpn-postgres-manager end\n\n"
         ) % (ADMIN_DB, ADMIN_ROLE, ADMIN_DB, ADMIN_ROLE, ADMIN_ROLE, ADMIN_ROLE)
-        begin = '# cyberpanel-postgres-manager begin'
-        end = '# cyberpanel-postgres-manager end'
+        begin = '# cpn-postgres-manager begin'
+        end = '# cpn-postgres-manager end'
         if begin in data and end in data:
             start = data.find(begin)
             finish = data.find(end, start) + len(end)

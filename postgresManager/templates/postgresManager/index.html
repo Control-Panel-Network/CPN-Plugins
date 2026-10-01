@@ -1,7 +1,7 @@
 {% extends "baseTemplate/index.html" %}
 {% load i18n %}
 
-{% block title %}PostgreSQL Manager - {% trans "CyberPanel" %}{% endblock %}
+{% block title %}PostgreSQL Manager - {% trans "CPN" %}{% endblock %}
 
 {% block content %}
 <style>
@@ -53,7 +53,7 @@
     <div class="pgm-head">
         <div>
             <h1 class="pgm-title">PostgreSQL Manager{% if not is_paid %}<span class="pgm-free">{% trans "Free" %}</span>{% endif %}</h1>
-            <p class="pgm-sub">Manage PostgreSQL service, databases, users, passwords, and Adminer access from CyberPanel.</p>
+            <p class="pgm-sub">Manage PostgreSQL service, databases, users, passwords, and Adminer access from CPN.</p>
         </div>
         {% if adminer_installed and admin_password %}
         <form action="{{ adminer_url }}" method="post" target="_blank">

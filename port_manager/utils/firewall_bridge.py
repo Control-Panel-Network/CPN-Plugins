@@ -1,5 +1,5 @@
 from plogical.firewallUtilities import FirewallUtilities
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from .validation import parse_port, parse_proto
 
 def open_port(proto, port, ip='0.0.0.0/0'):

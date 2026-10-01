@@ -1,8 +1,8 @@
-# Security Implementation - CyberPanel Test Plugin
+# Security Implementation - CPN Test Plugin
 
 ## 🔒 Security Overview
 
-The CyberPanel Test Plugin has been designed with **enterprise-grade security** as the top priority. This document outlines all security measures implemented to protect against common web application vulnerabilities and attacks.
+The CPN Test Plugin has been designed with **enterprise-grade security** as the top priority. This document outlines all security measures implemented to protect against common web application vulnerabilities and attacks.
 
 ## 🛡️ Security Features Implemented
 
@@ -138,7 +138,7 @@ HMAC_ALGORITHM = 'sha256'
 7. **Implement proper session management**
 
 ### For Administrators
-1. **Keep CyberPanel updated**
+1. **Keep CPN updated**
 2. **Use strong, unique passwords**
 3. **Enable 2FA** on admin accounts
 4. **Regularly review security logs**
@@ -217,7 +217,7 @@ Access the security information page at: `/testPlugin/security/`
 
 For security-related issues or vulnerability reports:
 
-- **Email**: security@cyberpanel.net
+- **Email**: security@cpn.net
 - **GitHub**: Create a private security issue
 - **Response Time**: Within 24-48 hours
 
@@ -235,7 +235,7 @@ Security is an ongoing process. Regular updates include:
 
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [Django Security](https://docs.djangoproject.com/en/stable/topics/security/)
-- [CyberPanel Security](https://cyberpanel.net/docs/)
+- [CPN Security](https://cpn.newstargeted.com/docs/)
 - [Web Application Security](https://cheatsheetseries.owasp.org/)
 
 ---

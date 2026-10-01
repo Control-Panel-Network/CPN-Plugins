@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""JSON API views for Fail2ban plugin (CyberPanel admin session required)."""
+"""JSON API views for Fail2ban plugin (CPN admin session required)."""
 import json
 import re
 import subprocess

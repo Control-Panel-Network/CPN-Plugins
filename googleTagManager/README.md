@@ -1,4 +1,4 @@
-# Google Tag Manager Plugin for CyberPanel
+# Google Tag Manager Plugin for CPN
 
 **Author:** master3395  
 **Version:** 1.0.0  
@@ -6,7 +6,7 @@
 
 ## Overview
 
-The Google Tag Manager (GTM) plugin for CyberPanel makes it easy to add Google Tag Manager container IDs to your domains. Configure GTM for each domain and get ready-to-use code snippets to add to your websites.
+The Google Tag Manager (GTM) plugin for CPN makes it easy to add Google Tag Manager container IDs to your domains. Configure GTM for each domain and get ready-to-use code snippets to add to your websites.
 
 ## Features
 
@@ -22,14 +22,14 @@ The Google Tag Manager (GTM) plugin for CyberPanel makes it easy to add Google T
 
 ### Prerequisites
 
-- CyberPanel installed and running
-- Admin or user access to CyberPanel
+- CPN installed and running
+- Admin or user access to CPN
 - Python 3.6+ and Django 2.2+
 
 ### Installation Steps
 
 1. **Upload Plugin**
-   - Log into CyberPanel as administrator
+   - Log into CPN as administrator
    - Navigate to **Plugins** → **Installed Plugins**
    - Click **Upload Plugin** button
    - Select the `googleTagManager.zip` file
@@ -184,13 +184,13 @@ The plugin creates a `google_tag_manager_settings` table with the following stru
 - `domain`: Domain name (unique)
 - `gtm_container_id`: GTM container ID (format: GTM-XXXXXXX)
 - `enabled`: Boolean flag for enable/disable
-- `website`: Foreign key to CyberPanel Websites (optional)
+- `website`: Foreign key to CPN Websites (optional)
 - `created_at`: Timestamp
 - `updated_at`: Timestamp
 
 ## Security
 
-- All views require CyberPanel authentication
+- All views require CPN authentication
 - Domain access is validated using ACLManager
 - GTM container IDs are validated for correct format
 - API endpoints use CSRF protection
@@ -200,9 +200,9 @@ The plugin creates a `google_tag_manager_settings` table with the following stru
 
 ### Plugin Not Appearing
 
-- Check that plugin is installed: `/usr/local/CyberCP/googleTagManager/`
+- Check that plugin is installed: `/usr/local/cpn/googleTagManager/`
 - Verify `INSTALLED_APPS` in `settings.py` includes `googleTagManager`
-- Check CyberPanel logs: `/var/log/cyberpanel/error.log`
+- Check CPN logs: `/var/log/cpn/error.log`
 
 ### GTM Code Not Working
 
@@ -213,15 +213,15 @@ The plugin creates a `google_tag_manager_settings` table with the following stru
 
 ### Domain Not Showing
 
-- Ensure domain exists in CyberPanel
+- Ensure domain exists in CPN
 - Check user has access to the domain
 - Verify domain is not suspended
 
 ## Support
 
 For issues, questions, or contributions:
-- GitHub: https://github.com/master3395/cyberpanel-plugins
-- Check CyberPanel logs: `/var/log/cyberpanel/error.log`
+- GitHub: https://github.com/Control-Panel-Network/CPN-Plugins
+- Check CPN logs: `/var/log/cpn/error.log`
 
 ## Changelog
 
@@ -242,4 +242,4 @@ MIT License - see LICENSE file for details
 
 ---
 
-**Note:** This plugin requires CyberPanel to be installed and running. Make sure you have proper backups before installing plugins.
+**Note:** This plugin requires CPN to be installed and running. Make sure you have proper backups before installing plugins.

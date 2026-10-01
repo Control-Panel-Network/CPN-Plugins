@@ -7,13 +7,13 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from plogical.httpProc import httpProc
 
 from . import utils
 
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
@@ -34,7 +34,7 @@ def _body(request):
 
 
 @ensure_csrf_cookie
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(['GET'])
 def main_view(request):
     try:
@@ -66,7 +66,7 @@ def main_view(request):
         return HttpResponse('PostgreSQL Manager error', status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 def api_control(request):
@@ -82,7 +82,7 @@ def api_control(request):
         return _json({'success': False, 'error': 'Internal server error.'}, 500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 def api_init_admin(request):
@@ -98,7 +98,7 @@ def api_init_admin(request):
         return _json({'success': False, 'error': 'Internal server error.'}, 500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(['GET'])
 def api_websites(request):
     try:
@@ -108,7 +108,7 @@ def api_websites(request):
         return _json({'success': False, 'error': 'Internal server error.'}, 500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(['GET'])
 def api_databases(request):
     try:
@@ -119,7 +119,7 @@ def api_databases(request):
         return _json({'success': False, 'error': 'Internal server error.'}, 500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 def api_create_database(request):
@@ -142,7 +142,7 @@ def api_create_database(request):
         return _json({'success': False, 'error': str(exc)}, 500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 def api_change_password(request):
@@ -164,7 +164,7 @@ def api_change_password(request):
         return _json({'success': False, 'error': str(exc)}, 500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 def api_delete_database(request):

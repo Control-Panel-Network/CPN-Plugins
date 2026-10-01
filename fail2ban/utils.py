@@ -8,9 +8,9 @@ from .models import SecurityEvent, BannedIP
 # Fail2ban jail names: alphanumeric, underscore, hyphen, dot (no shell metacharacters)
 JAIL_NAME_PATTERN = re.compile(r'^[a-zA-Z0-9_.-]+$')
 JAIL_NAME_MAX_LEN = 128
-SAFE_FAIL2BAN_CLIENT = '/usr/local/bin/cyberpanel-safe-fail2ban-client'
-SAFE_FAIL2BAN_LOGS = '/usr/local/bin/cyberpanel-safe-fail2ban-logs'
-SAFE_FAIL2BAN_LOGS_CLEAR = '/usr/local/bin/cyberpanel-safe-fail2ban-logs-clear'
+SAFE_FAIL2BAN_CLIENT = '/usr/local/bin/cpn-safe-fail2ban-client'
+SAFE_FAIL2BAN_LOGS = '/usr/local/bin/cpn-safe-fail2ban-logs'
+SAFE_FAIL2BAN_LOGS_CLEAR = '/usr/local/bin/cpn-safe-fail2ban-logs-clear'
 FAIL2BAN_LOG_FILE = '/var/log/fail2ban.log'
 
 # Short-lived cache so Banned IPs pagination does not re-query fail2ban every page.
@@ -28,7 +28,7 @@ class Fail2banManager:
     
     def _privileged_fail2ban_argv(self, argv):
         """
-        LSCPD workers run as cyberpanel (not root). Prefer the allowlisted
+        LSCPD workers run as cpn (not root). Prefer the allowlisted
         sudo wrapper; fall back to sudo fail2ban-client when needed.
         """
         argv = list(argv)
@@ -242,7 +242,7 @@ class Fail2banManager:
         return rows
 
     def count_firewall_bans(self, q=None):
-        """Fast count of active CyberPanel firewall bans (optional IP search)."""
+        """Fast count of active CPN firewall bans (optional IP search)."""
         try:
             from firewall.models import BannedIP as FirewallBannedIP
             qs = FirewallBannedIP.objects.filter(active=True)
@@ -327,7 +327,7 @@ class Fail2banManager:
         """
         Get banned IPs from fail2ban jails.
 
-        When include_firewall=True, also merge CyberPanel firewall BannedIP /
+        When include_firewall=True, also merge CPN firewall BannedIP /
         firewalld rich-rule drops so historical Firewall bans appear in this plugin.
         Prefer get_banned_ips_page() for large lists.
         """
@@ -628,7 +628,7 @@ class Fail2banManager:
             if not cleaned:
                 cleaned = ['127.0.0.1', '::1']
 
-            helper = '/usr/local/bin/cyberpanel-safe-fail2ban-ignoreip'
+            helper = '/usr/local/bin/cpn-safe-fail2ban-ignoreip'
             payload = ' '.join(cleaned)
             wrote = False
             if os.path.isfile(helper):
@@ -977,7 +977,7 @@ class Fail2banManager:
             return {'success': False, 'error': str(e)}
 
     def unban_firewall_ip(self, ip):
-        """Remove a permanent CyberPanel / firewalld ban for an IP."""
+        """Remove a permanent CPN / firewalld ban for an IP."""
         try:
             if not self.is_valid_ip(ip):
                 return {'success': False, 'error': 'Invalid IP address format'}
@@ -1068,7 +1068,7 @@ class Fail2banManager:
             n = max(1, min(n, 5000))
 
             logs = []
-            # Panel workers run as cyberpanel and cannot read root-only fail2ban.log.
+            # Panel workers run as cpn and cannot read root-only fail2ban.log.
             if os.path.isfile(SAFE_FAIL2BAN_LOGS):
                 result = self.run_command(['sudo', '-n', SAFE_FAIL2BAN_LOGS, str(n)])
                 if result.get('success'):

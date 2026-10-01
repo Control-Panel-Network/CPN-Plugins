@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-Test Contabo API connection. Run from CyberCP directory:
-  cd /usr/local/CyberCP && python3 contaboAutoSnapshot/test_contabo_api.py
+Test Contabo API connection. Run from CPN directory:
+  cd /usr/local/cpn && python3 contaboAutoSnapshot/test_contabo_api.py
 
 Set env: CONTABO_CLIENT_SECRET, CONTABO_API_USER (email), CONTABO_API_PASSWORD
 Or copy credentials from archive-snapshots config.
 """
 import os
 import sys
-sys.path.insert(0, '/usr/local/CyberCP')
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CyberCP.settings')
+sys.path.insert(0, '/usr/local/cpn')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cpn.settings')
 import django
 django.setup()
 

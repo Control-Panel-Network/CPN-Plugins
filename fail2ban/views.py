@@ -4,22 +4,22 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from .utils import Fail2banManager
-from .panel_auth import cyberpanel_login_and_admin, _html_plugin_error
+from .panel_auth import cpn_login_and_admin, _html_plugin_error
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def fail2ban_plugin(request):
     """Main plugin page: single inline-tab UI (no separate panels)."""
     return unified_settings(request)
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def settings(request):
     """Alias for pluginHolder settings proxy + clean /settings/ URL."""
     return unified_settings(request)
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def plugin_card(request):
     """Plugin card view with buttons"""
     try:
@@ -31,55 +31,55 @@ def plugin_card(request):
         return _html_plugin_error(request, e, 'Plugin card')
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def jails_standalone(request):
     """Legacy URL: open the unified page on the jails tab."""
     from django.shortcuts import redirect
     return redirect('/plugins/fail2ban/#jails')
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def banned_ips_standalone(request):
     """Legacy URL: open the unified page on the banned tab."""
     from django.shortcuts import redirect
     return redirect('/plugins/fail2ban/#banned')
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def whitelist_standalone(request):
     """Legacy URL: open the unified page on the whitelist tab."""
     from django.shortcuts import redirect
     return redirect('/plugins/fail2ban/#whitelist')
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def blacklist_standalone(request):
     """Legacy URL: open the unified page on the blacklist tab."""
     from django.shortcuts import redirect
     return redirect('/plugins/fail2ban/#blacklist')
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def logs_standalone(request):
     """Legacy URL: open the unified page on the logs tab."""
     from django.shortcuts import redirect
     return redirect('/plugins/fail2ban/#logs')
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def statistics_standalone(request):
     """Legacy URL: open the unified page on the statistics tab."""
     from django.shortcuts import redirect
     return redirect('/plugins/fail2ban/#statistics')
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def settings_standalone(request):
     """Legacy /settings/ path: same single-page UI."""
     return unified_settings(request)
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def unified_settings(request):
     """Unified settings view with tabs"""
     try:
@@ -140,13 +140,13 @@ def unified_settings(request):
         return _html_plugin_error(request, e, 'Unified settings')
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def dashboard(request):
     """Legacy dashboard view - redirects to unified settings"""
     return unified_settings(request)
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def jails_management(request):
     """Jails management page"""
     context = {
@@ -156,7 +156,7 @@ def jails_management(request):
     return render(request, 'fail2ban_plugin/jails.html', context)
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def banned_ips_management(request):
     """Banned IPs management page"""
     context = {
@@ -166,7 +166,7 @@ def banned_ips_management(request):
     return render(request, 'fail2ban_plugin/banned_ips.html', context)
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def whitelist_management(request):
     """Whitelist management page"""
     context = {
@@ -176,7 +176,7 @@ def whitelist_management(request):
     return render(request, 'fail2ban_plugin/whitelist.html', context)
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def blacklist_management(request):
     """Blacklist management page"""
     context = {
@@ -186,7 +186,7 @@ def blacklist_management(request):
     return render(request, 'fail2ban_plugin/blacklist.html', context)
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def settings_management(request):
     """Settings management page"""
     context = {
@@ -196,7 +196,7 @@ def settings_management(request):
     return render(request, 'fail2ban_plugin/settings.html', context)
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def logs_view(request):
     """Logs view page"""
     context = {
@@ -206,7 +206,7 @@ def logs_view(request):
     return render(request, 'fail2ban_plugin/logs.html', context)
 
 
-@cyberpanel_login_and_admin
+@cpn_login_and_admin
 def statistics_view(request):
     """Statistics view page"""
     context = {
@@ -215,5 +215,5 @@ def statistics_view(request):
     }
     return render(request, 'fail2ban_plugin/statistics.html', context)
 
-# Alias for CyberPanel plugin_settings_proxy (/plugins/<name>/settings/)
+# Alias for CPN plugin_settings_proxy (/plugins/<name>/settings/)
 settings = unified_settings

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Fernet key storage for encrypted MySQL passwords (same pattern as CyberPanel phpMyAdmin flow).
+Fernet key storage for encrypted MySQL passwords (same pattern as CPN phpMyAdmin flow).
 
-The CyberPanel WSGI process runs as user ``cyberpanel``; the key must be readable by that
-user (mode 600, owner cyberpanel). Do NOT chown to root — that breaks encrypt/decrypt.
+The CPN WSGI process runs as user ``cpn``; the key must be readable by that
+user (mode 600, owner cpn). Do NOT chown to root — that breaks encrypt/decrypt.
 """
 import os
 import pwd
@@ -12,8 +12,8 @@ from cryptography.fernet import Fernet
 
 
 KEY_BASENAME = 'limitedPhpmyAdmin_fernet.key'
-KEY_DIR = '/home/cyberpanel'
-_PANEL_USER = 'cyberpanel'
+KEY_DIR = '/home/cpn'
+_PANEL_USER = 'cpn'
 
 
 def _key_path():
@@ -21,7 +21,7 @@ def _key_path():
 
 
 def _chown_key_to_panel(path):
-    """Make key file readable by lswsgi (cyberpanel). Safe no-op if user missing or not root."""
+    """Make key file readable by lswsgi (cpn). Safe no-op if user missing or not root."""
     try:
         os.chmod(path, 0o600)
     except OSError:

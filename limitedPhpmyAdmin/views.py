@@ -13,20 +13,20 @@ from django.views.decorators.http import require_http_methods
 
 from plogical.httpProc import httpProc
 from plogical.mailUtilities import mailUtilities
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
 from . import acl_helpers
 from . import crypto_util
 from . import mysql_grant
 from .models import LimitedPhpmyAdminGrant
 
-# Django (lswsgi) runs as user `cyberpanel`, not `lscpd`. Panel state under
-# /var/lib/cyberpanel-panelstate/ is often root:lscpd and not writable — use
-# CyberCP pluginState (owned by cyberpanel) for saves. Older paths remain as read fallbacks.
-POLICY_FILE_PRIMARY = '/usr/local/CyberCP/pluginState/limited_phpmyadmin_policy.json'
+# Django (lswsgi) runs as user `cpn`, not `lscpd`. Panel state under
+# /var/lib/cpn-panelstate/ is often root:lscpd and not writable — use
+# CPN pluginState (owned by cpn) for saves. Older paths remain as read fallbacks.
+POLICY_FILE_PRIMARY = '/usr/local/cpn/pluginState/limited_phpmyadmin_policy.json'
 POLICY_FILE_READ_FALLBACKS = (
-    '/var/lib/cyberpanel-panelstate/limited_phpmyadmin_policy.json',
-    '/etc/cyberpanel/limited_phpmyadmin_policy.json',
+    '/var/lib/cpn-panelstate/limited_phpmyadmin_policy.json',
+    '/etc/cpn/limited_phpmyadmin_policy.json',
 )
 PREFERENCE_TAB_KEYS = (
     'manage',
@@ -60,7 +60,7 @@ def _default_policy():
     }
 
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
@@ -123,8 +123,8 @@ def _save_policy(policy):
         return False
 
 
-def cyberpanel_api_login_required(view_func):
-    """Like cyberpanel_login_required but return JSON 401 for fetch/XHR (never HTML redirect)."""
+def cpn_api_login_required(view_func):
+    """Like cpn_login_required but return JSON 401 for fetch/XHR (never HTML redirect)."""
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
@@ -156,7 +156,7 @@ def catch_json_api_errors(view_func):
             return _json(
                 {
                     'success': False,
-                    'error': 'Unexpected server error. Check CyberPanel logs and plugin migrations.',
+                    'error': 'Unexpected server error. Check CPN logs and plugin migrations.',
                 },
                 500,
             )
@@ -188,7 +188,7 @@ def _lpma_url_base(request):
     return p[: i + len(marker)] + '/'
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(['GET'])
 def main_view(request):
     try:
@@ -227,7 +227,7 @@ def main_view(request):
                 {
                     'error_message': (
                         'Limited phpMyAdmin failed to load. If this persists, check '
-                        'CyberPanel logs, run: cd /usr/local/CyberCP && python3 manage.py '
+                        'CPN logs, run: cd /usr/local/cpn && python3 manage.py '
                         'migrate limitedPhpmyAdmin --noinput, then systemctl restart lscpd.'
                     ),
                 },
@@ -243,7 +243,7 @@ def _require_api_session(request):
     return triplet
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['GET'])
 @catch_json_api_errors
@@ -256,7 +256,7 @@ def api_list_domains(request):
     return _json({'success': True, 'sites': [{'id': s.pk, 'domain': s.domain} for s in sites]})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['GET'])
 @catch_json_api_errors
@@ -273,7 +273,7 @@ def api_list_databases(request):
     return _json({'success': True, 'databases': [{'dbName': d.dbName} for d in dbs]})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['GET'])
 @catch_json_api_errors
@@ -288,7 +288,7 @@ def api_list_ftp(request):
     return _json({'success': True, 'ftp_users': acl_helpers.list_ftp_for_website(site)})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['GET'])
 @catch_json_api_errors
@@ -322,7 +322,7 @@ def _grant_to_dict(g):
     }
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['GET'])
 @catch_json_api_errors
@@ -338,7 +338,7 @@ def api_list_grants(request):
     return _json({'success': True, 'grants': [_grant_to_dict(g) for g in grants]})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @catch_json_api_errors
@@ -368,7 +368,7 @@ def api_create_grant(request):
     elif st == LimitedPhpmyAdminGrant.SUBJECT_CPUSER:
         adm = acl_helpers.resolve_cpuser_for_website(site, body.get('administrator_id'))
         if not adm:
-            return _json({'success': False, 'error': 'Invalid CyberPanel user for this website'}, 400)
+            return _json({'success': False, 'error': 'Invalid CPN user for this website'}, 400)
         label = adm.userName
         ftp_id = None
         adm_id = adm.pk
@@ -420,7 +420,7 @@ def api_create_grant(request):
     })
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @catch_json_api_errors
@@ -451,7 +451,7 @@ def api_disable_grant(request):
     return _json({'success': True, 'grant': _grant_to_dict(g)})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @catch_json_api_errors
@@ -491,7 +491,7 @@ def api_enable_grant(request):
     return _json({'success': True, 'grant': _grant_to_dict(g)})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @catch_json_api_errors
@@ -520,7 +520,7 @@ def api_delete_grant(request):
     return _json({'success': True})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @catch_json_api_errors
@@ -557,7 +557,7 @@ def api_rotate_password(request):
     })
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @catch_json_api_errors
@@ -598,7 +598,7 @@ def api_change_database(request):
     return _json({'success': True, 'grant': _grant_to_dict(g)})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @catch_json_api_errors
@@ -626,7 +626,7 @@ def api_update_notes(request):
     return _json({'success': True, 'grant': _grant_to_dict(g)})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @catch_json_api_errors
@@ -670,7 +670,7 @@ def api_update_privileges(request):
     return _json({'success': True, 'grant': _grant_to_dict(g)})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @catch_json_api_errors
@@ -706,7 +706,7 @@ def api_update_grant_launch(request):
     return _json({'success': True, 'grant': _grant_to_dict(g)})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['GET'])
 @catch_json_api_errors
@@ -717,7 +717,7 @@ def api_get_policy(request):
     return _json({'success': True, 'policy': _load_policy()})
 
 
-@cyberpanel_api_login_required
+@cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @catch_json_api_errors

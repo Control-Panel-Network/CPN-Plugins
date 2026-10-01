@@ -4,7 +4,7 @@ from . import views
 app_name = 'discordWebhooks'
 
 urlpatterns = [
-    # Main plugin page (required by CyberPanel)
+    # Main plugin page (required by CPN)
     re_path(r'^$', views.discord_webhooks_plugin, name='discord_webhooks_plugin'),
     
     # Settings page

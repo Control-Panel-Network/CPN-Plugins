@@ -12,7 +12,7 @@ import json
 from . import utils
 
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
@@ -24,7 +24,7 @@ def cyberpanel_login_required(view_func):
     return _wrapped_view
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["GET"])
 def admin_settings(request):
     try:
@@ -49,7 +49,7 @@ def admin_settings(request):
     return response
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -70,14 +70,14 @@ def api_toggle(request):
         return JsonResponse({'success': False, 'error': 'Invalid JSON.'}, status=400)
     except Exception as exc:
         try:
-            from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+            from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
             logging.writeToFile('snappymailWebmail api_toggle: %s' % str(exc))
         except Exception:
             pass
         return JsonResponse({'success': False, 'error': str(exc)}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @require_http_methods(["GET"])
 def api_status(request):

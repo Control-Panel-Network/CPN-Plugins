@@ -1,6 +1,6 @@
 {% extends "baseTemplate/index.html" %}
 {% load i18n %}
-{% block title %}{% trans "Send Emails - CyberPanel" %}{% endblock %}
+{% block title %}{% trans "Send Emails - CPN" %}{% endblock %}
 {% block content %}
 {% load static %}
 {% include "pluginHolder/cpui_head.html" %}
@@ -23,7 +23,7 @@
 <div ng-controller="sendEmailsCTRL" class="panel" style="background: var(--bg-primary, white); border-color: var(--border-color, #ddd);">
     <div class="panel-body" style="background: var(--bg-primary, white); color: var(--text-primary, #333);">
         <h3 class="title-hero">
-            {% trans "Send Emails" %} <img ng-hide="cyberPanelLoading" src="{% static 'images/loading.gif' %}">
+            {% trans "Send Emails" %} <img ng-hide="cpnLoading" src="{% static 'images/loading.gif' %}">
         </h3>
         <div  class="example-box-wrapper">
 
@@ -52,7 +52,7 @@
                                     <div class="modal-content" style="background: var(--bg-primary, white); color: var(--text-primary, #333); border-color: var(--border-color, #ddd);">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title">{% trans "You are doing to delete this template.." %} <img ng-hide="cyberPanelLoading" src="{% static 'images/loading.gif' %}"></h4>
+                                            <h4 class="modal-title">{% trans "You are doing to delete this template.." %} <img ng-hide="cpnLoading" src="{% static 'images/loading.gif' %}"></h4>
                                         </div>
                                         <div class="modal-body">
                                             <p>{% trans 'Are you sure?' %}</p>

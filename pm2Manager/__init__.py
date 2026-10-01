@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PM2 Manager Plugin for CyberPanel
+PM2 Manager Plugin for CPN
 Author: Master3395
 Version: 1.0.0
 """

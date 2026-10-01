@@ -24,7 +24,7 @@ Monitor your server and receive real-time notifications in Discord channels for 
 ## Installation
 
 1. Download the plugin ZIP file
-2. Upload via CyberPanel Plugin Manager
+2. Upload via CPN Plugin Manager
 3. Install and activate
 4. Configure webhook URLs in plugin settings
 5. Enable desired notification types
@@ -45,4 +45,4 @@ Monitor your server and receive real-time notifications in Discord channels for 
 
 - Python `psutil` library (usually pre-installed)
 - Discord webhook URLs
-- CyberPanel 2.5.5-dev or higher
+- CPN 2.5.5-dev or higher

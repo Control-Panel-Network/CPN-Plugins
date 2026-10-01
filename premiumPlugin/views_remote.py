@@ -21,15 +21,15 @@ REMOTE_VERIFICATION_URL = 'https://api.newstargeted.com/api/verify-patreon-membe
 PLUGIN_NAME = 'premiumPlugin'
 PLUGIN_VERSION = '1.0.4'
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     """
-    Custom decorator that checks for CyberPanel session userID
+    Custom decorator that checks for CPN session userID
     """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
             userID = request.session['userID']
-            # User is authenticated via CyberPanel session
+            # User is authenticated via CPN session
             return view_func(request, *args, **kwargs)
         except KeyError:
             # Not logged in, redirect to login
@@ -66,7 +66,7 @@ def remote_verification_required(view_func):
                 'plugin_name': 'Premium Plugin Example',
                 'is_paid': True,
                 'payment_method': 'patreon',
-                'patreon_tier': verification_result.get('patreon_tier', 'CyberPanel Paid Plugin'),
+                'patreon_tier': verification_result.get('patreon_tier', 'CPN Paid Plugin'),
                 'patreon_url': verification_result.get('patreon_url', 'https://www.patreon.com/c/newstargeted/membership'),
                 'paypal_me_url': '',
                 'paypal_payment_link': '',
@@ -105,7 +105,7 @@ def check_remote_membership(user_email, user_ip=''):
             'plugin_name': PLUGIN_NAME,
             'plugin_version': PLUGIN_VERSION,
             'user_ip': user_ip,
-            'tier_id': '27789984'  # CyberPanel Paid Plugin tier ID
+            'tier_id': '27789984'  # CPN Paid Plugin tier ID
         }
         
         # Make request to remote verification server
@@ -114,7 +114,7 @@ def check_remote_membership(user_email, user_ip=''):
             data=json.dumps(request_data).encode('utf-8'),
             headers={
                 'Content-Type': 'application/json',
-                'User-Agent': f'CyberPanel-Plugin/{PLUGIN_VERSION}',
+                'User-Agent': f'CPN-Plugin/{PLUGIN_VERSION}',
                 'X-Plugin-Name': PLUGIN_NAME
             }
         )
@@ -127,7 +127,7 @@ def check_remote_membership(user_email, user_ip=''):
                 if response_data.get('success', False):
                     return {
                         'has_access': response_data.get('has_access', False),
-                        'patreon_tier': response_data.get('patreon_tier', 'CyberPanel Paid Plugin'),
+                        'patreon_tier': response_data.get('patreon_tier', 'CPN Paid Plugin'),
                         'patreon_url': response_data.get('patreon_url', 'https://www.patreon.com/c/newstargeted/membership'),
                         'message': response_data.get('message', 'Access granted'),
                         'error': None
@@ -135,7 +135,7 @@ def check_remote_membership(user_email, user_ip=''):
                 else:
                     return {
                         'has_access': False,
-                        'patreon_tier': response_data.get('patreon_tier', 'CyberPanel Paid Plugin'),
+                        'patreon_tier': response_data.get('patreon_tier', 'CPN Paid Plugin'),
                         'patreon_url': response_data.get('patreon_url', 'https://www.patreon.com/c/newstargeted/membership'),
                         'message': response_data.get('message', 'Patreon subscription required'),
                         'error': response_data.get('error')
@@ -145,7 +145,7 @@ def check_remote_membership(user_email, user_ip=''):
             error_body = e.read().decode('utf-8') if e.fp else 'Unknown error'
             return {
                 'has_access': False,
-                'patreon_tier': 'CyberPanel Paid Plugin',
+                'patreon_tier': 'CPN Paid Plugin',
                 'patreon_url': 'https://www.patreon.com/c/newstargeted/membership',
                 'message': 'Unable to verify subscription. Please try again later.',
                 'error': f'HTTP {e.code}: {error_body}'
@@ -154,7 +154,7 @@ def check_remote_membership(user_email, user_ip=''):
             # Network error
             return {
                 'has_access': False,
-                'patreon_tier': 'CyberPanel Paid Plugin',
+                'patreon_tier': 'CPN Paid Plugin',
                 'patreon_url': 'https://www.patreon.com/c/newstargeted/membership',
                 'message': 'Unable to connect to verification server. Please check your internet connection.',
                 'error': str(e.reason) if hasattr(e, 'reason') else str(e)
@@ -163,7 +163,7 @@ def check_remote_membership(user_email, user_ip=''):
             # Other errors
             return {
                 'has_access': False,
-                'patreon_tier': 'CyberPanel Paid Plugin',
+                'patreon_tier': 'CPN Paid Plugin',
                 'patreon_url': 'https://www.patreon.com/c/newstargeted/membership',
                 'message': 'Verification error occurred. Please try again later.',
                 'error': str(e)
@@ -174,13 +174,13 @@ def check_remote_membership(user_email, user_ip=''):
         logging.writeToFile(f"Error in remote membership check: {str(e)}")
         return {
             'has_access': False,
-            'patreon_tier': 'CyberPanel Paid Plugin',
+            'patreon_tier': 'CPN Paid Plugin',
             'patreon_url': 'https://www.patreon.com/c/newstargeted/membership',
             'message': 'Verification error occurred. Please try again later.',
             'error': str(e)
         }
 
-@cyberpanel_login_required
+@cpn_login_required
 @remote_verification_required
 def main_view(request):
     """
@@ -205,7 +205,7 @@ def main_view(request):
     proc = httpProc(request, 'premiumPlugin/index.html', context, 'managePlugins')
     return proc.render()
 
-@cyberpanel_login_required
+@cpn_login_required
 @remote_verification_required
 def settings_view(request):
     """
@@ -223,7 +223,7 @@ def settings_view(request):
     proc = httpProc(request, 'premiumPlugin/settings.html', context, 'managePlugins')
     return proc.render()
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @remote_verification_required
 def api_status_view(request):

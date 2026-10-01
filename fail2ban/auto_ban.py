@@ -17,7 +17,7 @@ logger = logging.getLogger('fail2ban_plugin')
 
 _monitor_thread = None
 _monitor_lock = threading.Lock()
-_LOCK_PATH = '/tmp/cyberpanel-fail2ban-autoban.lock'
+_LOCK_PATH = '/tmp/cpn-fail2ban-autoban.lock'
 
 
 def _sleep_interruptible(seconds):
@@ -165,7 +165,7 @@ def run_autoban_once(force=False):
                 if fw_state == 'added':
                     need_fw_reload = True
                     try:
-                        block_log = '/usr/local/CyberCP/data/blocked_ips.log'
+                        block_log = '/usr/local/cpn/data/blocked_ips.log'
                         from datetime import datetime
                         os.makedirs(os.path.dirname(block_log), exist_ok=True)
                         with open(block_log, 'a') as fh:

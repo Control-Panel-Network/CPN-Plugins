@@ -5,7 +5,7 @@
 
 {% block extraCSS %}
 <style>
-/* Completely isolate our plugin from CyberPanel's CSS */
+/* Completely isolate our plugin from CPN's CSS */
 .fail2ban-plugin-container {
     /* Reset and isolate */
     all: initial;
@@ -18,13 +18,13 @@
     box-sizing: border-box;
     position: relative;
     z-index: 1;
-    /* Prevent interference with CyberPanel sidebar */
+    /* Prevent interference with CPN sidebar */
     overflow: visible !important;
     max-width: none !important;
     width: 100% !important;
 }
 
-/* Prevent CyberPanel CSS from affecting our plugin */
+/* Prevent CPN CSS from affecting our plugin */
 .fail2ban-plugin-container * {
     /* Reset all inherited styles */
     box-sizing: border-box !important;
@@ -647,28 +647,28 @@
     }
 }
 
-/* CyberPanel Compatibility */
+/* CPN Compatibility */
 .fail2ban-plugin-container {
-    /* Ensure the plugin content doesn't interfere with CyberPanel's layout */
+    /* Ensure the plugin content doesn't interfere with CPN's layout */
     position: relative;
     z-index: 1;
 }
 
-/* Reset any potential conflicts with CyberPanel's CSS */
+/* Reset any potential conflicts with CPN's CSS */
 .fail2ban-plugin-container * {
     /* Ensure our styles don't leak out */
     box-sizing: border-box;
 }
 
-/* Ensure tab navigation doesn't conflict with CyberPanel's menu */
+/* Ensure tab navigation doesn't conflict with CPN's menu */
 .fail2ban-plugin-container .tab-navigation {
-    /* Isolate our tab navigation from CyberPanel's menu system */
+    /* Isolate our tab navigation from CPN's menu system */
     position: relative;
     z-index: 10;
 }
 
 .fail2ban-plugin-container .tab-list {
-    /* Ensure our tab list doesn't interfere with CyberPanel's navigation */
+    /* Ensure our tab list doesn't interfere with CPN's navigation */
     list-style: none;
     margin: 0;
     padding: 0;
@@ -680,7 +680,7 @@
 }
 
 .fail2ban-plugin-container .tab-link {
-    /* Ensure tab links don't inherit CyberPanel's menu link styles */
+    /* Ensure tab links don't inherit CPN's menu link styles */
     text-decoration: none;
     color: inherit;
     display: block;
@@ -967,7 +967,7 @@
                 
                 <div class="form-group">
                     <label for="enabledJails">Enabled Jails (comma-separated):</label>
-                    <input type="text" id="enabledJails" name="enabled_jails" class="form-control" value="sshd,openlitespeed,cyberpanel">
+                    <input type="text" id="enabledJails" name="enabled_jails" class="form-control" value="sshd,openlitespeed,cpn">
                 </div>
                 
                 <button type="submit" class="btn btn-primary">

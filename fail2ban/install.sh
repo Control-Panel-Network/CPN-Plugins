@@ -1,6 +1,6 @@
 #!/bin/bash
 # Fail2ban Security Manager - Installation Script
-# Portable deployment script for any CyberPanel installation
+# Portable deployment script for any CPN installation
 
 set -e  # Exit on error
 
@@ -21,14 +21,14 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-# Check if CyberPanel is installed
-if [ ! -d "/usr/local/CyberCP" ]; then
-    echo -e "${RED}❌ Error: CyberPanel not found at /usr/local/CyberCP${NC}"
-    echo "   Please install CyberPanel first."
+# Check if CPN is installed
+if [ ! -d "/usr/local/cpn" ]; then
+    echo -e "${RED}❌ Error: CPN not found at /usr/local/cpn${NC}"
+    echo "   Please install CPN first."
     exit 1
 fi
 
-echo -e "${GREEN}✅ CyberPanel installation detected${NC}"
+echo -e "${GREEN}✅ CPN installation detected${NC}"
 echo ""
 
 # Get script directory
@@ -36,7 +36,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PLUGIN_SOURCE="$SCRIPT_DIR"
 
 echo "Installation steps:"
-echo "1. Copy plugin files to CyberPanel directories"
+echo "1. Copy plugin files to CPN directories"
 echo "2. Update security middleware configuration"
 echo "3. Set proper permissions"
 echo "4. Restart LiteSpeed web server"
@@ -53,30 +53,30 @@ echo "Step 1: Copying plugin files..."
 echo "----------------------------------------"
 
 # Create plugin directories if they don't exist
-mkdir -p /home/cyberpanel/plugins/fail2ban
-mkdir -p /usr/local/CyberCP/fail2ban_plugin
-mkdir -p /usr/local/CyberCP/pluginHolder/fail2ban_plugin
+mkdir -p /home/cpn/plugins/fail2ban
+mkdir -p /usr/local/cpn/fail2ban_plugin
+mkdir -p /usr/local/cpn/pluginHolder/fail2ban_plugin
 
 # Copy files to main Django app location
-echo -n "Copying to /usr/local/CyberCP/fail2ban_plugin/... "
-cp -r "$PLUGIN_SOURCE"/* /usr/local/CyberCP/fail2ban_plugin/ 2>/dev/null || true
+echo -n "Copying to /usr/local/cpn/fail2ban_plugin/... "
+cp -r "$PLUGIN_SOURCE"/* /usr/local/cpn/fail2ban_plugin/ 2>/dev/null || true
 echo -e "${GREEN}✅${NC}"
 
 # Copy files to pluginHolder location
-echo -n "Copying to /usr/local/CyberCP/pluginHolder/fail2ban_plugin/... "
-cp -r "$PLUGIN_SOURCE"/* /usr/local/CyberCP/pluginHolder/fail2ban_plugin/ 2>/dev/null || true
+echo -n "Copying to /usr/local/cpn/pluginHolder/fail2ban_plugin/... "
+cp -r "$PLUGIN_SOURCE"/* /usr/local/cpn/pluginHolder/fail2ban_plugin/ 2>/dev/null || true
 echo -e "${GREEN}✅${NC}"
 
 # Copy files to development location
-echo -n "Copying to /home/cyberpanel/plugins/fail2ban/... "
-cp -r "$PLUGIN_SOURCE"/* /home/cyberpanel/plugins/fail2ban/ 2>/dev/null || true
+echo -n "Copying to /home/cpn/plugins/fail2ban/... "
+cp -r "$PLUGIN_SOURCE"/* /home/cpn/plugins/fail2ban/ 2>/dev/null || true
 echo -e "${GREEN}✅${NC}"
 
 echo ""
 echo "Step 2: Updating security middleware..."
 echo "----------------------------------------"
 
-MIDDLEWARE_FILE="/usr/local/CyberCP/CyberCP/secMiddleware.py"
+MIDDLEWARE_FILE="/usr/local/cpn/cpn/secMiddleware.py"
 
 # Check if middleware file exists
 if [ ! -f "$MIDDLEWARE_FILE" ]; then
@@ -110,21 +110,21 @@ echo "Step 3: Setting permissions..."
 echo "----------------------------------------"
 
 # Set ownership for development location
-echo -n "Setting permissions for /home/cyberpanel/plugins/fail2ban/... "
-chown -R cyberpanel:cyberpanel /home/cyberpanel/plugins/fail2ban/
-chmod -R 755 /home/cyberpanel/plugins/fail2ban/
+echo -n "Setting permissions for /home/cpn/plugins/fail2ban/... "
+chown -R cpn:cpn /home/cpn/plugins/fail2ban/
+chmod -R 755 /home/cpn/plugins/fail2ban/
 echo -e "${GREEN}✅${NC}"
 
 # Set ownership for Django app location
-echo -n "Setting permissions for /usr/local/CyberCP/fail2ban_plugin/... "
-chown -R root:root /usr/local/CyberCP/fail2ban_plugin/
-chmod -R 755 /usr/local/CyberCP/fail2ban_plugin/
+echo -n "Setting permissions for /usr/local/cpn/fail2ban_plugin/... "
+chown -R root:root /usr/local/cpn/fail2ban_plugin/
+chmod -R 755 /usr/local/cpn/fail2ban_plugin/
 echo -e "${GREEN}✅${NC}"
 
 # Set ownership for pluginHolder location
-echo -n "Setting permissions for /usr/local/CyberCP/pluginHolder/fail2ban_plugin/... "
-chown -R root:root /usr/local/CyberCP/pluginHolder/fail2ban_plugin/
-chmod -R 755 /usr/local/CyberCP/pluginHolder/fail2ban_plugin/
+echo -n "Setting permissions for /usr/local/cpn/pluginHolder/fail2ban_plugin/... "
+chown -R root:root /usr/local/cpn/pluginHolder/fail2ban_plugin/
+chmod -R 755 /usr/local/cpn/pluginHolder/fail2ban_plugin/
 echo -e "${GREEN}✅${NC}"
 
 echo ""
@@ -152,7 +152,7 @@ echo "============================================================"
 echo ""
 echo "Next steps:"
 echo "1. Navigate to: https://YOUR_SERVER_IP:2087/"
-echo "2. Login to CyberPanel"
+echo "2. Login to CPN"
 echo "3. Go to: Plugins"
 echo "4. Find: Fail2ban Security Manager"
 echo "5. Click: Enable"
@@ -164,7 +164,7 @@ echo "  Settings:   https://YOUR_SERVER_IP:2087/plugins/fail2ban/settings/"
 echo "  Changelog:  https://YOUR_SERVER_IP:2087/plugins/fail2ban/changelog/"
 echo ""
 echo "For verification, run:"
-echo "  cd /usr/local/CyberCP && python3 -c 'import os, django; os.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"CyberCP.settings\"); django.setup(); from pluginHolder.fail2ban_plugin.views.core import dashboard; print(\"✅ Plugin loaded successfully\")'"
+echo "  cd /usr/local/cpn && python3 -c 'import os, django; os.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"cpn.settings\"); django.setup(); from pluginHolder.fail2ban_plugin.views.core import dashboard; print(\"✅ Plugin loaded successfully\")'"
 echo ""
 echo "============================================================"
 

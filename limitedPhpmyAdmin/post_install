@@ -1,4 +1,4 @@
-#!/usr/local/CyberCP/bin/python
+#!/usr/local/cpn/bin/python
 # -*- coding: utf-8 -*-
 """Ensure websiteFunctions is in the migration graph, then migrate this plugin."""
 import os
@@ -10,8 +10,8 @@ BLUE = "\033[0;34m"
 GREEN = "\033[0;32m"
 YELLOW = "\033[0;33m"
 
-CYBERCP = '/usr/local/CyberCP'
-MIG_DIR = os.path.join(CYBERCP, 'websiteFunctions', 'migrations')
+CPN = '/usr/local/cpn'
+MIG_DIR = os.path.join(CPN, 'websiteFunctions', 'migrations')
 STUB = os.path.join(MIG_DIR, '0001_initial.py')
 STUB_MARKER = 'limitedPhpmyAdmin-websiteFunctions-stub'
 
@@ -19,7 +19,7 @@ MIG_INIT = b'# -*- coding: utf-8 -*-\n'
 STUB_BODY = b'''# -*- coding: utf-8 -*-
 # ''' + STUB_MARKER.encode() + b'''
 """
-State-only registration for legacy Websites table (CyberPanel has no prior
+State-only registration for legacy Websites table (CPN has no prior
 django_migrations for websiteFunctions). Allows plugin FKs to resolve.
 """
 from django.db import migrations, models
@@ -46,10 +46,10 @@ class Migration(migrations.Migration):
 
 print(BLUE + "Limited phpMyAdmin: post-install" + RESET)
 
-LPMA = os.path.join(CYBERCP, 'limitedPhpmyAdmin')
+LPMA = os.path.join(CPN, 'limitedPhpmyAdmin')
 TPL_INDEX = os.path.join(LPMA, 'templates', 'limitedPhpmyAdmin', 'index.html')
 
-if os.path.isdir(CYBERCP):
+if os.path.isdir(CPN):
     if not os.path.isfile(TPL_INDEX):
         print(
             YELLOW
@@ -100,14 +100,14 @@ if os.path.isdir(CYBERCP):
                 else:
                     pass
         if need_write_stub:
-            print(YELLOW + "Installing websiteFunctions migration stub (legacy CyberPanel)." + RESET)
+            print(YELLOW + "Installing websiteFunctions migration stub (legacy CPN)." + RESET)
             with open(STUB, 'wb') as f:
                 f.write(STUB_BODY)
         py = sys.executable if sys.executable else 'python3'
         for app in ('websiteFunctions', 'limitedPhpmyAdmin'):
             r = subprocess.run(
                 [py, 'manage.py', 'migrate', app, '--noinput'],
-                cwd=CYBERCP,
+                cwd=CPN,
                 capture_output=True,
                 text=True,
             )
@@ -118,6 +118,6 @@ if os.path.isdir(CYBERCP):
     except OSError as exc:
         print(YELLOW + "post_install I/O error: %s" % exc + RESET)
 else:
-    print(YELLOW + "CyberCP path not found: %s" % CYBERCP + RESET)
+    print(YELLOW + "CPN path not found: %s" % CPN + RESET)
 
 print(GREEN + "Limited phpMyAdmin post-install finished." + RESET)

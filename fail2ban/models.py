@@ -4,14 +4,14 @@ from django.db import models
 class Fail2banSettings(models.Model):
     """
     Global fail2ban plugin settings (singleton row pk=1).
-    Live DB has no user_id column; keep this aligned with CyberPanel MariaDB.
+    Live DB has no user_id column; keep this aligned with CPN MariaDB.
     """
     email_notifications = models.BooleanField(default=True)
     auto_ban_threshold = models.IntegerField(default=5)
     ban_duration = models.IntegerField(default=3600)  # seconds
     whitelist_ips = models.TextField(default='', blank=True)
     blacklist_ips = models.TextField(default='', blank=True)
-    enabled_jails = models.TextField(default='sshd,openlitespeed,cyberpanel', blank=True)
+    enabled_jails = models.TextField(default='sshd,openlitespeed,cpn', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -28,7 +28,7 @@ class Fail2banSettings(models.Model):
                 'ban_duration': 3600,
                 'whitelist_ips': '',
                 'blacklist_ips': '',
-                'enabled_jails': 'sshd,openlitespeed,cyberpanel',
+                'enabled_jails': 'sshd,openlitespeed,cpn',
             },
         )
         return obj

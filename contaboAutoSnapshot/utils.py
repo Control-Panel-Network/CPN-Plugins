@@ -6,7 +6,7 @@ import uuid
 import requests
 import json
 from datetime import datetime
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
 # Contabo snapshot limits by productId (from Contabo docs: VPS 10=1, VPS 20=2, VPS 30+=3)
 SNAPSHOT_LIMIT_BY_PRODUCT = {

@@ -1,1 +1,1 @@
-# SnappyMail Webmail plugin for CyberPanel
+# SnappyMail Webmail plugin for CPN

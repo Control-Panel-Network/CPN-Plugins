@@ -382,7 +382,7 @@ function getCookie(name) {
 
 // Activation key on settings page (same flow as subscription + pluginHolder store-activation hook)
 document.addEventListener('DOMContentLoaded', function() {
-    async function persistActivationInCyberPanel(pluginName, activationKey) {
+    async function persistActivationInCPN(pluginName, activationKey) {
         try {
             if (!activationKey) return;
             await fetch('/plugins/api/store-activation/' + encodeURIComponent(pluginName) + '/', {
@@ -432,7 +432,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     throw new Error('Could not activate. Check your network and try again.');
                 }
                 if (data.success && data.has_access) {
-                    await persistActivationInCyberPanel('contaboAutoSnapshot', activationKey);
+                    await persistActivationInCPN('contaboAutoSnapshot', activationKey);
                     if (activationMessage) {
                         activationMessage.textContent = '✅ ' + (data.message || 'Access activated successfully');
                         activationMessage.style.display = 'block';

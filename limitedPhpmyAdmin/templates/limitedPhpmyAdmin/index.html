@@ -2,7 +2,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans "Limited phpMyAdmin" %} - {% trans "CyberPanel" %}{% endblock %}
+{% block title %}{% trans "Limited phpMyAdmin" %} - {% trans "CPN" %}{% endblock %}
 
 {% block content %}
 {% include "pluginHolder/cpui_head.html" %}
@@ -115,7 +115,7 @@
                     <label>{% trans "Subject type" %}</label>
                     <select id="lpma-subject-type" class="form-control">
                         <option value="ftp">{% trans "FTP user" %}</option>
-                        <option value="cpuser">{% trans "CyberPanel user" %}</option>
+                        <option value="cpuser">{% trans "CPN user" %}</option>
                     </select>
                 </div>
                 <div class="form-group" id="lpma-wrap-ftp">
@@ -123,7 +123,7 @@
                     <select id="lpma-ftp" class="form-control"></select>
                 </div>
                 <div class="form-group lpma-hidden" id="lpma-wrap-cp">
-                    <label>{% trans "CyberPanel user" %}</label>
+                    <label>{% trans "CPN user" %}</label>
                     <select id="lpma-cp" class="form-control"></select>
                 </div>
                 <div class="form-group">
@@ -321,7 +321,7 @@
             if (r.status === 401 || r.status === 403) {
                 hint += '{% trans "Session may have expired — reload the page and sign in again." %}';
             } else if (r.status >= 500) {
-                hint += '{% trans "Server error. Check CyberPanel logs and plugin migrations." %}';
+                hint += '{% trans "Server error. Check CPN logs and plugin migrations." %}';
             } else {
                 hint += '{% trans "The panel returned a page instead of JSON (wrong URL or proxy)." %}';
             }
@@ -446,7 +446,7 @@
                 : '<span class="text-warning"><i class="fas fa-ban"></i> {% trans "Disabled" %}</span>';
             var typeLabel = (g.subject_type === 'ftp')
                 ? '{% trans "FTP user" %}'
-                : ((g.subject_type === 'cpuser') ? '{% trans "CyberPanel user" %}' : escapeHtml(g.subject_type));
+                : ((g.subject_type === 'cpuser') ? '{% trans "CPN user" %}' : escapeHtml(g.subject_type));
             tr.innerHTML =
                 '<td>' + g.id + '</td>' +
                 '<td>' + escapeHtml(g.subject_label) + '</td>' +

@@ -8,10 +8,10 @@ import tempfile
 import subprocess
 import stat
 
-# Paths used by CyberPanel SnappyMail
-SNAPPYMAIL_INDEX = '/usr/local/CyberCP/public/snappymail/index.php'
-SNAPPYMAIL_DATA = '/usr/local/lscp/cyberpanel/snappymail/data'
-SNAPPYMAIL_APPLICATION_INI = '/usr/local/lscp/cyberpanel/snappymail/data/_data_/_default_/configs/application.ini'
+# Paths used by CPN SnappyMail
+SNAPPYMAIL_INDEX = '/usr/local/cpn/public/snappymail/index.php'
+SNAPPYMAIL_DATA = '/usr/local/lscp/cpn/snappymail/data'
+SNAPPYMAIL_APPLICATION_INI = '/usr/local/lscp/cpn/snappymail/data/_data_/_default_/configs/application.ini'
 PHP_BIN = '/usr/local/lsws/lsphp83/bin/php'
 # Fallback if lsphp83 not present
 PHP_ALTERNATIVES = ['/usr/local/lsws/lsphp82/bin/php', '/usr/local/lsws/lsphp81/bin/php', '/usr/bin/php']
@@ -162,7 +162,7 @@ echo $ok ? 'Done' : 'Error';
                 msg = (
                     'SnappyMail could not save the password. '
                     'Ensure the data folder is writable: run on the server '
-                    'sudo bash /usr/local/CyberCP/snappymailAdmin/fix_snappymail_permissions.sh'
+                    'sudo bash /usr/local/cpn/snappymailAdmin/fix_snappymail_permissions.sh'
                 )
             else:
                 msg = err or out or 'SnappyMail API did not return success.'
@@ -172,7 +172,7 @@ echo $ok ? 'Done' : 'Error';
         actual_login = get_snappymail_admin_login()
         if actual_login != login_val:
             try:
-                from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+                from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
                 logging.writeToFile(
                     'snappymailAdmin: PHP reported Done but config has admin_login=%r (expected %r). '
                     'Config path: %s' % (actual_login, login_val, SNAPPYMAIL_APPLICATION_INI)
@@ -182,14 +182,14 @@ echo $ok ? 'Done' : 'Error';
             return False, (
                 'SnappyMail reported success but the config file was not updated. '
                 'The admin panel may be using a different config path. '
-                'Try running: sudo bash /usr/local/CyberCP/snappymailAdmin/fix_snappymail_permissions.sh'
+                'Try running: sudo bash /usr/local/cpn/snappymailAdmin/fix_snappymail_permissions.sh'
             )
         return True, 'SnappyMail Admin credentials updated. Log in at the Admin URL shown above with username "%s" and your new password.' % login_val
     except subprocess.TimeoutExpired:
         return False, 'Request timed out.'
     except Exception as e:
         try:
-            from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+            from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
             logging.writeToFile('snappymailAdmin set_snappymail_admin_password: %s' % str(e))
         except Exception:
             pass

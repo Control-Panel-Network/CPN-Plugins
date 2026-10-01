@@ -23,7 +23,7 @@ header('Content-Type: text/html; charset=UTF-8');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Implementation Example - CyberPanel Plugins</title>
+    <title>Security Implementation Example - CPN Plugins</title>
     <style>
         * {
             margin: 0;
@@ -588,7 +588,7 @@ def check_remote_payment_secure(user_email, user_ip, domain, request_timestamp=N
             data=json.dumps(request_data).encode('utf-8'),
             headers={
                 'Content-Type': 'application/json',
-                'User-Agent': f'CyberPanel-Plugin/{PLUGIN_VERSION}',
+                'User-Agent': f'CPN-Plugin/{PLUGIN_VERSION}',
                 'X-Plugin-Name': PLUGIN_NAME,
                 'X-Timestamp': str(request_data['timestamp']),
                 # Add signature header if using HMAC
@@ -659,7 +659,7 @@ def check_remote_payment_secure(user_email, user_ip, domain, request_timestamp=N
 <code>from functools import wraps
 from django.shortcuts import redirect
 from plogical.httpProc import httpProc
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
 def secure_verification_required(view_func):
     """
@@ -730,7 +730,7 @@ def secure_verification_required(view_func):
     return _wrapped_view
 
 # Usage example:
-# @cyberpanel_login_required
+# @cpn_login_required
 # @secure_verification_required
 # def settings_view(request):
 #     # Your settings code here
@@ -782,7 +782,7 @@ def generate_file_hash(filepath):
         <div class="footer">
             <p><strong>Security Implementation Example</strong></p>
             <p>Version 1.0.0 | Last Updated: <?php echo date('Y-m-d'); ?></p>
-            <p>© <?php echo date('Y'); ?> master3395 - CyberPanel Plugins</p>
+            <p>© <?php echo date('Y'); ?> master3395 - CPN Plugins</p>
         </div>
     </div>
 </body>

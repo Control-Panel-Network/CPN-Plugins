@@ -1,16 +1,16 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.http import HttpResponse
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from .models import SecurityEvent, BannedIP
 
-# Try to import CyberPanel signals (may not be available in all versions)
+# Try to import CPN signals (may not be available in all versions)
 try:
     from websiteFunctions.signals import postWebsiteCreation, postWebsiteDeletion
-    CYBERPANEL_SIGNALS_AVAILABLE = True
+    CPN_SIGNALS_AVAILABLE = True
 except ImportError:
-    CYBERPANEL_SIGNALS_AVAILABLE = False
-    logging.writeToFile('CyberPanel signals not available - using fallback logging only')
+    CPN_SIGNALS_AVAILABLE = False
+    logging.writeToFile('CPN signals not available - using fallback logging only')
 
 @receiver(post_save, sender=SecurityEvent)
 def log_security_event(sender, instance, created, **kwargs):
@@ -31,8 +31,8 @@ def log_unbanned_ip(sender, instance, **kwargs):
     """Log when banned IP is deleted"""
     logging.writeToFile(f"Fail2ban Banned IP Removed: {instance.ip_address} from {instance.jail_name}")
 
-# CyberPanel core event handlers
-if CYBERPANEL_SIGNALS_AVAILABLE:
+# CPN core event handlers
+if CPN_SIGNALS_AVAILABLE:
     @receiver(postWebsiteCreation)
     def handle_website_creation(sender, **kwargs):
         """Handle new website creation - ensure fail2ban protection is active"""
@@ -59,5 +59,5 @@ if CYBERPANEL_SIGNALS_AVAILABLE:
             logging.writeToFile(f'Fail2ban Plugin: Error handling website deletion - {str(e)}')
             return 200
 else:
-    # Fallback logging for when CyberPanel signals are not available
-    logging.writeToFile('Fail2ban Plugin: CyberPanel signals not available, using basic Django signals only')
+    # Fallback logging for when CPN signals are not available
+    logging.writeToFile('Fail2ban Plugin: CPN signals not available, using basic Django signals only')

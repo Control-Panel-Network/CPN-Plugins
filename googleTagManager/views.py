@@ -9,7 +9,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
 from plogical.mailUtilities import mailUtilities
 from plogical.httpProc import httpProc
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from plogical.acl import ACLManager
 from functools import wraps
 import json
@@ -20,9 +20,9 @@ from .models import GTMSettings
 from .utils import get_user_domains, get_gtm_code_full, get_gtm_for_domain
 
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     """
-    Custom decorator that checks for CyberPanel session userID
+    Custom decorator that checks for CPN session userID
     """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
@@ -48,7 +48,7 @@ def _gtm_json_server_error(request, log_msg, exc=None):
 
 
 @ensure_csrf_cookie
-@cyberpanel_login_required
+@cpn_login_required
 def main_view(request):
     """
     Main view for Google Tag Manager plugin
@@ -114,7 +114,7 @@ def main_view(request):
 
 
 @ensure_csrf_cookie
-@cyberpanel_login_required
+@cpn_login_required
 def settings_view(request):
     """
     Settings page for configuring GTM container IDs per domain
@@ -171,7 +171,7 @@ def settings_view(request):
         return proc.render()
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["GET"])
 def api_get_domains(request):
     """
@@ -206,7 +206,7 @@ def api_get_domains(request):
         return _gtm_json_server_error(request, 'Error in api_get_domains', e)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["POST"])
 def api_save_gtm(request):
     """
@@ -273,7 +273,7 @@ def api_save_gtm(request):
         return _gtm_json_server_error(request, 'Error in api_save_gtm', e)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["POST"])
 def api_delete_gtm(request):
     """
@@ -323,7 +323,7 @@ def api_delete_gtm(request):
         return _gtm_json_server_error(request, 'Error in api_delete_gtm', e)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["GET"])
 def api_get_gtm_code(request, domain):
     """
@@ -367,7 +367,7 @@ def api_get_gtm_code(request, domain):
         return _gtm_json_server_error(request, 'Error in api_get_gtm_code', e)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["POST"])
 def api_toggle_gtm(request):
     """

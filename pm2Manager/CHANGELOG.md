@@ -44,5 +44,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[1.1.0]: https://github.com/master3395/cyberpanel-plugins/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/master3395/cyberpanel-plugins/releases/tag/v1.0.0
+[1.1.0]: https://github.com/Control-Panel-Network/CPN-Plugins/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/Control-Panel-Network/CPN-Plugins/releases/tag/v1.0.0

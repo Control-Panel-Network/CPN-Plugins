@@ -10,7 +10,7 @@ from loginSystem.models import Administrator
 
 class DiscordAccount(models.Model):
     """
-    Links Discord accounts to CyberPanel administrators
+    Links Discord accounts to CPN administrators
     """
     admin = models.OneToOneField(
         Administrator,

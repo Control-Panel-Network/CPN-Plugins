@@ -1,6 +1,6 @@
 #!/bin/bash
 # Roundcube Webmail catalog entry: redirect to CPN host package install.
-# Legacy CyberPanel paths are intentionally not used.
+# Legacy CPN paths are intentionally not used.
 set -euo pipefail
 
 LOG="/var/log/cpn/roundcubeWebmail_post_install.log"

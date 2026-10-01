@@ -2,7 +2,7 @@
 """
 SSH security alert analysis for Fail2ban plugin.
 
-Mirrors CyberPanel dashboard Recent SSH Logs alerts, but returns every
+Mirrors CPN dashboard Recent SSH Logs alerts, but returns every
 attacker IP (not only Top IP) so Ban All can cover root login attempts.
 """
 from __future__ import annotations

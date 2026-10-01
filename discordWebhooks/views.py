@@ -7,7 +7,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from functools import wraps
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from plogical.acl import ACLManager
 from .models import DiscordWebhook, WebhookSettings
 from .forms import DiscordWebhookForm, WebhookSettingsForm
@@ -26,15 +26,15 @@ def _webhooks_json_server_error(exc=None):
     )
 
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     """
-    Custom decorator that checks for CyberPanel session userID
+    Custom decorator that checks for CPN session userID
     """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
             userID = request.session['userID']
-            # User is authenticated via CyberPanel session
+            # User is authenticated via CPN session
             return view_func(request, *args, **kwargs)
         except KeyError:
             # Not logged in, redirect to login
@@ -43,8 +43,8 @@ def cyberpanel_login_required(view_func):
     return _wrapped_view
 
 
-def cyberpanel_admin_required(view_func):
-    """Require CyberPanel ACL admin (global webhooks are server-wide sensitive)."""
+def cpn_admin_required(view_func):
+    """Require CPN ACL admin (global webhooks are server-wide sensitive)."""
 
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
@@ -73,10 +73,10 @@ def cyberpanel_admin_required(view_func):
     return _wrapped_view
 
 
-@cyberpanel_login_required
-@cyberpanel_admin_required
+@cpn_login_required
+@cpn_admin_required
 def discord_webhooks_plugin(request):
-    """Main plugin page (required by CyberPanel)"""
+    """Main plugin page (required by CPN)"""
     try:
         # Redirect to settings page as main page
         return redirect('discordWebhooks:settings')
@@ -85,8 +85,8 @@ def discord_webhooks_plugin(request):
         return HttpResponse('<div>Plugin error</div>', status=500)
 
 
-@cyberpanel_login_required
-@cyberpanel_admin_required
+@cpn_login_required
+@cpn_admin_required
 def settings_view(request):
     """Main settings page"""
     try:
@@ -116,8 +116,8 @@ def settings_view(request):
         return HttpResponse('<div>Settings error</div>', status=500)
 
 
-@cyberpanel_login_required
-@cyberpanel_admin_required
+@cpn_login_required
+@cpn_admin_required
 @require_http_methods(["POST"])
 def add_webhook(request):
     """Add new webhook"""
@@ -136,8 +136,8 @@ def add_webhook(request):
         return _webhooks_json_server_error(e)
 
 
-@cyberpanel_login_required
-@cyberpanel_admin_required
+@cpn_login_required
+@cpn_admin_required
 @require_http_methods(["GET", "POST"])
 def edit_webhook(request, webhook_id):
     """Edit webhook"""
@@ -170,8 +170,8 @@ def edit_webhook(request, webhook_id):
         return _webhooks_json_server_error(e)
 
 
-@cyberpanel_login_required
-@cyberpanel_admin_required
+@cpn_login_required
+@cpn_admin_required
 @require_http_methods(["POST"])
 def delete_webhook(request, webhook_id):
     """Delete webhook"""
@@ -187,8 +187,8 @@ def delete_webhook(request, webhook_id):
         return _webhooks_json_server_error(e)
 
 
-@cyberpanel_login_required
-@cyberpanel_admin_required
+@cpn_login_required
+@cpn_admin_required
 @require_http_methods(["POST"])
 def test_webhook(request, webhook_id):
     """Test webhook"""
@@ -198,7 +198,7 @@ def test_webhook(request, webhook_id):
         # Create a test embed
         test_embed = {
             'title': 'Test Webhook',
-            'description': 'This is a test message from CyberPanel Discord Webhooks plugin.',
+            'description': 'This is a test message from CPN Discord Webhooks plugin.',
             'color': 3066993,  # Green
             'fields': [
                 {
@@ -213,7 +213,7 @@ def test_webhook(request, webhook_id):
                 }
             ],
             'footer': {
-                'text': 'CyberPanel Discord Webhooks'
+                'text': 'CPN Discord Webhooks'
             },
             'timestamp': datetime.now().isoformat()
         }
@@ -242,8 +242,8 @@ def test_webhook(request, webhook_id):
         return _webhooks_json_server_error(e)
 
 
-@cyberpanel_login_required
-@cyberpanel_admin_required
+@cpn_login_required
+@cpn_admin_required
 @require_http_methods(["POST"])
 def save_settings(request):
     """Save plugin settings"""

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Run Redis Manager config path detection (implement, run, test).
-Usage: cd /home/cyberpanel-plugins && python redisManager/run_detect_test.py
+Usage: cd /home/cpn-plugins && python redisManager/run_detect_test.py
 """
 import os
 import sys

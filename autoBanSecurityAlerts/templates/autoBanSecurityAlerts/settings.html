@@ -1,7 +1,7 @@
 {% extends "baseTemplate/index.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Auto Ban Security Alerts Settings - CyberPanel" %}{% endblock %}
+{% block title %}{% trans "Auto Ban Security Alerts Settings - CPN" %}{% endblock %}
 
 {% block content %}
 {% include "pluginHolder/cpui_head.html" %}
@@ -95,11 +95,11 @@
         
         <!-- IP Whitelist Management -->
         <h2 style="margin-top: 40px; margin-bottom: 20px;"><i class="fas fa-shield-alt"></i> {% trans "IP Whitelist" %}</h2>
-        <p style="color: #6c757d; margin-bottom: 20px;">{% trans "Whitelisted IPs will never be auto-banned. The CyberPanel machine IP is automatically whitelisted and cannot be removed." %}</p>
+        <p style="color: #6c757d; margin-bottom: 20px;">{% trans "Whitelisted IPs will never be auto-banned. The CPN machine IP is automatically whitelisted and cannot be removed." %}</p>
         
         {% if machine_ip %}
         <div style="background: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-            <strong><i class="fas fa-server"></i> {% trans "Current CyberPanel Machine IP" %}:</strong> 
+            <strong><i class="fas fa-server"></i> {% trans "Current CPN Machine IP" %}:</strong> 
             <code style="background: white; padding: 4px 8px; border-radius: 4px; margin-left: 10px;">{{ machine_ip }}</code>
             <span class="system-ip-badge" style="margin-left: 10px;">{% trans "Auto-whitelisted" %}</span>
         </div>
@@ -167,7 +167,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 40px; margin-bottom: 12px;">
             <h2 style="margin: 0;"><i class="fas fa-history"></i> {% trans "Recent Auto-Bans" %}</h2>
             <div>
-                <a href="/plugins/autoBanSecurityAlerts/export_firewall_json/" class="btn btn-secondary" style="white-space: nowrap;" title="{% trans 'JSON compatible with CyberPanel Firewall → Import Banned IPs' %}">
+                <a href="/plugins/autoBanSecurityAlerts/export_firewall_json/" class="btn btn-secondary" style="white-space: nowrap;" title="{% trans 'JSON compatible with CPN Firewall → Import Banned IPs' %}">
                     <i class="fas fa-file-download"></i> {% trans "Export for Firewall" %}
                 </a>
             </div>
@@ -211,7 +211,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-async function persistActivationInCyberPanel(pluginName, activationKey) {
+async function persistActivationInCPN(pluginName, activationKey) {
     try {
         if (!activationKey) return;
         await fetch('/plugins/api/store-activation/' + encodeURIComponent(pluginName) + '/', {
@@ -528,7 +528,7 @@ document.getElementById('activation-form').addEventListener('submit', async func
         msg.style.background = data.status === 1 ? '#d4edda' : '#f8d7da';
         msg.style.color = data.status === 1 ? '#155724' : '#721c24';
         if (data.status === 1) {
-            await persistActivationInCyberPanel('autoBanSecurityAlerts', key);
+            await persistActivationInCPN('autoBanSecurityAlerts', key);
             document.getElementById('activation-key').value = ''; 
             setTimeout(function() { location.reload(); }, 2000); 
         }

@@ -18,9 +18,9 @@ from .models import CSPConfig
 from .forms import CSPConfigForm
 
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     """
-    Custom decorator that checks for CyberPanel session userID
+    Custom decorator that checks for CPN session userID
     """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
@@ -33,13 +33,13 @@ def cyberpanel_login_required(view_func):
     return _wrapped_view
 
 
-@cyberpanel_login_required
+@cpn_login_required
 def main_view(request):
     """Main plugin page - redirects to settings"""
     return redirect('cspManager:settings')
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["GET", "POST"])
 def settings_view(request):
     """Settings page with CSP configuration"""
@@ -53,7 +53,7 @@ def settings_view(request):
             from django.db.utils import OperationalError, ProgrammingError
             from django.http import HttpResponse
             from django.core.management import call_command
-            from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+            from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
             logging.writeToFile(f"CSP Manager get_config error: {db_err}")
             if isinstance(db_err, (OperationalError, ProgrammingError)):
                 try:
@@ -64,7 +64,7 @@ def settings_view(request):
                     return HttpResponse(
                         '<div style="padding:20px;font-family:sans-serif;">'
                         '<h2>CSP Manager</h2><p>The database table is missing. Run migrations:</p>'
-                        '<pre>cd /usr/local/CyberCP && python3 manage.py migrate cspManager</pre>'
+                        '<pre>cd /usr/local/cpn && python3 manage.py migrate cspManager</pre>'
                         '<p>Error: %s</p></div>' % str(db_err),
                         status=503
                     )
@@ -106,7 +106,7 @@ def settings_view(request):
         return proc.render()
         
     except Exception as e:
-        from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+        from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
         logging.writeToFile(f"CSP Manager settings error: {str(e)}")
         import traceback
         error_trace = traceback.format_exc()
@@ -115,7 +115,7 @@ def settings_view(request):
         return HttpResponse(f"<div style='padding: 20px;'><h2>Settings Error</h2><p>{str(e)}</p><pre>{error_trace}</pre></div>")
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -148,7 +148,7 @@ def toggle_plugin_csp(request):
             'error': 'Invalid JSON data'
         }, status=400)
     except Exception as e:
-        from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+        from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
         logging.writeToFile(f"CSP Manager toggle error: {str(e)}")
         return JsonResponse({
             'success': False,

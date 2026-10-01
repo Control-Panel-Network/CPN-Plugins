@@ -1,6 +1,6 @@
 # Fail2ban Security Manager
 
-Manage and monitor fail2ban security settings through CyberPanel.
+Manage and monitor fail2ban security settings through CPN.
 
 **Version:** 1.0.0  
 **Type:** Security  
@@ -9,7 +9,7 @@ Manage and monitor fail2ban security settings through CyberPanel.
 
 ## Description
 
-Comprehensive fail2ban management interface for CyberPanel with jail configuration, IP management, and monitoring.
+Comprehensive fail2ban management interface for CPN with jail configuration, IP management, and monitoring.
 
 ## Features
 
@@ -22,7 +22,7 @@ Comprehensive fail2ban management interface for CyberPanel with jail configurati
 ## Installation
 
 1. Download the plugin ZIP file
-2. Upload via CyberPanel Plugin Manager
+2. Upload via CPN Plugin Manager
 3. Install and activate
 
 ## URLs
@@ -34,4 +34,4 @@ Comprehensive fail2ban management interface for CyberPanel with jail configurati
 
 - fail2ban installed on the server
 - Appropriate system permissions
-- CyberPanel 2.5.5-dev or higher
+- CPN 2.5.5-dev or higher

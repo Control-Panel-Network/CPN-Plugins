@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('database_name', models.CharField(help_text='Must match databases.Databases.dbName for this website', max_length=64)),
-                ('subject_type', models.CharField(choices=[('ftp', 'FTP user'), ('cpuser', 'CyberPanel user')], max_length=16)),
+                ('subject_type', models.CharField(choices=[('ftp', 'FTP user'), ('cpuser', 'CPN user')], max_length=16)),
                 ('subject_label', models.CharField(help_text='Display: FTP login or panel username', max_length=200)),
                 ('ftp_user_id', models.IntegerField(blank=True, help_text='ftp.models.Users.pk when subject_type=ftp', null=True)),
                 ('administrator_id', models.IntegerField(blank=True, help_text='Administrator.pk when subject_type=cpuser', null=True)),

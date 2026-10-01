@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""CyberPanel session + admin ACL and safe error responses for Fail2ban plugin."""
+"""CPN session + admin ACL and safe error responses for Fail2ban plugin."""
 import uuid
 import logging as pylogging
 from functools import wraps
@@ -34,8 +34,8 @@ def json_server_error(request, exc=None, status=500):
     )
 
 
-def cyberpanel_login_and_admin(view_func):
-    """Require CyberPanel session userID and ACL admin flag (matches other plugins)."""
+def cpn_login_and_admin(view_func):
+    """Require CPN session userID and ACL admin flag (matches other plugins)."""
 
     @wraps(view_func)
     def _wrapped(request, *args, **kwargs):
@@ -78,14 +78,14 @@ def cyberpanel_login_and_admin(view_func):
 
 def fail2ban_api(view_func):
     """
-    JSON API decorator: CSRF-exempt (CyberPanel plugin pattern) + admin session.
+    JSON API decorator: CSRF-exempt (CPN plugin pattern) + admin session.
     Session auth remains required; CSRF is redundant for same-origin panel XHR.
     """
-    return csrf_exempt(cyberpanel_login_and_admin(view_func))
+    return csrf_exempt(cpn_login_and_admin(view_func))
 
 
 def _django_user_for_fail2ban_settings(request):
-    """Map CyberPanel Administrator to a Django User for Fail2banSettings OneToOne."""
+    """Map CPN Administrator to a Django User for Fail2banSettings OneToOne."""
     admin = Administrator.objects.get(pk=int(request.session['userID']))
     User = get_user_model()
     user, _ = User.objects.get_or_create(

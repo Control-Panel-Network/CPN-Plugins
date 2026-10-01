@@ -1,6 +1,6 @@
 # PM2 Manager
 
-Manage PM2 process manager through CyberPanel interface.
+Manage PM2 process manager through CPN interface.
 
 **Version:** 1.0.0  
 **Type:** Utility  
@@ -9,7 +9,7 @@ Manage PM2 process manager through CyberPanel interface.
 
 ## Description
 
-Manage and monitor PM2 Node.js process manager directly from CyberPanel.
+Manage and monitor PM2 Node.js process manager directly from CPN.
 
 ## Features
 
@@ -22,7 +22,7 @@ Manage and monitor PM2 Node.js process manager directly from CyberPanel.
 ## Installation
 
 1. Download the plugin ZIP file
-2. Upload via CyberPanel Plugin Manager
+2. Upload via CPN Plugin Manager
 3. Install and activate
 
 ## URLs
@@ -35,4 +35,4 @@ Manage and monitor PM2 Node.js process manager directly from CyberPanel.
 - PM2 installed on the server
 - Node.js installed
 - Appropriate system permissions
-- CyberPanel 2.5.5-dev or higher
+- CPN 2.5.5-dev or higher

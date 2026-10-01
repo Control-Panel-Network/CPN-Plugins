@@ -1,10 +1,10 @@
-#!/usr/local/CyberCP/bin/python
+#!/usr/local/cpn/bin/python
 
 import os
 import time
 import csv
 import re
-import plogical.CyberCPLogFileWriter as logging
+import plogical.CPNLogFileWriter as logging
 from .models import EmailLists, EmailsInList, EmailTemplate, EmailJobs, SMTPHosts, ValidationLog
 from plogical.backupSchedule import backupSchedule
 from websiteFunctions.models import Websites
@@ -29,7 +29,7 @@ class emailMarketing(multi.Thread):
             elif self.function == 'startEmailJob':
                 self.startEmailJob()
         except BaseException as msg:
-            logging.CyberCPLogFileWriter.writeToFile(str(msg) + ' [emailMarketing.run]')
+            logging.CPNLogFileWriter.writeToFile(str(msg) + ' [emailMarketing.run]')
 
     def createEmailList(self):
         try:
@@ -59,10 +59,10 @@ class emailMarketing(multi.Thread):
                                             newEmail.save()
                                         except:
                                             pass
-                                    logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'], str(counter) + ' emails read.')
+                                    logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'], str(counter) + ' emails read.')
                                     counter = counter + 1
                         except BaseException as msg:
-                            logging.CyberCPLogFileWriter.writeToFile('%s. [createEmailList]' % (str(msg)))
+                            logging.CPNLogFileWriter.writeToFile('%s. [createEmailList]' % (str(msg)))
                             continue
             elif self.extraArgs['path'].endswith('.txt'):
                 with open(self.extraArgs['path'], 'r') as emailsList:
@@ -76,13 +76,13 @@ class emailMarketing(multi.Thread):
                                 newEmail = EmailsInList(owner=newList, email=email, verificationStatus='NOT CHECKED',
                                                         dateCreated=time.strftime("%I-%M-%S-%a-%b-%Y"))
                                 newEmail.save()
-                            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],str(counter) + ' emails read.')
+                            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],str(counter) + ' emails read.')
                             counter = counter + 1
                         emails = emailsList.readline()
 
-            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'], str(counter) + 'Successfully read all emails. [200]')
+            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'], str(counter) + 'Successfully read all emails. [200]')
         except BaseException as msg:
-            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'], str(msg) +'. [404]')
+            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'], str(msg) +'. [404]')
             return 0
 
     def findNextIP(self):
@@ -125,7 +125,7 @@ class emailMarketing(multi.Thread):
                                 returnCheck = 1
                     return ipv6[0]
         except BaseException as msg:
-            logging.CyberCPLogFileWriter.writeToFile(str(msg))
+            logging.CPNLogFileWriter.writeToFile(str(msg))
             return None
 
     def verificationJob(self):
@@ -134,18 +134,18 @@ class emailMarketing(multi.Thread):
             verificationList = EmailLists.objects.get(listName=self.extraArgs['listName'])
             domain = verificationList.owner.domain
 
-            if not os.path.exists('/home/cyberpanel/' + domain):
-                os.mkdir('/home/cyberpanel/' + domain)
+            if not os.path.exists('/home/cpn/' + domain):
+                os.mkdir('/home/cpn/' + domain)
 
-            tempStatusPath = '/home/cyberpanel/' + domain + "/" + self.extraArgs['listName']
-            logging.CyberCPLogFileWriter.statusWriter(tempStatusPath, 'Starting verification job..')
+            tempStatusPath = '/home/cpn/' + domain + "/" + self.extraArgs['listName']
+            logging.CPNLogFileWriter.statusWriter(tempStatusPath, 'Starting verification job..')
 
             counter = 1
             counterGlobal = 0
 
             allEmailsInList = verificationList.emailsinlist_set.all()
 
-            configureVerifyPath = '/home/cyberpanel/configureVerify'
+            configureVerifyPath = '/home/cpn/configureVerify'
             finalPath = '%s/%s' % (configureVerifyPath, domain)
 
 
@@ -207,7 +207,7 @@ class emailMarketing(multi.Thread):
                                             else:
                                                 server = smtplib.SMTP(self.currentIP, timeout=10)
                                     else:
-                                        logging.CyberCPLogFileWriter.writeToFile(
+                                        logging.CPNLogFileWriter.writeToFile(
                                             'Delay not configured..')
 
                                         ValidationLog(owner=verificationList, status=backupSchedule.INFO,
@@ -245,7 +245,7 @@ class emailMarketing(multi.Thread):
                                 items.verificationStatus = 'Verification Failed'
                                 items.save()
 
-                        logging.CyberCPLogFileWriter.statusWriter(tempStatusPath, str(counter) + ' emails verified so far..')
+                        logging.CPNLogFileWriter.statusWriter(tempStatusPath, str(counter) + ' emails verified so far..')
                         counter = counter + 1
                     except BaseException as msg:
                         items.verificationStatus = 'Verification Failed'
@@ -262,13 +262,13 @@ class emailMarketing(multi.Thread):
 
             ValidationLog(owner=verificationList, status=backupSchedule.ERROR, message=str(counter) + ' emails successfully verified. [200]').save()
 
-            logging.CyberCPLogFileWriter.statusWriter(tempStatusPath, str(counter) + ' emails successfully verified. [200]')
+            logging.CPNLogFileWriter.statusWriter(tempStatusPath, str(counter) + ' emails successfully verified. [200]')
         except BaseException as msg:
             verificationList = EmailLists.objects.get(listName=self.extraArgs['listName'])
             domain = verificationList.owner.domain
-            tempStatusPath = '/home/cyberpanel/' + domain + "/" + self.extraArgs['listName']
-            logging.CyberCPLogFileWriter.statusWriter(tempStatusPath, str(msg) +'. [404]')
-            logging.CyberCPLogFileWriter.writeToFile(str(msg))
+            tempStatusPath = '/home/cpn/' + domain + "/" + self.extraArgs['listName']
+            logging.CPNLogFileWriter.statusWriter(tempStatusPath, str(msg) +'. [404]')
+            logging.CPNLogFileWriter.writeToFile(str(msg))
             return 0
 
     def setupSMTPConnection(self):
@@ -286,15 +286,15 @@ class emailMarketing(multi.Thread):
                 self.smtpServer.login(str(self.verifyHost.userName), str(self.verifyHost.password))
                 return 1
         except smtplib.SMTPHeloError:
-            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
+            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
                                                       'The server didnt reply properly to the HELO greeting.')
             return 0
         except smtplib.SMTPAuthenticationError:
-            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
+            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
                                                       'Username and password combination not accepted.')
             return 0
         except smtplib.SMTPException:
-            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
+            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
                                                       'No suitable authentication method was found.')
             return 0
 
@@ -302,7 +302,7 @@ class emailMarketing(multi.Thread):
         try:
 
             if self.setupSMTPConnection() == 0:
-                logging.CyberCPLogFileWriter.writeToFile('SMTP Connection failed. [301]')
+                logging.CPNLogFileWriter.writeToFile('SMTP Connection failed. [301]')
                 return 0
 
             emailList = EmailLists.objects.get(listName=self.extraArgs['listName'])
@@ -313,7 +313,7 @@ class emailMarketing(multi.Thread):
             sent = 0
             failed = 0
 
-            ipFile = "/etc/cyberpanel/machineIP"
+            ipFile = "/etc/cpn/machineIP"
             f = open(ipFile)
             ipData = f.read()
             ipAddress = ipData.split('\n', 1)[0]
@@ -323,7 +323,7 @@ class emailMarketing(multi.Thread):
             from email.mime.text import MIMEText
             import re
 
-            tempPath = "/home/cyberpanel/" + str(randint(1000, 9999))
+            tempPath = "/home/cpn/" + str(randint(1000, 9999))
 
             emailJob = EmailJobs(owner=emailMessage, date=time.strftime("%I-%M-%S-%a-%b-%Y"),
                                  host=self.extraArgs['host'], totalEmails=totalEmails,
@@ -358,7 +358,7 @@ class emailMarketing(multi.Thread):
                                     messageFile.close()
 
                                     command = "sudo sed -i 's/{{ unsubscribeCheck }}/" + removalLink + "/g' " + tempPath
-                                    ProcessUtilities.executioner(command, 'cyberpanel')
+                                    ProcessUtilities.executioner(command, 'cpn')
 
                                     messageFile = open(tempPath, 'r')
                                     finalMessage = messageFile.read()
@@ -381,7 +381,7 @@ class emailMarketing(multi.Thread):
                                 self.smtpServer.sendmail(message['From'], items.email, message.as_string())
                             except:  # smtplib.SMTPServerDisconnected
                                 if self.setupSMTPConnection() == 0:
-                                    logging.CyberCPLogFileWriter.writeToFile('SMTP Connection failed. [301]')
+                                    logging.CPNLogFileWriter.writeToFile('SMTP Connection failed. [301]')
                                     return 0
                                 self.smtpServer.sendmail(message['From'], items.email, message.as_string())
 
@@ -389,7 +389,7 @@ class emailMarketing(multi.Thread):
                             sent = sent + 1
                             emailJob.sent = sent
                             emailJob.save()
-                            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
+                            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
                                                                       'Successfully sent: ' + str(
                                                                           sent) + ' Failed: ' + str(
                                                                           failed))
@@ -397,22 +397,22 @@ class emailMarketing(multi.Thread):
                             failed = failed + 1
                             emailJob.failed = failed
                             emailJob.save()
-                            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
+                            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
                                                                       'Successfully sent: ' + str(
                                                                           sent) + ', Failed: ' + str(failed))
                             if self.setupSMTPConnection() == 0:
-                                logging.CyberCPLogFileWriter.writeToFile(
+                                logging.CPNLogFileWriter.writeToFile(
                                     'SMTP Connection failed. Error: %s. [392]' % (str(msg)))
                                 return 0
                 except BaseException as msg:
                             failed = failed + 1
                             emailJob.failed = failed
                             emailJob.save()
-                            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
+                            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
                                                                       'Successfully sent: ' + str(
                                                                           sent) + ', Failed: ' + str(failed))
                             if self.setupSMTPConnection() == 0:
-                                logging.CyberCPLogFileWriter.writeToFile('SMTP Connection failed. Error: %s. [399]' % (str(msg)))
+                                logging.CPNLogFileWriter.writeToFile('SMTP Connection failed. Error: %s. [399]' % (str(msg)))
                                 return 0
 
 
@@ -420,8 +420,8 @@ class emailMarketing(multi.Thread):
             emailJob.failed = failed
             emailJob.save()
 
-            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
+            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'],
                                                       'Email job completed. [200]')
         except BaseException as msg:
-            logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'], str(msg) + '. [404]')
+            logging.CPNLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'], str(msg) + '. [404]')
             return 0

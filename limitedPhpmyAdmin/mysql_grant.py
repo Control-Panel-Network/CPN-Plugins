@@ -3,7 +3,7 @@
 MySQL operations for single-database grants. Uses mysqlUtilities.setupConnection and LOCALHOST.
 """
 from plogical.mysqlUtilities import mysqlUtilities
-import plogical.CyberCPLogFileWriter as logging
+import plogical.CPNLogFileWriter as logging
 
 ALL_PRIVILEGES_TOKEN = 'ALL'
 SUPPORTED_PRIVILEGES = (
@@ -28,7 +28,7 @@ def _flush_close(conn, cur):
     try:
         cur.execute('FLUSH PRIVILEGES')
     except Exception as msg:
-        logging.CyberCPLogFileWriter.writeToFile('limitedPhpmyAdmin flush: %s' % str(msg))
+        logging.CPNLogFileWriter.writeToFile('limitedPhpmyAdmin flush: %s' % str(msg))
     try:
         conn.close()
     except Exception:
@@ -100,7 +100,7 @@ def _set_database_privileges(database_name, mysql_username, privileges):
         _flush_close(conn, cur)
         return True, None
     except Exception as msg:
-        logging.CyberCPLogFileWriter.writeToFile('limitedPhpmyAdmin set privileges: %s' % str(msg))
+        logging.CPNLogFileWriter.writeToFile('limitedPhpmyAdmin set privileges: %s' % str(msg))
         try:
             conn.close()
         except Exception:
@@ -127,7 +127,7 @@ def provision_mysql_user(database_name, mysql_username, password, privileges=Non
                 return False, err or 'Failed to set custom privileges.'
         return True, None
     except Exception as msg:
-        logging.CyberCPLogFileWriter.writeToFile('limitedPhpmyAdmin provision_mysql_user: %s' % str(msg))
+        logging.CPNLogFileWriter.writeToFile('limitedPhpmyAdmin provision_mysql_user: %s' % str(msg))
         return False, str(msg)
 
 
@@ -147,7 +147,7 @@ def grant_database_only(database_name, mysql_username, password, privileges=None
                 return False, err or 'Failed to set custom privileges.'
         return True, None
     except Exception as msg:
-        logging.CyberCPLogFileWriter.writeToFile('limitedPhpmyAdmin grant_database_only: %s' % str(msg))
+        logging.CPNLogFileWriter.writeToFile('limitedPhpmyAdmin grant_database_only: %s' % str(msg))
         return False, str(msg)
 
 
@@ -168,7 +168,7 @@ def revoke_database_privileges(database_name, mysql_username):
         _flush_close(conn, cur)
         return True, None
     except Exception as msg:
-        logging.CyberCPLogFileWriter.writeToFile('limitedPhpmyAdmin revoke: %s' % str(msg))
+        logging.CPNLogFileWriter.writeToFile('limitedPhpmyAdmin revoke: %s' % str(msg))
         try:
             conn.close()
         except Exception:
@@ -192,7 +192,7 @@ def drop_mysql_user(mysql_username):
         _flush_close(conn, cur)
         return True, None
     except Exception as msg:
-        logging.CyberCPLogFileWriter.writeToFile('limitedPhpmyAdmin drop_mysql_user: %s' % str(msg))
+        logging.CPNLogFileWriter.writeToFile('limitedPhpmyAdmin drop_mysql_user: %s' % str(msg))
         try:
             conn.close()
         except Exception:

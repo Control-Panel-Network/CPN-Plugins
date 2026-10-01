@@ -5,7 +5,7 @@ from __future__ import print_function
 import os
 
 PLUGIN_NAME = 'roundcubeWebmail'
-# CPN host package paths (never CyberPanel).
+# CPN host package paths (never CPN).
 ROUNDCUBE_ROOT = '/opt/cpn-webmail/roundcube'
 ROUNDCUBE_PUBLIC = os.path.join(ROUNDCUBE_ROOT, 'public_html')
 ROUNDCUBE_CONFIG = os.path.join(ROUNDCUBE_ROOT, 'config', 'config.inc.php')

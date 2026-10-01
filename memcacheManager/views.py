@@ -18,7 +18,7 @@ from . import utils
 
 def _memcache_json_server_error(request, log_prefix, exc=None):
     error_id = str(uuid.uuid4())[:12]
-    from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+    from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
     if exc is not None:
         logging.writeToFile('%s [error_id=%s] %s' % (log_prefix, error_id, str(exc)))
@@ -30,8 +30,8 @@ def _memcache_json_server_error(request, log_prefix, exc=None):
     )
 
 
-def cyberpanel_login_required(view_func):
-    """Decorator to ensure user is logged into CyberPanel."""
+def cpn_login_required(view_func):
+    """Decorator to ensure user is logged into CPN."""
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
@@ -44,7 +44,7 @@ def cyberpanel_login_required(view_func):
 
 
 @ensure_csrf_cookie
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["GET"])
 def main_view(request):
     """Main Memcache Manager page: status, controls, stats, config."""
@@ -102,13 +102,13 @@ def main_view(request):
         return proc.render()
     
     except Exception as e:
-        from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+        from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
         logging.writeToFile('Memcache Manager main_view error: %s' % str(e))
         return HttpResponse('Internal server error', status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["POST"])
 def api_control(request):
     """API: start, stop, restart, enable, disable memcache service."""
@@ -131,7 +131,7 @@ def api_control(request):
         return _memcache_json_server_error(request, 'Memcache Manager api_control error', e)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["GET"])
 def api_stats(request):
     """API: Get memcache statistics as JSON (for real-time updates)."""
@@ -175,7 +175,7 @@ def api_stats(request):
         return _memcache_json_server_error(request, 'Memcache Manager api_stats error', e)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["POST"])
 def api_flush(request):
     """API: Flush all memcache data."""
@@ -187,7 +187,7 @@ def api_flush(request):
         return _memcache_json_server_error(request, 'Memcache Manager api_flush error', e)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["GET"])
 def api_config(request):
     """API: Get memcache configuration as JSON."""

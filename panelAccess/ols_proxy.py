@@ -7,7 +7,7 @@ without manual OLS configuration.
 import os
 import re
 
-# Path used by CyberPanel for panel port (same as ProcessUtilities.portPath); SSH login message uses this
+# Path used by CPN for panel port (same as ProcessUtilities.portPath); SSH login message uses this
 BIND_CONF = '/usr/local/lscp/conf/bind.conf'
 
 
@@ -68,7 +68,7 @@ def _domain_from_origin(origin):
 def _vhost_conf_content(domain, backend_url):
     """Generate vhost.conf content: proxy entire site to panel backend."""
     # OLS: extprocessor (proxy) + context / (handler = proxy)
-    return """# Panel Access: reverse proxy to CyberPanel backend (do not edit manually)
+    return """# Panel Access: reverse proxy to CPN backend (do not edit manually)
 docRoot                   {vhroot}/
 vhDomain                  {domain}
 enableGzip                1
@@ -143,9 +143,9 @@ def setup_panel_proxy_vhost(domain_name):
     try:
         from plogical.processUtilities import ProcessUtilities
         from plogical import installUtilities
-        from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter
+        from plogical.CPNLogFileWriter import CPNLogFileWriter
     except ImportError:
-        return False, 'CyberPanel plumbing not available (run inside CyberPanel).'
+        return False, 'CPN plumbing not available (run inside CPN).'
 
     if ProcessUtilities.decideServer() != ProcessUtilities.OLS:
         return False, 'Only OpenLiteSpeed is supported for automatic proxy setup.'
@@ -179,7 +179,7 @@ def setup_panel_proxy_vhost(domain_name):
             command = 'chmod 755 {}'.format(vhost_dir)
             ProcessUtilities.normalExecutioner(command)
     except Exception as e:
-        CyberCPLogFileWriter.writeToFile('[panelAccess.ols_proxy] makedirs: {}'.format(e))
+        CPNLogFileWriter.writeToFile('[panelAccess.ols_proxy] makedirs: {}'.format(e))
         return False, 'Could not create directories: {}'.format(e)
 
     # Write vhost.conf (use detected panel URL so port 2087/8090 is correct)
@@ -211,7 +211,7 @@ def setup_panel_proxy_vhost(domain_name):
                 os.unlink(temp_file)
             except:
                 pass
-        CyberCPLogFileWriter.writeToFile('[panelAccess.ols_proxy] write vhost.conf: {}'.format(e))
+        CPNLogFileWriter.writeToFile('[panelAccess.ols_proxy] write vhost.conf: {}'.format(e))
         return False, 'Could not write vhost config: {}'.format(e)
 
     # Add virtualHost + map to httpd_config.conf (idempotent)
@@ -226,9 +226,9 @@ def setup_panel_proxy_vhost(domain_name):
             if 'No such file' in result2 or 'cannot access' in result2:
                 return False, 'OpenLiteSpeed config not found: {}'.format(HTTPD_CONFIG)
             # File might exist but have permission issues - log and continue
-            CyberCPLogFileWriter.writeToFile('[panelAccess.ols_proxy] Warning: Config file check ambiguous, proceeding: {}'.format(result2))
+            CPNLogFileWriter.writeToFile('[panelAccess.ols_proxy] Warning: Config file check ambiguous, proceeding: {}'.format(result2))
     except Exception as e:
-        CyberCPLogFileWriter.writeToFile('[panelAccess.ols_proxy] Error checking config file: {}'.format(e))
+        CPNLogFileWriter.writeToFile('[panelAccess.ols_proxy] Error checking config file: {}'.format(e))
         # Don't fail here - let safeModifyHttpdConfig handle it
 
     def modifier(current_lines):
@@ -252,11 +252,11 @@ def setup_panel_proxy_vhost(domain_name):
         )
         if not success:
             error_msg = error or 'Failed to update httpd_config.conf.'
-            CyberCPLogFileWriter.writeToFile('[panelAccess.ols_proxy] safeModifyHttpdConfig failed: {}'.format(error_msg))
+            CPNLogFileWriter.writeToFile('[panelAccess.ols_proxy] safeModifyHttpdConfig failed: {}'.format(error_msg))
             return False, error_msg
     except Exception as e:
         error_msg = 'Error calling safeModifyHttpdConfig: {}'.format(str(e))
-        CyberCPLogFileWriter.writeToFile('[panelAccess.ols_proxy] {}'.format(error_msg))
+        CPNLogFileWriter.writeToFile('[panelAccess.ols_proxy] {}'.format(error_msg))
         return False, error_msg
 
     # Reload OpenLiteSpeed
@@ -265,9 +265,9 @@ def setup_panel_proxy_vhost(domain_name):
         subprocess = __import__('subprocess')
         r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=15)
         if r.returncode != 0:
-            CyberCPLogFileWriter.writeToFile('[panelAccess.ols_proxy] lswsctrl reload: {}'.format(r.stderr or r.stdout))
+            CPNLogFileWriter.writeToFile('[panelAccess.ols_proxy] lswsctrl reload: {}'.format(r.stderr or r.stdout))
     except Exception as e:
-        CyberCPLogFileWriter.writeToFile('[panelAccess.ols_proxy] reload: {}'.format(e))
+        CPNLogFileWriter.writeToFile('[panelAccess.ols_proxy] reload: {}'.format(e))
 
     return True, 'Proxy for {} added. Reload OpenLiteSpeed if needed.'.format(domain)
 
