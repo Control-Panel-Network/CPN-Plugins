@@ -19,7 +19,7 @@ class CSPManagerConfig(AppConfig):
         if middleware_class not in settings.MIDDLEWARE:
             # Insert after secMiddleware so our CSP overrides the core CSP
             try:
-                sec_middleware_index = settings.MIDDLEWARE.index('CyberCP.secMiddleware.secMiddleware')
+                sec_middleware_index = settings.MIDDLEWARE.index('cpn.secMiddleware.secMiddleware')
                 settings.MIDDLEWARE.insert(sec_middleware_index + 1, middleware_class)
             except (ValueError, AttributeError):
                 # Fallback: append to end if secMiddleware not found

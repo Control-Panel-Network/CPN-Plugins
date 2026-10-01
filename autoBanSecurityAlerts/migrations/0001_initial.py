@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('ip_address', models.GenericIPAddressField(help_text='IP address to whitelist.', unique=True)),
                 ('description', models.CharField(blank=True, default='', help_text='Optional description for this whitelisted IP.', max_length=255)),
-                ('is_system_ip', models.BooleanField(default=False, help_text='System IP (CyberPanel machine IP) - cannot be deleted.')),
+                ('is_system_ip', models.BooleanField(default=False, help_text='System IP (CPN machine IP) - cannot be deleted.')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
             ],

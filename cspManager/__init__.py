@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 CSP Manager Plugin
-Manages Content Security Policy headers for CyberPanel
+Manages Content Security Policy headers for CPN
 Supports Google Analytics, Tag Manager, Discord Auth, and all required resources
 """
 

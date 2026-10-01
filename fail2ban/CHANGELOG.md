@@ -6,7 +6,7 @@
 ## 1.4.0 (2026-08-05)
 
 - Unified UI: tabs in URL, banned/whitelist pagination and search, Manage modal, firewall sync, opaque dark-mode modal.
-- Requires CyberPanel 2.5.5+ (meta min_version).
+- Requires CPN 2.5.5+ (meta min_version).
 
 # Changelog - Fail2ban Security Manager
 
@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Overview tab content nesting (tabs now switch correctly)
 - Hash-based tab loading (#overview, #jails, etc.) on page load
-- extraCSS block changed to header_scripts so styles load in CyberPanel base template
+- extraCSS block changed to header_scripts so styles load in CPN base template
 - Recent Activity always showing "No recent activity" when fail2ban is running (journalctl now runs with sudo)
 
 ### Changed

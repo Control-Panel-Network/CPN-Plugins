@@ -17,7 +17,7 @@ All plugins display their pricing status with badges:
 Badges appear in:
 - Grid View (next to version)
 - Table View (next to version)
-- CyberPanel Plugin Store (separate "Pricing" column)
+- CPN Plugin Store (separate "Pricing" column)
 
 ## Paid Plugin Features
 

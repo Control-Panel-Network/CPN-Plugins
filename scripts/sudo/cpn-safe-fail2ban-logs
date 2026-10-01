@@ -9,7 +9,7 @@ if (( lines < 1 )); then lines=1; fi
 if (( lines > 5000 )); then lines=5000; fi
 file="/var/log/fail2ban.log"
 if [[ ! -f "$file" ]]; then
-  echo "cyberpanel-safe-fail2ban-logs: $file not found" >&2
+  echo "cpn-safe-fail2ban-logs: $file not found" >&2
   exit 1
 fi
 exec /usr/bin/tail -n "$lines" "$file"

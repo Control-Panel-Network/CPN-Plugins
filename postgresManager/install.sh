@@ -3,14 +3,14 @@ set -euo pipefail
 
 APP_NAME="postgresManager"
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-DEST="/usr/local/CyberCP/${APP_NAME}"
-SETTINGS="/usr/local/CyberCP/CyberCP/settings.py"
-PLUGIN_URLS="/usr/local/CyberCP/pluginHolder/urls.py"
-ADMINER_DIR="/usr/local/CyberCP/public/postgres-adminer"
-STATE_DIR="/usr/local/CyberCP/pluginState/postgresManager"
-ADMIN_ROLE="cyberpanel_pgadmin"
-ADMIN_DB="cyberpanel_postgres"
-PASSWORD_FILE="${STATE_DIR}/cyberpanel_pgadmin_password"
+DEST="/usr/local/cpn/${APP_NAME}"
+SETTINGS="/usr/local/cpn/cpn/settings.py"
+PLUGIN_URLS="/usr/local/cpn/pluginHolder/urls.py"
+ADMINER_DIR="/usr/local/cpn/public/postgres-adminer"
+STATE_DIR="/usr/local/cpn/pluginState/postgresManager"
+ADMIN_ROLE="cpn_pgadmin"
+ADMIN_DB="cpn_postgres"
+PASSWORD_FILE="${STATE_DIR}/cpn_pgadmin_password"
 
 log() { printf '[PostgreSQL Manager] %s\n' "$*"; }
 fail() { printf '[PostgreSQL Manager] Error: %s\n' "$*" >&2; exit 1; }
@@ -44,7 +44,7 @@ install_packages() {
 
 install_php_pgsql() {
     local pm="$1"
-    log "Installing PHP PostgreSQL extension for CyberPanel PHP..."
+    log "Installing PHP PostgreSQL extension for CPN PHP..."
     case "$pm" in
         dnf|yum)
             local installed_any=0
@@ -52,7 +52,7 @@ install_php_pgsql() {
             while IFS= read -r phpbin; do
                 [ -n "$phpbin" ] && php_bins+=("$phpbin")
             done < <(awk '
-                /extprocessor cyberpanelphp/,/^}/ {
+                /extprocessor cpnphp/,/^}/ {
                     if ($1 == "path" && $2 ~ /^\/usr\/local\/lsws\/lsphp[0-9]+\/bin\/lsphp$/) print $2
                 }
                 /extprocessor lsphp/,/^}/ {
@@ -125,16 +125,16 @@ import sys
 path, role, db = sys.argv[1], sys.argv[2], sys.argv[3]
 with open(path, 'r', encoding='utf-8') as f:
     data = f.read()
-block = """# cyberpanel-postgres-manager begin
+block = """# cpn-postgres-manager begin
 host    {db}             {role}             127.0.0.1/32            md5
 host    {db}             {role}             ::1/128                 md5
 host    all              {role}             127.0.0.1/32            md5
 host    all              {role}             ::1/128                 md5
-# cyberpanel-postgres-manager end
+# cpn-postgres-manager end
 
 """.format(db=db, role=role)
-begin = "# cyberpanel-postgres-manager begin"
-end = "# cyberpanel-postgres-manager end"
+begin = "# cpn-postgres-manager begin"
+end = "# cpn-postgres-manager end"
 if begin in data and end in data:
     start = data.find(begin)
     finish = data.find(end, start) + len(end)
@@ -193,7 +193,7 @@ install_adminer() {
     fi
     cat > "${ADMINER_DIR}/index.php" <<'PHP'
 <?php
-// CyberPanel PostgreSQL Manager ships stock Adminer for maximum compatibility.
+// CPN PostgreSQL Manager ships stock Adminer for maximum compatibility.
 // Select "PostgreSQL" in System and use credentials shown in /plugins/postgresManager/.
 include __DIR__ . "/adminer.php";
 PHP
@@ -212,7 +212,7 @@ copy_plugin() {
 }
 
 patch_installed_apps() {
-    [ -f "$SETTINGS" ] || fail "$SETTINGS not found. Is CyberPanel installed?"
+    [ -f "$SETTINGS" ] || fail "$SETTINGS not found. Is CPN installed?"
     if grep -q "'${APP_NAME}'" "$SETTINGS" 2>/dev/null; then
         log "${APP_NAME} already registered in INSTALLED_APPS."
         return
@@ -279,12 +279,12 @@ path = sys.argv[1]
 with open(path, 'r', encoding='utf-8') as f:
     data = f.read()
 block = """context /postgres-adminer/ {
-  location                /usr/local/CyberCP/public/postgres-adminer/
+  location                /usr/local/cpn/public/postgres-adminer/
   allowBrowse             1
   indexFiles              index.php
   addDefaultCharset       off
   scripthandler  {
-    add                     lsapi:cyberpanelphp php
+    add                     lsapi:cpnphp php
   }
 }
 
@@ -316,7 +316,7 @@ restart_services() {
     if [ -x /usr/local/lsws/bin/lswsctrl ]; then
         /usr/local/lsws/bin/lswsctrl restart || true
     elif ! systemctl is-active --quiet lscpd 2>/dev/null; then
-        log "Restart CyberPanel/OpenLiteSpeed manually."
+        log "Restart CPN/OpenLiteSpeed manually."
     fi
 }
 

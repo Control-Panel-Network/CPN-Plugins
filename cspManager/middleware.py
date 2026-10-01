@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 CSP Manager Middleware
-Sets comprehensive Content Security Policy headers for CyberPanel
+Sets comprehensive Content Security Policy headers for CPN
 Supports Google Analytics, Tag Manager, Discord Auth, and all required resources
 Makes CSP optional for plugin routes (plugins can opt-out)
 Handles Cloudflare proxy by setting multiple CSP headers
@@ -15,7 +15,7 @@ from django.http import HttpResponse
 class CSPManagerMiddleware(MiddlewareMixin):
     """
     Middleware to set comprehensive CSP headers
-    Overrides core CyberPanel CSP to support Google Analytics, Tag Manager, and Discord Auth
+    Overrides core CPN CSP to support Google Analytics, Tag Manager, and Discord Auth
     Makes CSP optional for plugin routes - plugins can opt-out by setting X-CSP-Opt-Out header
     Handles Cloudflare by setting both Content-Security-Policy and X-Content-Security-Policy headers
     """
@@ -116,7 +116,7 @@ class CSPManagerMiddleware(MiddlewareMixin):
                         # Use standard CSP for plugins (respects settings)
                         csp_parts = self._build_csp_parts(config, is_plugin_route)
                 else:
-                    # Standard CSP for core CyberPanel pages (login, dashboard, etc.)
+                    # Standard CSP for core CPN pages (login, dashboard, etc.)
                     csp_parts = self._build_csp_parts(config, is_plugin_route)
                 
                 csp_value = "; ".join(csp_parts)

@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from plogical.mailUtilities import mailUtilities
 from plogical.httpProc import httpProc
 from plogical.plugin_acl import require_manage_plugins_api
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from functools import wraps
 import urllib.request
 import urllib.error
@@ -38,7 +38,7 @@ REMOTE_VERIFICATION_PLUGIN_GRANT_URL = 'https://api.newstargeted.com/api/verify-
 REMOTE_ACTIVATION_KEY_URL = 'https://api.newstargeted.com/api/activate-plugin-key.php'
 REMOTE_ENTITLEMENT_VERIFY_URL = 'https://api.newstargeted.com/api/verify-entitlement.php'
 
-PATREON_TIER = 'CyberPanel Paid Plugin'
+PATREON_TIER = 'CPN Paid Plugin'
 PATREON_URL = 'https://www.patreon.com/membership/27789984'
 PAYPAL_ME_URL = 'https://paypal.me/KimBS?locale.x=en_US&country.x=NO'
 PAYPAL_PAYMENT_LINK = ''
@@ -78,7 +78,7 @@ def _resolve_user_identity(request, override_email=''):
     for item in candidates:
         if item:
             return item.lower()
-    # CyberPanel commonly stores only userID in session (not email). Fall back to Administrator.
+    # CPN commonly stores only userID in session (not email). Fall back to Administrator.
     try:
         from loginSystem.models import Administrator
         uid = request.session.get('userID') if hasattr(request, 'session') else None
@@ -94,9 +94,9 @@ def _resolve_user_identity(request, override_email=''):
     return ''
 
 
-def _persist_activation_in_cyberpanel_db(request, activation_key):
+def _persist_activation_in_cpn_db(request, activation_key):
     """
-    Save activation key in CyberPanel pluginHolder DB storage for upgrade resilience.
+    Save activation key in CPN pluginHolder DB storage for upgrade resilience.
     """
     key_value = (activation_key or '').strip()
     if not key_value:
@@ -138,7 +138,7 @@ def _persist_activation_in_cyberpanel_db(request, activation_key):
     return saved_any
 
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
@@ -157,7 +157,7 @@ def _api_request(url, data, timeout=10):
     try:
         body, extra_headers = api_encryption.encrypt_payload(data)
         headers = {
-            'User-Agent': f'CyberPanel-Plugin/{PLUGIN_VERSION}',
+            'User-Agent': f'CPN-Plugin/{PLUGIN_VERSION}',
             'X-Plugin-Name': PLUGIN_NAME
         }
         headers.update(extra_headers)
@@ -399,7 +399,7 @@ def unified_verification_required(view_func):
                 try:
                     activation_key_str = activation_key.strip()
 
-                    # 1) Local verification using CyberPanel DB-backed activation keys.
+                    # 1) Local verification using CPN DB-backed activation keys.
                     # This prevents re-locking when upgrades/remote activation state becomes inconsistent.
                     activation_ok = False
                     try:
@@ -442,7 +442,7 @@ def unified_verification_required(view_func):
                                 config.activation_key = activation_key_str
                                 config.save(update_fields=['activation_key', 'updated_at'])
                                 _persist_entitlement_from_response(config, response_data)
-                                _persist_activation_in_cyberpanel_db(request, activation_key_str)
+                                _persist_activation_in_cpn_db(request, activation_key_str)
                             except Exception as e:
                                 logging.writeToFile(f"Auto Ban Plugin: Could not persist activation key: {str(e)}")
                         else:
@@ -564,9 +564,9 @@ def unified_verification_required(view_func):
 
 
 def get_machine_ip():
-    """Get CyberPanel machine IP from /etc/cyberpanel/machineIP"""
+    """Get CPN machine IP from /etc/cpn/machineIP"""
     try:
-        ip_file = '/etc/cyberpanel/machineIP'
+        ip_file = '/etc/cpn/machineIP'
         if os.path.exists(ip_file):
             with open(ip_file, 'r') as f:
                 ip = f.read().strip()
@@ -578,7 +578,7 @@ def get_machine_ip():
 
 
 def ensure_machine_ip_whitelisted():
-    """Ensure the current CyberPanel machine IP is whitelisted"""
+    """Ensure the current CPN machine IP is whitelisted"""
     try:
         machine_ip = get_machine_ip()
         if not machine_ip:
@@ -596,7 +596,7 @@ def ensure_machine_ip_whitelisted():
         WhitelistedIP.objects.get_or_create(
             ip_address=machine_ip,
             defaults={
-                'description': 'CyberPanel Machine IP (Auto-managed)',
+                'description': 'CPN Machine IP (Auto-managed)',
                 'is_system_ip': True
             }
         )
@@ -634,13 +634,13 @@ def _recent_bans_pagination_context(request):
     }
 
 
-@cyberpanel_login_required
+@cpn_login_required
 def main_view(request):
     mailUtilities.checkHome()
     return redirect('autoBanSecurityAlerts:settings')
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @unified_verification_required
 def settings_view(request):
     mailUtilities.checkHome()
@@ -699,12 +699,12 @@ def _expires_display_for_autoban_log(log):
         return 'Never'
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @unified_verification_required
 @require_http_methods(["GET"])
 def export_auto_bans_firewall_json(request):
     """
-    Export all AutoBanLog rows as JSON compatible with CyberPanel
+    Export all AutoBanLog rows as JSON compatible with CPN
     Firewall → Import Banned IPs (expects banned_ips array, version 1.0).
     """
     mailUtilities.checkHome()
@@ -745,7 +745,7 @@ def export_auto_bans_firewall_json(request):
         return JsonResponse({'exportStatus': 0, 'error_message': 'Export failed'}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @unified_verification_required
 def recent_bans_fragment(request):
     """Return HTML fragment for Recent Auto-Bans (AJAX pagination without full page reload)."""
@@ -775,7 +775,7 @@ def recent_bans_fragment(request):
         return JsonResponse({'ok': False, 'error': 'Failed to load'}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @unified_verification_required
 @require_http_methods(["POST"])
@@ -813,7 +813,7 @@ def update_config(request):
         return JsonResponse({'status': 0, 'error_message': str(e)})
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @unified_verification_required
 @require_http_methods(["POST"])
@@ -851,7 +851,7 @@ def add_whitelist_ip(request):
         return JsonResponse({'status': 0, 'error_message': str(e)})
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @unified_verification_required
 @require_http_methods(["POST"])
@@ -870,7 +870,7 @@ def remove_whitelist_ip(request):
             return JsonResponse({'status': 0, 'error_message': 'Whitelisted IP not found'})
 
         if whitelist_ip.is_system_ip:
-            return JsonResponse({'status': 0, 'error_message': 'Cannot delete system IP (CyberPanel machine IP)'})
+            return JsonResponse({'status': 0, 'error_message': 'Cannot delete system IP (CPN machine IP)'})
 
         whitelist_ip.delete()
         return JsonResponse({'status': 1, 'message': 'IP address removed from whitelist'})
@@ -879,7 +879,7 @@ def remove_whitelist_ip(request):
         return JsonResponse({'status': 0, 'error_message': str(e)})
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @unified_verification_required
 @require_http_methods(["POST"])
@@ -903,7 +903,7 @@ def remove_auto_ban(request):
         ip = str(log_entry.ip_address).strip()
         machine_ip = get_machine_ip()
         if machine_ip and ip == str(machine_ip).strip():
-            return JsonResponse({'status': 0, 'error_message': 'Cannot remove ban for the CyberPanel machine IP'})
+            return JsonResponse({'status': 0, 'error_message': 'Cannot remove ban for the CPN machine IP'})
 
         from firewall.firewallManager import FirewallManager
         from loginSystem.models import Administrator
@@ -938,7 +938,7 @@ def remove_auto_ban(request):
         return JsonResponse({'status': 0, 'error_message': 'Could not remove ban'})
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["POST"])
 def activate_key(request):
     """Activate plugin with activation key.
@@ -975,7 +975,7 @@ def activate_key(request):
                 config.activation_key = activation_key
                 config.save(update_fields=['activation_key', 'updated_at'])
                 _persist_entitlement_from_response(config, response_data)
-                _persist_activation_in_cyberpanel_db(request, activation_key)
+                _persist_activation_in_cpn_db(request, activation_key)
             except Exception as e:
                 logging.writeToFile(f"Auto Ban Plugin: Could not persist activation key: {str(e)}")
 
@@ -1230,7 +1230,7 @@ def start_monitoring_thread():
         if _monitoring_thread is not None and _monitoring_thread.is_alive():
             return
         # Cross-worker lock so only one LSCPD worker owns the monitor.
-        lock_path = '/tmp/cyberpanel-autoban-monitor.lock'
+        lock_path = '/tmp/cpn-autoban-monitor.lock'
         try:
             lock_fd = os.open(lock_path, os.O_CREAT | os.O_RDWR, 0o644)
             import fcntl

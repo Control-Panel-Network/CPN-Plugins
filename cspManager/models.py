@@ -15,7 +15,7 @@ class CSPConfig(models.Model):
     # Global settings
     csp_enabled = models.BooleanField(default=True, help_text="Enable/disable CSP globally")
     apply_to_plugins = models.BooleanField(default=True, help_text="Apply CSP to plugin routes")
-    apply_to_core = models.BooleanField(default=True, help_text="Apply CSP to core CyberPanel pages")
+    apply_to_core = models.BooleanField(default=True, help_text="Apply CSP to core CPN pages")
     
     # Plugin-specific settings (stored as JSON in a text field)
     # Format: {"plugin_name": {"enabled": true/false, "opt_out": true/false}}

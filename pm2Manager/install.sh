@@ -20,4 +20,4 @@ if ! command -v node &> /dev/null; then
 fi
 
 echo "PM2 Manager plugin installation completed!"
-echo "Please restart CyberPanel service: systemctl restart lscpd"
+echo "Please restart CPN service: systemctl restart lscpd"

@@ -1,13 +1,13 @@
 #!/bin/bash
-# Add snappymailAdmin to CyberPanel INSTALLED_APPS and restart panel.
+# Add snappymailAdmin to CPN INSTALLED_APPS and restart panel.
 # Run as root on the server: bash install.sh  or  ./install.sh
 
 set -e
-SETTINGS='/usr/local/CyberCP/CyberCP/settings.py'
+SETTINGS='/usr/local/cpn/cpn/settings.py'
 APP_NAME='snappymailAdmin'
 
 if [ ! -f "$SETTINGS" ]; then
-    echo "Error: $SETTINGS not found. Is CyberPanel installed?"
+    echo "Error: $SETTINGS not found. Is CPN installed?"
     exit 1
 fi
 
@@ -53,7 +53,7 @@ PY
 fi
 
 # Fix SnappyMail data folder permissions so the web app can access it (avoids "Permission denied" on data folder)
-if [ -d /usr/local/CyberCP/public/snappymail ]; then
+if [ -d /usr/local/cpn/public/snappymail ]; then
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
     if [ -x "$SCRIPT_DIR/fix_snappymail_permissions.sh" ]; then
         "$SCRIPT_DIR/fix_snappymail_permissions.sh"

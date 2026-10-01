@@ -2,7 +2,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}CSP Manager Settings - {% trans "CyberPanel" %}{% endblock %}
+{% block title %}CSP Manager Settings - {% trans "CPN" %}{% endblock %}
 
 {% block content %}
 {% include "pluginHolder/cpui_head.html" %}
@@ -67,10 +67,10 @@
                                     <div class="form-check">
                                         {{ form.apply_to_core }}
                                         <label class="form-check-label" for="{{ form.apply_to_core.id_for_label }}">
-                                            <strong>{% trans "Apply CSP to Core CyberPanel Pages" %}</strong>
+                                            <strong>{% trans "Apply CSP to Core CPN Pages" %}</strong>
                                         </label>
                                         <small class="form-text text-muted">
-                                            {% trans "Apply CSP to login, dashboard, and other core CyberPanel pages." %}
+                                            {% trans "Apply CSP to login, dashboard, and other core CPN pages." %}
                                         </small>
                                     </div>
                                 </div>

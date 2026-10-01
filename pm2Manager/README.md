@@ -1,12 +1,12 @@
-# PM2 Manager Plugin for CyberPanel
+# PM2 Manager Plugin for CPN
 
 **Author:** Master3395  
 **Version:** 1.1.0  
-**Compatible with:** CyberPanel 2.5.5-dev and higher
+**Compatible with:** CPN 2.5.5-dev and higher
 
 ## Description
 
-PM2 Manager is a comprehensive process management plugin for CyberPanel that provides a web-based interface for managing PM2 applications. It offers real-time monitoring, process control, and detailed statistics - essentially a domain manager but for PM2 processes.
+PM2 Manager is a comprehensive process management plugin for CPN that provides a web-based interface for managing PM2 applications. It offers real-time monitoring, process control, and detailed statistics - essentially a domain manager but for PM2 processes.
 
 ## Features
 
@@ -25,16 +25,16 @@ PM2 Manager is a comprehensive process management plugin for CyberPanel that pro
 
 ## Requirements
 
-- CyberPanel 2.5.5-dev or higher
+- CPN 2.5.5-dev or higher
 - PM2 installed globally (`npm install -g pm2`)
 - Node.js installed
 - Python 3.6+
-- Django (included with CyberPanel)
+- Django (included with CPN)
 
 ## Installation
 
-1. **Download the plugin** from the CyberPanel Plugin Store or GitHub
-2. **Upload via CyberPanel**:
+1. **Download the plugin** from the CPN Plugin Store or GitHub
+2. **Upload via CPN**:
    - Navigate to **Plugins** → **Installed Plugins**
    - Click **Upload Plugin**
    - Select the PM2 Manager plugin ZIP file
@@ -132,8 +132,8 @@ The plugin automatically falls back to HTTP polling if WebSocket is unavailable.
 ## Support
 
 For issues and questions:
-- Open an issue on GitHub: https://github.com/master3395/cyberpanel-plugins
-- Check CyberPanel documentation
+- Open an issue on GitHub: https://github.com/Control-Panel-Network/CPN-Plugins
+- Check CPN documentation
 - Review PM2 documentation: https://pm2.keymetrics.io/
 
 ## License

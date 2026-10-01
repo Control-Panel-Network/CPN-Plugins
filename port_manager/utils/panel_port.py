@@ -1,4 +1,4 @@
-"""Detect CyberPanel admin port from bind.conf (8090, 2087, etc.)."""
+"""Detect CPN admin port from bind.conf (8090, 2087, etc.)."""
 import os
 import re
 

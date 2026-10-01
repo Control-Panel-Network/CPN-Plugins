@@ -179,7 +179,7 @@ def check_remote_payment_secure(user_email, user_ip, domain, request_timestamp=N
             data=json.dumps(request_data).encode('utf-8'),
             headers={
                 'Content-Type': 'application/json',
-                'User-Agent': f'CyberPanel-Plugin/{PLUGIN_VERSION}',
+                'User-Agent': f'CPN-Plugin/{PLUGIN_VERSION}',
                 'X-Plugin-Name': PLUGIN_NAME,
                 'X-Timestamp': str(request_data['timestamp']),
                 # Add signature header if using HMAC
@@ -251,7 +251,7 @@ def secure_verification_required(view_func):
         is_valid, integrity_error = verify_code_integrity()
         if not is_valid:
             # Log security violation
-            from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+            from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
             logging.writeToFile(f"SECURITY VIOLATION: {integrity_error} - User: {request.session.get('userID')}")
             
             # Show error (don't reveal details)
@@ -297,9 +297,9 @@ def secure_verification_required(view_func):
     return _wrapped_view
 
 # Usage example:
-# CyberPanel ACL: use httpProc(..., 'managePlugins') for plugin pages and
+# CPN ACL: use httpProc(..., 'managePlugins') for plugin pages and
 # plogical.plugin_acl.require_manage_plugins_api on APIs (full admin OR managePlugins in ACL).
-# @cyberpanel_login_required
+# @cpn_login_required
 # @require_manage_plugins_api
 # @secure_verification_required
 # def settings_view(request):

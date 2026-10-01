@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.utils import timezone
 from functools import wraps
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from plogical.httpProc import httpProc
 from plogical.plugin_acl import require_manage_plugins_api
 from .models import ContaboConfig, SnapshotSchedule, SnapshotHistory
@@ -31,7 +31,7 @@ REMOTE_ACTIVATION_KEY_URL = 'https://api.newstargeted.com/api/activate-plugin-ke
 REMOTE_ENTITLEMENT_VERIFY_URL = 'https://api.newstargeted.com/api/verify-entitlement.php'
 
 # Payment URLs (from meta.xml)
-PATREON_TIER = 'CyberPanel Paid Plugin'
+PATREON_TIER = 'CPN Paid Plugin'
 PATREON_URL = 'https://www.patreon.com/membership/27789984'
 PAYPAL_ME_URL = 'https://paypal.me/KimBS?locale.x=en_US&country.x=NO'
 PAYPAL_PAYMENT_LINK = ''
@@ -65,9 +65,9 @@ def _resolve_user_identity(request, override_email=''):
     return ''
 
 
-def _persist_activation_in_cyberpanel_db(request, activation_key):
+def _persist_activation_in_cpn_db(request, activation_key):
     """
-    Save activation key in CyberPanel pluginHolder DB storage for upgrade resilience.
+    Save activation key in CPN pluginHolder DB storage for upgrade resilience.
     """
     key_value = (activation_key or '').strip()
     if not key_value:
@@ -112,9 +112,9 @@ def _persist_activation_in_cyberpanel_db(request, activation_key):
     return saved_any
 
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     """
-    Custom decorator that checks for CyberPanel session userID
+    Custom decorator that checks for CPN session userID
     """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
@@ -124,7 +124,7 @@ def cyberpanel_login_required(view_func):
                 # Not logged in, redirect to login
                 from loginSystem.views import loadLoginPage
                 return redirect(loadLoginPage)
-            # User is authenticated via CyberPanel session
+            # User is authenticated via CPN session
             return view_func(request, *args, **kwargs)
         except Exception as login_error:
             # Catch any error in login check
@@ -146,7 +146,7 @@ def _api_request(url, data, timeout=10):
     try:
         body, extra_headers = api_encryption.encrypt_payload(data)
         headers = {
-            'User-Agent': f'CyberPanel-Plugin/{PLUGIN_VERSION}',
+            'User-Agent': f'CPN-Plugin/{PLUGIN_VERSION}',
             'X-Plugin-Name': PLUGIN_NAME
         }
         headers.update(extra_headers)
@@ -244,7 +244,7 @@ def check_patreon_membership(user_email, user_ip='', domain='', server_fp=''):
             'user_ip': user_ip,
             'domain': domain,
             'server_fingerprint': server_fp,
-            'tier_id': '27789984'  # CyberPanel Paid Plugin tier ID
+            'tier_id': '27789984'  # CPN Paid Plugin tier ID
         }
         response_data = _api_request(REMOTE_VERIFICATION_PATREON_URL, request_data)
         if response_data.get('success', False):
@@ -454,7 +454,7 @@ def unified_verification_required(view_func):
                                 config.activation_key = activation_key_str
                                 config.save(update_fields=['activation_key', 'updated_at'])
                                 _persist_entitlement_from_response(config, response_data)
-                                _persist_activation_in_cyberpanel_db(request, activation_key_str)
+                                _persist_activation_in_cpn_db(request, activation_key_str)
                             except Exception as persist_err:
                                 logging.writeToFile(f"Contabo Auto Snapshot: Could not persist activation key: {str(persist_err)}")
                         elif not response_data.get('success') and activation_key_str:
@@ -633,9 +633,9 @@ def test_view_no_decorator(request):
     return HttpResponse("<h1>Test View Works!</h1><p>If you see this, the basic view system is working.</p><p>No decorators used.</p>")
 
 
-@cyberpanel_login_required
+@cpn_login_required
 def main_view(request):
-    """Main plugin page (required by CyberPanel)"""
+    """Main plugin page (required by CPN)"""
     try:
         # Redirect to settings page as main page
         return redirect('contaboAutoSnapshot:settings')
@@ -644,7 +644,7 @@ def main_view(request):
         return HttpResponse(f"<div>Plugin Error: {str(e)}</div>")
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @unified_verification_required
 def settings_view(request):
     """Main settings page"""
@@ -725,7 +725,7 @@ def settings_view(request):
         return HttpResponse(f"<div style='padding: 20px;'><h2>Settings Error</h2><p>{str(e)}</p><pre>{error_trace}</pre></div>")
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["POST"])
 def activate_key(request):
     """Activate plugin access using activation key"""
@@ -764,7 +764,7 @@ def activate_key(request):
                 config.activation_key = activation_key
                 config.save(update_fields=['activation_key', 'updated_at'])
                 _persist_entitlement_from_response(config, response_data)
-                _persist_activation_in_cyberpanel_db(request, activation_key)
+                _persist_activation_in_cpn_db(request, activation_key)
             except Exception as persist_err:
                 logging.writeToFile(f"Contabo Auto Snapshot: Could not persist activation key: {str(persist_err)}")
             return JsonResponse({
@@ -810,7 +810,7 @@ def activate_key(request):
         }, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @unified_verification_required
 @require_http_methods(["POST"])
@@ -838,7 +838,7 @@ def add_schedule(request):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @unified_verification_required
 @require_http_methods(["GET", "POST"])
@@ -881,7 +881,7 @@ def edit_schedule(request, schedule_id):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @require_http_methods(["POST"])
 def delete_schedule(request, schedule_id):
@@ -899,7 +899,7 @@ def delete_schedule(request, schedule_id):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @require_http_methods(["POST"])
 def toggle_schedule(request, schedule_id):
@@ -923,7 +923,7 @@ def toggle_schedule(request, schedule_id):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @unified_verification_required
 @require_http_methods(["POST"])
@@ -981,7 +981,7 @@ def create_snapshot(request):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 def snapshot_history(request):
     """View snapshot history"""
     try:
@@ -1006,7 +1006,7 @@ def snapshot_history(request):
         return HttpResponse(f"<div>History Error: {str(e)}</div>")
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @require_http_methods(["POST"])
 def delete_snapshot(request, snapshot_id):
@@ -1035,7 +1035,7 @@ def delete_snapshot(request, snapshot_id):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @require_http_methods(["GET"])
 def api_schedules(request):
@@ -1059,7 +1059,7 @@ def api_schedules(request):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @require_http_methods(["GET"])
 def api_snapshots(request):
@@ -1086,7 +1086,7 @@ def api_snapshots(request):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @require_http_methods(["POST"])
 def test_connection(request):
@@ -1133,7 +1133,7 @@ def test_connection(request):
         }, status=500)
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @require_http_methods(["POST"])
 def save_config(request):

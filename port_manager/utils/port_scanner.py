@@ -2,7 +2,7 @@ import os
 import re
 import subprocess
 from plogical.processUtilities import ProcessUtilities
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from .validation import sanitize_search
 
 IPV4_ANY = frozenset(['0.0.0.0', '*'])

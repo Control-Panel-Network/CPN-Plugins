@@ -2,17 +2,17 @@
 # SnappyMail Webmail plugin pre-remove: stop serving, preserve data.
 set -euo pipefail
 
-PLUGIN_HOME="/usr/local/CyberCP/snappymailWebmail"
-LOG="/var/log/cyberpanel/snappymailWebmail_pre_remove.log"
+PLUGIN_HOME="/usr/local/cpn/snappymailWebmail"
+LOG="/var/log/cpn/snappymailWebmail_pre_remove.log"
 mkdir -p "$(dirname "$LOG")"
 
 exec >>"$LOG" 2>&1
 echo "[$(date -Iseconds)] snappymailWebmail pre_remove start"
 
 if [ -d "$PLUGIN_HOME" ]; then
-  /usr/local/CyberCP/bin/python - <<'PY'
+  /usr/local/cpn/bin/python - <<'PY'
 import sys
-sys.path.insert(0, '/usr/local/CyberCP')
+sys.path.insert(0, '/usr/local/cpn')
 from snappymailWebmail import utils
 ok, message = utils.pre_remove_tasks()
 print(message)

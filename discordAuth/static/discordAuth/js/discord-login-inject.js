@@ -1,6 +1,6 @@
 /**
  * Discord Login Button Injector
- * Injects Discord login button into CyberPanel login page
+ * Injects Discord login button into CPN login page
  */
 
 (function() {

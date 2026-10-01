@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('csp_enabled', models.BooleanField(default=True, help_text='Enable/disable CSP globally')),
                 ('apply_to_plugins', models.BooleanField(default=True, help_text='Apply CSP to plugin routes')),
-                ('apply_to_core', models.BooleanField(default=True, help_text='Apply CSP to core CyberPanel pages')),
+                ('apply_to_core', models.BooleanField(default=True, help_text='Apply CSP to core CPN pages')),
                 ('plugin_settings', models.TextField(default='{}', help_text='JSON object storing per-plugin CSP settings')),
                 ('allow_google_analytics', models.BooleanField(default=True, help_text='Allow Google Analytics')),
                 ('allow_google_tag_manager', models.BooleanField(default=True, help_text='Allow Google Tag Manager')),

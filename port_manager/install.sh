@@ -1,5 +1,5 @@
 #!/bin/bash
-# CyberPanel Port Manager - Installation Script
+# CPN Port Manager - Installation Script
 # Flat plugin layout: Django app files live in this directory (no nested port_manager/).
 
 set -euo pipefail
@@ -13,14 +13,14 @@ if [ "${EUID:-$(id -u)}" -ne 0 ]; then
   exit 1
 fi
 
-if [ ! -d /usr/local/CyberCP ]; then
-  echo -e "${RED}Error: CyberPanel not found at /usr/local/CyberCP${NC}"
+if [ ! -d /usr/local/cpn ]; then
+  echo -e "${RED}Error: CPN not found at /usr/local/cpn${NC}"
   exit 1
 fi
 
 SRC="$(cd "$(dirname "$0")" && pwd)"
-DEST="/usr/local/CyberCP/port_manager"
-MARKER="/home/cyberpanel/plugins/port_manager"
+DEST="/usr/local/cpn/port_manager"
+MARKER="/home/cpn/plugins/port_manager"
 
 echo "[Port Manager] Installing from $SRC to $DEST ..."
 
@@ -65,7 +65,7 @@ fi
 chown -R root:root "$DEST" 2>/dev/null || true
 chmod -R u=rwX,go=rX "$DEST" 2>/dev/null || true
 
-cd /usr/local/CyberCP
+cd /usr/local/cpn
 python3 manage.py makemigrations port_manager 2>/dev/null || true
 python3 manage.py migrate port_manager --noinput 2>/dev/null || true
 

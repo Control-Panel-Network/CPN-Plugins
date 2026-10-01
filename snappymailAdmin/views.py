@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-SnappyMail Admin Password plugin – change SnappyMail Admin panel password from CyberPanel.
+SnappyMail Admin Password plugin – change SnappyMail Admin panel password from CPN.
 """
 from django.shortcuts import redirect
 from django.http import JsonResponse
@@ -15,7 +15,7 @@ import json
 from . import utils
 
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
@@ -27,7 +27,7 @@ def cyberpanel_login_required(view_func):
     return _wrapped_view
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_http_methods(["GET"])
 def main_view(request):
     """Main plugin page: form to set SnappyMail Admin password."""
@@ -61,7 +61,7 @@ def main_view(request):
     return response
 
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -91,7 +91,7 @@ def api_set_password(request):
         return JsonResponse({'success': False, 'error': 'Invalid JSON.'}, status=400)
     except Exception as e:
         try:
-            from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+            from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
             logging.writeToFile('snappymailAdmin api_set_password: %s' % str(e))
         except Exception:
             pass

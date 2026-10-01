@@ -1,15 +1,15 @@
 #!/bin/bash
 # Deploy and install Redis Manager plugin so it appears as installed and active.
-# Run on the CyberPanel server from the cyberpanel-plugins repo root, or set REPO_DIR.
+# Run on the CPN server from the cpn-plugins repo root, or set REPO_DIR.
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="${REPO_DIR:-$SCRIPT_DIR}"
-CYBERCP_DIR="${CYBERCP_DIR:-/usr/local/CyberCP}"
-PLUGIN_HOLDER_DIR="$CYBERCP_DIR/pluginHolder"
-PLUGIN_STATE_DIR="${PLUGIN_STATE_DIR:-/home/cyberpanel/plugin_states}"
-PYTHON_BIN="${PYTHON_BIN:-$CYBERCP_DIR/bin/python}"
+CPN_DIR="${CPN_DIR:-/usr/local/cpn}"
+PLUGIN_HOLDER_DIR="$CPN_DIR/pluginHolder"
+PLUGIN_STATE_DIR="${PLUGIN_STATE_DIR:-/home/cpn/plugin_states}"
+PYTHON_BIN="${PYTHON_BIN:-$CPN_DIR/bin/python}"
 PLUGIN_NAME="redisManager"
 
 GREEN='\033[0;32m'
@@ -34,16 +34,16 @@ zip -r "$ZIP_FILE" "$PLUGIN_NAME" -x "*.pyc" -x "__pycache__/*" -x "*.git/*" -x 
     exit 1
 }
 
-if [ -d "$CYBERCP_DIR/$PLUGIN_NAME" ]; then
+if [ -d "$CPN_DIR/$PLUGIN_NAME" ]; then
     log_warn "$PLUGIN_NAME already installed; replacing..."
-    rm -rf "$CYBERCP_DIR/$PLUGIN_NAME"
+    rm -rf "$CPN_DIR/$PLUGIN_NAME"
 fi
 
 log_info "Installing $PLUGIN_NAME..."
 cp "$ZIP_FILE" "$PLUGIN_HOLDER_DIR/"
 cd "$PLUGIN_HOLDER_DIR"
-"$PYTHON_BIN" "$CYBERCP_DIR/pluginInstaller/pluginInstaller.py" installPlugin --pluginName "$PLUGIN_NAME" 2>&1 || {
-    log_error "pluginInstaller failed; check $CYBERCP_DIR and Python path"
+"$PYTHON_BIN" "$CPN_DIR/pluginInstaller/pluginInstaller.py" installPlugin --pluginName "$PLUGIN_NAME" 2>&1 || {
+    log_error "pluginInstaller failed; check $CPN_DIR and Python path"
     rm -f "$ZIP_FILE"
     exit 1
 }
@@ -55,7 +55,7 @@ chmod 644 "$PLUGIN_STATE_DIR/${PLUGIN_NAME}.state"
 log_info "Plugin enabled: $PLUGIN_STATE_DIR/${PLUGIN_NAME}.state"
 
 if command -v systemctl >/dev/null 2>&1; then
-    log_info "Restarting CyberPanel (lscpd)..."
+    log_info "Restarting CPN (lscpd)..."
     systemctl restart lscpd 2>/dev/null || true
 fi
 

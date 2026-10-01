@@ -4,7 +4,7 @@ from . import views
 app_name = 'contaboAutoSnapshot'
 
 urlpatterns = [
-    # Main plugin page (required by CyberPanel)
+    # Main plugin page (required by CPN)
     re_path(r'^$', views.main_view, name='main'),
     
     # Settings page

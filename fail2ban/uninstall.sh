@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fail2ban Plugin Uninstall Script
-# This script will completely remove the fail2ban plugin from CyberPanel
+# This script will completely remove the fail2ban plugin from CPN
 
 echo "🔒 Fail2ban Plugin Uninstall Script"
 echo "=================================="
@@ -13,7 +13,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Get the plugin directory
-PLUGIN_DIR="/home/cyberpanel/plugins/fail2ban_plugin"
+PLUGIN_DIR="/home/cpn/plugins/fail2ban_plugin"
 
 echo "📁 Plugin directory: $PLUGIN_DIR"
 
@@ -37,7 +37,7 @@ echo "🗑️  Removing plugin files..."
 rm -rf "$PLUGIN_DIR"
 
 # Remove any backup directories
-rm -rf /home/cyberpanel/plugins/fail2ban_plugin.backup.*
+rm -rf /home/cpn/plugins/fail2ban_plugin.backup.*
 
 echo "🔄 Restarting web server..."
 
@@ -51,4 +51,4 @@ echo "  - Plugin files removed"
 echo "  - Backup directories cleaned up"
 echo "  - Web server restarted"
 echo ""
-echo "🎯 You can now reinstall the plugin from CyberPanel's plugin manager"
+echo "🎯 You can now reinstall the plugin from CPN's plugin manager"

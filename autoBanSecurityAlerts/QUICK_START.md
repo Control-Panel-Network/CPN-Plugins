@@ -6,10 +6,10 @@ The plugin has been successfully installed and configured.
 
 ## Access the Plugin
 
-**URL:** https://cyberpanel.newstargeted.com:8090/plugins/autoBanSecurityAlerts/settings/
+**URL:** https://cpn.newstargeted.com:2087/plugins/autoBanSecurityAlerts/settings/
 
-Or navigate via CyberPanel:
-1. Login to CyberPanel
+Or navigate via CPN:
+1. Login to CPN
 2. Go to **Plugins** → **Installed Plugins**
 3. Find **"Auto Ban Security Alerts"**
 4. Click **"Settings"**
@@ -62,7 +62,7 @@ Once activated, configure:
 
 ✅ **Automatic IP Banning** - No more manual clicking!
 ✅ **IP Whitelist** - Protect trusted IPs
-✅ **System IP Protection** - CyberPanel IP auto-whitelisted
+✅ **System IP Protection** - CPN IP auto-whitelisted
 ✅ **Auto-Update** - System IP whitelist updates automatically
 ✅ **Ban History** - Track all auto-bans
 ✅ **Configurable** - Customize ban duration and check interval
@@ -70,12 +70,12 @@ Once activated, configure:
 ## Troubleshooting
 
 ### Plugin Not Showing
-- Restart CyberPanel: `systemctl restart lscpd`
+- Restart CPN: `systemctl restart lscpd`
 - Check INSTALLED_APPS in settings.py
 
 ### Migrations Needed
 ```bash
-cd /usr/local/CyberCP
+cd /usr/local/cpn
 python3 manage.py migrate autoBanSecurityAlerts
 ```
 

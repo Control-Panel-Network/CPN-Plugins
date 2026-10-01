@@ -13,7 +13,7 @@ import json
 from loginSystem.models import Administrator
 from plogical.httpProc import httpProc
 from plogical.mailUtilities import mailUtilities
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from plogical.acl import ACLManager
 from .models import DiscordAccount, DiscordAuthSettings
 from .utils.discord_oauth import (
@@ -37,8 +37,8 @@ DISCORD_OAUTH_ERROR_PARAM_MAP = {
 }
 
 
-def cyberpanel_login_required(view_func):
-    """Decorator to check CyberPanel session"""
+def cpn_login_required(view_func):
+    """Decorator to check CPN session"""
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
@@ -145,7 +145,7 @@ def discord_callback(request):
         if not discord_user:
             return redirect('/login?error=user_fetch_failed')
         
-        # Find or create CyberPanel admin account
+        # Find or create CPN admin account
         admin = None
         
         # Try to find existing Discord account link
@@ -206,7 +206,7 @@ def discord_callback(request):
 
 def create_admin_from_discord(discord_user, config):
     """
-    Create new CyberPanel admin account from Discord user data
+    Create new CPN admin account from Discord user data
     """
     try:
         from loginSystem.models import ACL
@@ -287,7 +287,7 @@ def create_discord_account_link(admin, discord_user):
         return None
 
 
-@cyberpanel_login_required
+@cpn_login_required
 def main_view(request):
     """Main plugin view"""
     mailUtilities.checkHome()
@@ -321,7 +321,7 @@ def main_view(request):
         return JsonResponse({'status': 0, 'error_message': 'Internal server error'})
 
 
-@cyberpanel_login_required
+@cpn_login_required
 def settings_view(request):
     """Settings page for Discord authentication"""
     mailUtilities.checkHome()

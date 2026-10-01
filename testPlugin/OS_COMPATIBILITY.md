@@ -1,8 +1,8 @@
-# OS Compatibility Guide - CyberPanel Test Plugin
+# OS Compatibility Guide - CPN Test Plugin
 
 ## 🌐 Supported Operating Systems
 
-The CyberPanel Test Plugin is designed to work seamlessly across all CyberPanel-supported operating systems with comprehensive multi-OS compatibility.
+The CPN Test Plugin is designed to work seamlessly across all CPN-supported operating systems with comprehensive multi-OS compatibility.
 
 ### ✅ Currently Supported OS
 
@@ -55,7 +55,7 @@ The installation script automatically detects your operating system and configur
 # Pip: pip3
 # Service Manager: systemctl
 # Web Server: apache2
-# User/Group: cyberpanel:cyberpanel
+# User/Group: cpn:cpn
 ```
 
 #### RHEL-based Systems (AlmaLinux, RockyLinux, RHEL, CentOS)
@@ -65,7 +65,7 @@ The installation script automatically detects your operating system and configur
 # Pip: pip3
 # Service Manager: systemctl
 # Web Server: httpd
-# User/Group: cyberpanel:cyberpanel
+# User/Group: cpn:cpn
 ```
 
 #### CloudLinux
@@ -75,7 +75,7 @@ The installation script automatically detects your operating system and configur
 # Pip: pip3
 # Service Manager: systemctl
 # Web Server: httpd
-# User/Group: cyberpanel:cyberpanel
+# User/Group: cpn:cpn
 ```
 
 ## 🐍 Python Compatibility
@@ -211,7 +211,7 @@ sestatus
 
 # Set proper context for plugin files
 setsebool -P httpd_can_network_connect 1
-chcon -R -t httpd_exec_t /usr/local/CyberCP/testPlugin/
+chcon -R -t httpd_exec_t /usr/local/cpn/testPlugin/
 ```
 
 ### AppArmor (Ubuntu/Debian)
@@ -247,7 +247,7 @@ iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 ### Run Compatibility Test
 ```bash
 # Navigate to plugin directory
-cd /usr/local/CyberCP/testPlugin
+cd /usr/local/cpn/testPlugin
 
 # Run compatibility test
 python3 test_os_compatibility.py
@@ -266,11 +266,11 @@ The compatibility test checks:
 - ✅ Web server configuration
 - ✅ File permissions and ownership
 - ✅ Network connectivity
-- ✅ CyberPanel integration
+- ✅ CPN integration
 
 ### Sample Output
 ```
-🔍 Testing OS Compatibility for CyberPanel Test Plugin
+🔍 Testing OS Compatibility for CPN Test Plugin
 ============================================================
 
 📋 Testing OS Detection...
@@ -297,15 +297,15 @@ The compatibility test checks:
    ✅ Installed: True
 
 🔐 Testing File Permissions...
-   ✅ Plugin Directory: /home/cyberpanel/plugins
-   ✅ CyberPanel Directory: /usr/local/CyberCP
+   ✅ Plugin Directory: /home/cpn/plugins
+   ✅ CPN Directory: /usr/local/cpn
 
 🌍 Testing Network Connectivity...
    ✅ GitHub: True
    ✅ Internet: True
 
-⚡ Testing CyberPanel Integration...
-   ✅ CyberPanel Installed: True
+⚡ Testing CPN Integration...
+   ✅ CPN Installed: True
    ✅ Settings File: True
    ✅ URLs File: True
    ✅ LSCPD Service: True
@@ -332,8 +332,8 @@ sudo apt-get update
 sudo apt-get install -y python3 python3-pip
 
 # Permission denied
-sudo chown -R cyberpanel:cyberpanel /home/cyberpanel/plugins
-sudo chown -R cyberpanel:cyberpanel /usr/local/CyberCP/testPlugin
+sudo chown -R cpn:cpn /home/cpn/plugins
+sudo chown -R cpn:cpn /usr/local/cpn/testPlugin
 
 # Service not starting
 sudo systemctl daemon-reload
@@ -349,11 +349,11 @@ sudo yum install -y python3 python3-pip
 
 # SELinux issues
 sudo setsebool -P httpd_can_network_connect 1
-sudo chcon -R -t httpd_exec_t /usr/local/CyberCP/testPlugin/
+sudo chcon -R -t httpd_exec_t /usr/local/cpn/testPlugin/
 
 # Permission denied
-sudo chown -R cyberpanel:cyberpanel /home/cyberpanel/plugins
-sudo chown -R cyberpanel:cyberpanel /usr/local/CyberCP/testPlugin
+sudo chown -R cpn:cpn /home/cpn/plugins
+sudo chown -R cpn:cpn /usr/local/cpn/testPlugin
 ```
 
 #### CloudLinux Issues
@@ -362,12 +362,12 @@ sudo chown -R cyberpanel:cyberpanel /usr/local/CyberCP/testPlugin
 sudo yum install -y python3 python3-pip
 
 # CageFS issues
-cagefsctl --enable cyberpanel
+cagefsctl --enable cpn
 cagefsctl --update
 
 # Permission denied
-sudo chown -R cyberpanel:cyberpanel /home/cyberpanel/plugins
-sudo chown -R cyberpanel:cyberpanel /usr/local/CyberCP/testPlugin
+sudo chown -R cpn:cpn /home/cpn/plugins
+sudo chown -R cpn:cpn /usr/local/cpn/testPlugin
 ```
 
 ### Debug Commands
@@ -387,12 +387,12 @@ systemctl status apache2  # Ubuntu/Debian
 systemctl status httpd    # RHEL-based
 
 # Check file permissions
-ls -la /home/cyberpanel/plugins/
-ls -la /usr/local/CyberCP/testPlugin/
+ls -la /home/cpn/plugins/
+ls -la /usr/local/cpn/testPlugin/
 
-# Check CyberPanel logs
-tail -f /home/cyberpanel/logs/cyberpanel.log
-tail -f /home/cyberpanel/logs/django.log
+# Check CPN logs
+tail -f /home/cpn/logs/cpn.log
+tail -f /home/cpn/logs/django.log
 ```
 
 ## 📋 Installation Checklist
@@ -400,7 +400,7 @@ tail -f /home/cyberpanel/logs/django.log
 ### Pre-Installation
 - [ ] Verify OS is supported
 - [ ] Check Python 3.6+ is installed
-- [ ] Ensure CyberPanel is installed and running
+- [ ] Ensure CPN is installed and running
 - [ ] Verify internet connectivity
 - [ ] Check available disk space (minimum 100MB)
 
@@ -424,7 +424,7 @@ tail -f /home/cyberpanel/logs/django.log
 ### Updating the Plugin
 ```bash
 # Navigate to plugin directory
-cd /usr/local/CyberCP/testPlugin
+cd /usr/local/cpn/testPlugin
 
 # Pull latest changes
 git pull origin main
@@ -441,8 +441,8 @@ sudo systemctl restart httpd    # RHEL-based
 sudo ./install.sh --uninstall
 
 # Or manually remove
-sudo rm -rf /usr/local/CyberCP/testPlugin
-sudo rm -f /home/cyberpanel/plugins/testPlugin
+sudo rm -rf /usr/local/cpn/testPlugin
+sudo rm -f /home/cpn/plugins/testPlugin
 ```
 
 ## 📞 Support
@@ -453,9 +453,9 @@ sudo rm -f /home/cyberpanel/plugins/testPlugin
 - **CloudLinux**: Check CloudLinux documentation
 
 ### Plugin Support
-- **GitHub Issues**: https://github.com/cyberpanel/testPlugin/issues
-- **CyberPanel Forums**: https://forums.cyberpanel.net/
-- **Documentation**: https://cyberpanel.net/docs/
+- **GitHub Issues**: https://github.com/Control-Panel-Network/CPN-Plugins/issues
+- **CPN Forums**: https://github.com/Control-Panel-Network/CPN-Plugins/issues
+- **Documentation**: https://cpn.newstargeted.com/docs/
 
 ---
 

@@ -36,7 +36,7 @@ class GTMSettings(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # Optional: Link to CyberPanel website object
+    # Optional: Link to CPN website object
     # Using db_constraint=False to avoid foreign key constraint issues
     website = models.ForeignKey(
         Websites,
@@ -45,7 +45,7 @@ class GTMSettings(models.Model):
         blank=True,
         related_name='gtm_settings',
         db_constraint=False,
-        help_text="Linked CyberPanel website (optional)"
+        help_text="Linked CPN website (optional)"
     )
     
     class Meta:

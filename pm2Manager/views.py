@@ -6,7 +6,7 @@ from django.views.decorators.http import require_http_methods
 from plogical.mailUtilities import mailUtilities
 from plogical.httpProc import httpProc
 from plogical.plugin_acl import require_manage_plugins_api
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from functools import wraps
 import json
 from .utils import (
@@ -15,15 +15,15 @@ from .utils import (
     format_pm2_process
 )
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     """
-    Custom decorator that checks for CyberPanel session userID
+    Custom decorator that checks for CPN session userID
     """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
             userID = request.session['userID']
-            # User is authenticated via CyberPanel session
+            # User is authenticated via CPN session
             return view_func(request, *args, **kwargs)
         except KeyError:
             # Not logged in, redirect to login
@@ -31,7 +31,7 @@ def cyberpanel_login_required(view_func):
             return redirect(loadLoginPage)
     return _wrapped_view
 
-@cyberpanel_login_required
+@cpn_login_required
 def dashboard(request):
     """Main PM2 Manager dashboard - pass PM2 status for initial display"""
     mailUtilities.checkHome()
@@ -48,7 +48,7 @@ def dashboard(request):
     response['Expires'] = '0'
     return response
 
-@cyberpanel_login_required
+@cpn_login_required
 def settings(request):
     """PM2 Manager settings page"""
     mailUtilities.checkHome()
@@ -60,7 +60,7 @@ def settings(request):
     proc = httpProc(request, 'pm2Manager/settings.html', context, 'managePlugins')
     return proc.render()
 
-@cyberpanel_login_required
+@cpn_login_required
 def node_detail(request, app_name):
     """Individual node detail page"""
     mailUtilities.checkHome()
@@ -72,7 +72,7 @@ def node_detail(request, app_name):
 
 # API Endpoints
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["GET"])
@@ -103,7 +103,7 @@ def api_list_apps(request):
             'pm2_status': pm2_status
         }, status=500)
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["GET"])
@@ -142,7 +142,7 @@ def api_get_info(request, app_name):
             'error': str(e)
         }, status=500)
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["GET"])
@@ -172,7 +172,7 @@ def api_get_logs(request, app_name):
             'error': str(e)
         }, status=500)
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -199,7 +199,7 @@ def api_start_app(request, app_name):
             'error': str(e)
         }, status=500)
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -226,7 +226,7 @@ def api_stop_app(request, app_name):
             'error': str(e)
         }, status=500)
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -253,7 +253,7 @@ def api_restart_app(request, app_name):
             'error': str(e)
         }, status=500)
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -280,7 +280,7 @@ def api_delete_app(request, app_name):
             'error': str(e)
         }, status=500)
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -343,7 +343,7 @@ def api_add_app(request):
             'error': str(e)
         }, status=500)
 
-@cyberpanel_login_required
+@cpn_login_required
 @require_manage_plugins_api
 @csrf_exempt
 @require_http_methods(["GET"])

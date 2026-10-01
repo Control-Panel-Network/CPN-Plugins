@@ -4,15 +4,15 @@ from plogical.mailUtilities import mailUtilities
 from plogical.httpProc import httpProc
 from functools import wraps
 
-def cyberpanel_login_required(view_func):
+def cpn_login_required(view_func):
     """
-    Custom decorator that checks for CyberPanel session userID
+    Custom decorator that checks for CPN session userID
     """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
             userID = request.session['userID']
-            # User is authenticated via CyberPanel session
+            # User is authenticated via CPN session
             return view_func(request, *args, **kwargs)
         except KeyError:
             # Not logged in, redirect to login
@@ -20,7 +20,7 @@ def cyberpanel_login_required(view_func):
             return redirect(loadLoginPage)
     return _wrapped_view
 
-@cyberpanel_login_required
+@cpn_login_required
 def test_plugin_view(request):
     """
     Main view for the test plugin
@@ -29,12 +29,12 @@ def test_plugin_view(request):
     context = {
         'plugin_name': 'Test Plugin',
         'version': '1.0.0',
-        'description': 'A simple test plugin for CyberPanel'
+        'description': 'A simple test plugin for CPN'
     }
     proc = httpProc(request, 'testPlugin/index.html', context, 'managePlugins')
     return proc.render()
 
-@cyberpanel_login_required
+@cpn_login_required
 def plugin_info_view(request):
     """
     API endpoint for plugin information
@@ -43,10 +43,10 @@ def plugin_info_view(request):
         'plugin_name': 'Test Plugin',
         'version': '1.0.0',
         'status': 'active',
-        'description': 'A simple test plugin for CyberPanel testing'
+        'description': 'A simple test plugin for CPN testing'
     })
 
-@cyberpanel_login_required
+@cpn_login_required
 def settings_view(request):
     """
     Settings page for the test plugin
@@ -55,7 +55,7 @@ def settings_view(request):
     context = {
         'plugin_name': 'Test Plugin',
         'version': '1.0.0',
-        'description': 'A simple test plugin for CyberPanel'
+        'description': 'A simple test plugin for CPN'
     }
     proc = httpProc(request, 'testPlugin/settings.html', context, 'managePlugins')
     return proc.render()

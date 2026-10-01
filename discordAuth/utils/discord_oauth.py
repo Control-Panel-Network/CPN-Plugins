@@ -10,7 +10,7 @@ import urllib.parse
 import json
 import secrets
 from django.conf import settings
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from .config import get_config, get_redirect_uri
 
 
@@ -84,7 +84,7 @@ def exchange_code_for_token(code, request):
             data=urllib.parse.urlencode(data).encode('utf-8'),
             headers={
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'User-Agent': 'CyberPanel-DiscordAuth/1.0'
+                'User-Agent': 'CPN-DiscordAuth/1.0'
             }
         )
         
@@ -120,7 +120,7 @@ def get_discord_user(access_token):
             DISCORD_USER_URL,
             headers={
                 'Authorization': f'Bearer {access_token}',
-                'User-Agent': 'CyberPanel-DiscordAuth/1.0'
+                'User-Agent': 'CPN-DiscordAuth/1.0'
             }
         )
         

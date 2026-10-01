@@ -14,7 +14,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('/var/log/cyberpanel/fail2ban_plugin_pre_install.log'),
+        logging.FileHandler('/var/log/cpn/fail2ban_plugin_pre_install.log'),
         logging.StreamHandler()
     ]
 )
@@ -78,9 +78,9 @@ def install_fail2ban():
 def create_directories():
     """Create necessary directories"""
     directories = [
-        '/var/log/cyberpanel/fail2ban_plugin',
+        '/var/log/cpn/fail2ban_plugin',
         '/etc/fail2ban/jail.d',
-        '/usr/local/CyberCP/static/fail2ban_plugin',
+        '/usr/local/cpn/static/fail2ban_plugin',
     ]
     
     for directory in directories:
@@ -97,8 +97,8 @@ def set_permissions():
     """Set proper permissions for directories and files"""
     try:
         # Set permissions for log directory
-        run_command('chmod 755 /var/log/cyberpanel/fail2ban_plugin', 'Setting log directory permissions')
-        run_command('chown -R root:root /var/log/cyberpanel/fail2ban_plugin', 'Setting log directory ownership')
+        run_command('chmod 755 /var/log/cpn/fail2ban_plugin', 'Setting log directory permissions')
+        run_command('chown -R root:root /var/log/cpn/fail2ban_plugin', 'Setting log directory ownership')
         
         # Set permissions for fail2ban directories
         run_command('chmod 755 /etc/fail2ban/jail.d', 'Setting fail2ban jail.d permissions')

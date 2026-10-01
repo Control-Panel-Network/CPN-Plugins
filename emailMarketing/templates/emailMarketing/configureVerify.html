@@ -1,6 +1,6 @@
 {% extends "baseTemplate/index.html" %}
 {% load i18n %}
-{% block title %}{% trans "Configure Email Verification - CyberPanel" %}{% endblock %}
+{% block title %}{% trans "Configure Email Verification - CPN" %}{% endblock %}
 {% block content %}
 {% load static %}
     {% include "pluginHolder/cpui_head.html" %}
@@ -23,7 +23,7 @@
         <div ng-controller="configureVerify" class="panel" style="background: var(--bg-primary, white); border-color: var(--border-color, #ddd);">
             <div class="panel-body" style="background: var(--bg-primary, white); color: var(--text-primary, #333);">
                 <h3 class="title-hero">
-                    {% trans "Compose Email Message" %} <img ng-hide="cyberPanelLoading"
+                    {% trans "Compose Email Message" %} <img ng-hide="cpnLoading"
                                                              src="{% static 'images/loading.gif' %}">
                 </h3>
                 <div class="example-box-wrapper">

@@ -23,7 +23,7 @@ header('Content-Type: text/html; charset=UTF-8');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paid Plugin Security Guide - CyberPanel Plugins</title>
+    <title>Paid Plugin Security Guide - CPN Plugins</title>
     <style>
         * {
             margin: 0;
@@ -642,7 +642,7 @@ def verify_code_integrity():
         <div class="footer">
             <p><strong>Paid Plugin Security Guide</strong></p>
             <p>Version 1.0.0 | Last Updated: <?php echo date('Y-m-d'); ?></p>
-            <p>© <?php echo date('Y'); ?> master3395 - CyberPanel Plugins</p>
+            <p>© <?php echo date('Y'); ?> master3395 - CPN Plugins</p>
         </div>
     </div>
 </body>

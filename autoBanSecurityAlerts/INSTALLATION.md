@@ -3,27 +3,27 @@
 ## Installation Steps
 
 ### 1. Plugin Files
-✅ Plugin files are located at: `/home/cyberpanel-plugins/autoBanSecurityAlerts/`
+✅ Plugin files are located at: `/home/cpn-plugins/autoBanSecurityAlerts/`
 
 ### 2. INSTALLED_APPS
-✅ Plugin has been added to `INSTALLED_APPS` in `/home/cyberpanel-repo/CyberCP/settings.py`
+✅ Plugin has been added to `INSTALLED_APPS` in `/home/cpn-repo/cpn/settings.py`
 
 ### 3. Run Migrations
 Run the following command to create database tables:
 
 ```bash
-cd /usr/local/CyberCP
+cd /usr/local/cpn
 python3 manage.py migrate autoBanSecurityAlerts
 ```
 
 If you encounter migration errors with other plugins, you can run migrations for all apps:
 ```bash
-cd /usr/local/CyberCP
+cd /usr/local/cpn
 python3 manage.py migrate
 ```
 
-### 4. Restart CyberPanel
-Restart the CyberPanel service to load the plugin:
+### 4. Restart CPN
+Restart the CPN service to load the plugin:
 
 ```bash
 systemctl restart lscpd
@@ -32,10 +32,10 @@ systemctl restart lscpd
 ### 5. Access the Plugin
 Navigate to:
 ```
-https://cyberpanel.newstargeted.com:8090/plugins/autoBanSecurityAlerts/settings/
+https://cpn.newstargeted.com:2087/plugins/autoBanSecurityAlerts/settings/
 ```
 
-Or via the CyberPanel dashboard:
+Or via the CPN dashboard:
 - Go to Plugins → Installed Plugins
 - Find "Auto Ban Security Alerts"
 - Click "Settings"
@@ -46,7 +46,7 @@ Or via the CyberPanel dashboard:
    - Click "Activate"
 
 2. **Option B: Patreon Subscription**
-   - Subscribe to "CyberPanel Paid Plugin" tier
+   - Subscribe to "CPN Paid Plugin" tier
    - The plugin will automatically verify your subscription
 
 3. **Option C: PayPal Payment**
@@ -63,19 +63,19 @@ Once activated:
 ### 8. Verify Installation
 Run the verification script:
 ```bash
-/home/cyberpanel-plugins/autoBanSecurityAlerts/verify_installation.sh
+/home/cpn-plugins/autoBanSecurityAlerts/verify_installation.sh
 ```
 
 ## Troubleshooting
 
 ### Plugin Not Appearing
 - Verify plugin is in `INSTALLED_APPS` in settings.py
-- Check that `/home/cyberpanel-plugins/autoBanSecurityAlerts/` exists
-- Restart CyberPanel: `systemctl restart lscpd`
-- Check CyberPanel logs: `/usr/local/lscp/logs/error.log`
+- Check that `/home/cpn-plugins/autoBanSecurityAlerts/` exists
+- Restart CPN: `systemctl restart lscpd`
+- Check CPN logs: `/usr/local/lscp/logs/error.log`
 
 ### Migration Errors
-- Ensure you're in the correct directory: `cd /usr/local/CyberCP`
+- Ensure you're in the correct directory: `cd /usr/local/cpn`
 - Check database connection
 - Run: `python3 manage.py migrate autoBanSecurityAlerts --verbosity=2`
 
@@ -88,7 +88,7 @@ Run the verification script:
 ## System IP Auto-Whitelisting
 
 The plugin automatically:
-- Reads the CyberPanel machine IP from `/etc/cyberpanel/machineIP`
+- Reads the CPN machine IP from `/etc/cpn/machineIP`
 - Whitelists it on first access
 - Updates the whitelist if the IP changes
 - Prevents deletion of the system IP
@@ -105,5 +105,5 @@ The plugin runs a background monitoring thread that:
 
 For issues or questions:
 - Check the README.md file
-- Review plugin logs in CyberPanel error logs
+- Review plugin logs in CPN error logs
 - Contact support via Patreon or PayPal

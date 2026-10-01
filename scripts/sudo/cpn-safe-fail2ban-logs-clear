@@ -6,7 +6,7 @@ if [[ ! -e "$file" ]]; then
   exit 0
 fi
 if [[ ! -f "$file" ]]; then
-  echo "cyberpanel-safe-fail2ban-logs-clear: not a regular file" >&2
+  echo "cpn-safe-fail2ban-logs-clear: not a regular file" >&2
   exit 1
 fi
 # Truncate in place; keep ownership/mode.

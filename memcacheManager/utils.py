@@ -10,8 +10,8 @@ import socket
 import re
 
 # Service configuration
-MEMCACHED_MARKER = '/home/cyberpanel/memcached'
-LSMCD_MARKER = '/home/cyberpanel/lsmcd'
+MEMCACHED_MARKER = '/home/cpn/memcached'
+LSMCD_MARKER = '/home/cpn/lsmcd'
 
 # Service binaries
 MEMCACHED_BIN = '/usr/bin/memcached'

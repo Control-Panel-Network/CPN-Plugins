@@ -31,9 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configure GTM container IDs per domain
 - Enable/disable GTM per domain
 - View and copy GTM code snippets (head and body)
-- Integration with CyberPanel domain list
+- Integration with CPN domain list
 
 ---
 
-[1.0.1]: https://github.com/master3395/cyberpanel-plugins/compare/googleTagManager-v1.0.0...googleTagManager-v1.0.1
-[1.0.0]: https://github.com/master3395/cyberpanel-plugins/releases/tag/googleTagManager-v1.0.0
+[1.0.1]: https://github.com/Control-Panel-Network/CPN-Plugins/compare/googleTagManager-v1.0.0...googleTagManager-v1.0.1
+[1.0.0]: https://github.com/Control-Panel-Network/CPN-Plugins/releases/tag/googleTagManager-v1.0.0

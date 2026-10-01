@@ -1,4 +1,4 @@
-# Google Tag Manager Plugin for CyberPanel
+# Google Tag Manager Plugin for CPN
 # Author: master3395
 # Version: 1.0.0
 

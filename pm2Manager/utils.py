@@ -7,7 +7,7 @@ import json
 import os
 import shlex
 import time
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
 def _run_pm2_command(command, timeout=10):
     """
@@ -22,7 +22,7 @@ def _run_pm2_command(command, timeout=10):
             'success': False,
             'error': 'PM2 is not installed or not in PATH'
         }
-    # Try root first so panel user never touches /usr/local/lscp/cyberpanel/.pm2
+    # Try root first so panel user never touches /usr/local/lscp/cpn/.pm2
     result_root = _run_pm2_command_impl(pm2_path, command, timeout, run_as_root=True)
     if result_root['success']:
         return result_root

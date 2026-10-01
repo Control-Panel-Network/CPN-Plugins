@@ -25,9 +25,9 @@ $("#manageSMTPHostsChild").attr("href", smtpHostsURL);
 
 app.controller('emailMarketing', function ($scope, $http) {
 
-    $scope.cyberPanelLoading = true;
+    $scope.cpnLoading = true;
     $scope.fetchUsers = function () {
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/fetchUsers";
 
@@ -43,7 +43,7 @@ app.controller('emailMarketing', function ($scope, $http) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
 
             if (response.data.status === 1) {
                 $scope.users = JSON.parse(response.data.data);
@@ -57,7 +57,7 @@ app.controller('emailMarketing', function ($scope, $http) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -69,7 +69,7 @@ app.controller('emailMarketing', function ($scope, $http) {
     };
     $scope.fetchUsers();
     $scope.enableDisableMarketing = function (status, userName) {
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/enableDisableMarketing";
 
@@ -85,7 +85,7 @@ app.controller('emailMarketing', function ($scope, $http) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             $scope.fetchUsers();
 
             if (response.data.status === 1) {
@@ -104,7 +104,7 @@ app.controller('emailMarketing', function ($scope, $http) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -120,7 +120,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
 
     $scope.installationDetailsForm = false;
     $scope.installationProgress = true;
-    $scope.cyberPanelLoading = true;
+    $scope.cpnLoading = true;
     $scope.goBackDisable = true;
 
     var statusFile;
@@ -130,7 +130,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
     $scope.goBack = function () {
         $scope.installationDetailsForm = false;
         $scope.installationProgress = true;
-        $scope.cyberPanelLoading = true;
+        $scope.cpnLoading = true;
         $scope.goBackDisable = true;
         $("#installProgress").css("width", "0%");
     };
@@ -139,7 +139,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
 
         $scope.installationDetailsForm = true;
         $scope.installationProgress = false;
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
         $scope.goBackDisable = true;
         $scope.currentStatus = "Starting to load email addresses..";
 
@@ -169,7 +169,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
             } else {
 
                 $scope.installationDetailsForm = true;
-                $scope.cyberPanelLoading = true;
+                $scope.cpnLoading = true;
                 $scope.goBackDisable = false;
 
                 new PNotify({
@@ -183,7 +183,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -222,7 +222,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
 
                     $scope.installationDetailsForm = true;
                     $scope.installationProgress = false;
-                    $scope.cyberPanelLoading = true;
+                    $scope.cpnLoading = true;
                     $scope.goBackDisable = false;
                     $scope.currentStatus = 'Emails successfully loaded.';
                     $timeout.cancel();
@@ -231,7 +231,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
 
                     $scope.installationDetailsForm = true;
                     $scope.installationProgress = false;
-                    $scope.cyberPanelLoading = true;
+                    $scope.cpnLoading = true;
                     $scope.goBackDisable = false;
                     $scope.currentStatus = response.data.error_message;
 
@@ -248,7 +248,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -262,7 +262,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
     }
 
     $scope.fetchEmails = function () {
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/fetchEmails";
 
@@ -278,7 +278,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
 
             if (response.data.status === 1) {
                 $scope.records = JSON.parse(response.data.data);
@@ -292,7 +292,7 @@ app.controller('createEmailList', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -310,7 +310,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
     $scope.installationDetailsForm = true;
     $scope.installationProgress = true;
-    $scope.cyberPanelLoading = true;
+    $scope.cpnLoading = true;
     $scope.goBackDisable = true;
     $scope.verificationStatus = true;
 
@@ -321,7 +321,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
     $scope.goBack = function () {
         $scope.installationDetailsForm = false;
         $scope.installationProgress = true;
-        $scope.cyberPanelLoading = true;
+        $scope.cpnLoading = true;
         $scope.goBackDisable = true;
         $("#installProgress").css("width", "0%");
     };
@@ -330,7 +330,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
         $scope.installationDetailsForm = true;
         $scope.installationProgress = false;
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
         $scope.goBackDisable = true;
         $scope.currentStatus = "Starting to load email addresses..";
 
@@ -360,7 +360,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
             } else {
 
                 $scope.installationDetailsForm = true;
-                $scope.cyberPanelLoading = true;
+                $scope.cpnLoading = true;
                 $scope.goBackDisable = false;
 
                 new PNotify({
@@ -374,7 +374,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -413,7 +413,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
                     $scope.installationDetailsForm = true;
                     $scope.installationProgress = false;
-                    $scope.cyberPanelLoading = true;
+                    $scope.cpnLoading = true;
                     $scope.goBackDisable = false;
                     $scope.currentStatus = 'Emails successfully loaded.';
                     $timeout.cancel();
@@ -422,7 +422,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
                     $scope.installationDetailsForm = true;
                     $scope.installationProgress = false;
-                    $scope.cyberPanelLoading = true;
+                    $scope.cpnLoading = true;
                     $scope.goBackDisable = false;
                     $scope.currentStatus = response.data.error_message;
 
@@ -439,7 +439,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -468,7 +468,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
         globalPage = page;
         listVerificationStatus();
 
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/fetchEmails";
 
@@ -489,7 +489,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
 
             if (response.data.status === 1) {
                 $scope.currentRecords = false;
@@ -506,7 +506,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -519,7 +519,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
     $scope.deleteList = function () {
 
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/deleteList";
 
@@ -537,7 +537,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             if (response.data.status === 1) {
                 new PNotify({
                     title: 'Success!',
@@ -546,7 +546,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
                 });
             } else {
 
-                $scope.cyberPanelLoading = false;
+                $scope.cpnLoading = false;
 
                 new PNotify({
                     title: 'Operation Failed!',
@@ -559,7 +559,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -583,7 +583,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
         $scope.installationDetailsForm = true;
         $scope.verificationStatus = false;
         $scope.verificationButton = true;
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/emailVerificationJob";
 
@@ -607,7 +607,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
                 $scope.verificationButton = true;
             } else {
 
-                $scope.cyberPanelLoading = true;
+                $scope.cpnLoading = true;
                 $scope.verificationButton = false;
 
                 new PNotify({
@@ -621,7 +621,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             $scope.verificationButton = false;
             new PNotify({
                 title: 'Operation Failed!',
@@ -639,13 +639,13 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
     function listVerificationStatus() {
 
         $scope.verificationButton = true;
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/websites/installWordpressStatus";
 
         var data = {
             domain: $("#domainNamePage").text(),
-            statusFile: "/home/cyberpanel/" + $("#domainNamePage").text() + "/" + $scope.listName
+            statusFile: "/home/cpn/" + $("#domainNamePage").text() + "/" + $scope.listName
         };
 
         var config = {
@@ -664,7 +664,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
             if (response.data.abort === 1) {
 
                 if (response.data.installStatus === 1) {
-                    $scope.cyberPanelLoading = true;
+                    $scope.cpnLoading = true;
                     $scope.verificationButton = false;
                     $scope.currentStatusVerification = 'Emails successfully verified.';
                     $timeout.cancel();
@@ -676,7 +676,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
                         return;
                     }
                     $scope.verificationButton = true;
-                    $scope.cyberPanelLoading = false;
+                    $scope.cpnLoading = false;
                     $scope.verificationStatus = false;
                     $scope.currentStatusVerification = response.data.error_message;
 
@@ -685,7 +685,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
             } else {
 
                 if (response.data.currentStatus.search('No such file') > -1) {
-                    $scope.cyberPanelLoading = true;
+                    $scope.cpnLoading = true;
                     $scope.deleteTemplateBTN = false;
                     $scope.sendEmailBTN = false;
                     $scope.sendEmailsView = true;
@@ -703,7 +703,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -720,7 +720,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
     $scope.deleteEmail = function (id) {
 
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/deleteEmail";
 
@@ -738,7 +738,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             $scope.fetchEmails(globalPage);
 
             if (response.data.status === 1) {
@@ -762,7 +762,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -779,7 +779,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
     $scope.fetchLogs = function () {
 
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         var config = {
             headers: {
@@ -798,7 +798,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
         $http.post(url, data, config).then(ListInitialData, cantLoadInitialData);
 
         function ListInitialData(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             if (response.data.status === 1) {
                 $scope.recordsLogs = JSON.parse(response.data.logs);
                 $scope.paginationLogs = response.data.pagination;
@@ -814,7 +814,7 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
             }
         }
         function cantLoadInitialData(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -830,9 +830,9 @@ app.controller('manageEmailLists', function ($scope, $http, $timeout) {
 
 app.controller('manageSMTPHostsCTRL', function ($scope, $http) {
 
-    $scope.cyberPanelLoading = true;
+    $scope.cpnLoading = true;
     $scope.fetchSMTPHosts = function () {
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/fetchSMTPHosts";
 
@@ -848,7 +848,7 @@ app.controller('manageSMTPHostsCTRL', function ($scope, $http) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
 
             if (response.data.status === 1) {
                 $scope.records = JSON.parse(response.data.data);
@@ -862,7 +862,7 @@ app.controller('manageSMTPHostsCTRL', function ($scope, $http) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -874,7 +874,7 @@ app.controller('manageSMTPHostsCTRL', function ($scope, $http) {
     };
     $scope.fetchSMTPHosts();
     $scope.saveSMTPHost = function (status, userName) {
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/saveSMTPHost";
 
@@ -895,7 +895,7 @@ app.controller('manageSMTPHostsCTRL', function ($scope, $http) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
 
             if (response.data.status === 1) {
                 $scope.fetchSMTPHosts();
@@ -914,7 +914,7 @@ app.controller('manageSMTPHostsCTRL', function ($scope, $http) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -925,7 +925,7 @@ app.controller('manageSMTPHostsCTRL', function ($scope, $http) {
 
     };
     $scope.smtpHostOperations = function (operation, id) {
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/smtpHostOperations";
 
@@ -944,7 +944,7 @@ app.controller('manageSMTPHostsCTRL', function ($scope, $http) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             $scope.fetchSMTPHosts();
 
             if (response.data.status === 1) {
@@ -963,7 +963,7 @@ app.controller('manageSMTPHostsCTRL', function ($scope, $http) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -977,9 +977,9 @@ app.controller('manageSMTPHostsCTRL', function ($scope, $http) {
 
 app.controller('composeMessageCTRL', function ($scope, $http) {
 
-    $scope.cyberPanelLoading = true;
+    $scope.cpnLoading = true;
     $scope.saveTemplate = function (status, userName) {
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/saveEmailTemplate";
 
@@ -1002,7 +1002,7 @@ app.controller('composeMessageCTRL', function ($scope, $http) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
 
             if (response.data.status === 1) {
                 new PNotify({
@@ -1020,7 +1020,7 @@ app.controller('composeMessageCTRL', function ($scope, $http) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -1034,7 +1034,7 @@ app.controller('composeMessageCTRL', function ($scope, $http) {
 
 app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
-    $scope.cyberPanelLoading = true;
+    $scope.cpnLoading = true;
     $scope.availableFunctions = true;
     $scope.sendEmailsView = true;
     $scope.jobStatus = true;
@@ -1060,7 +1060,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
     $scope.fetchJobs = function () {
 
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/fetchJobs";
 
@@ -1078,7 +1078,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
 
             if (response.data.status === 1) {
                 $scope.currentRecords = false;
@@ -1093,7 +1093,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -1105,7 +1105,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
     };
 
     $scope.startEmailJob = function () {
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
         $scope.deleteTemplateBTN = true;
         $scope.sendEmailBTN = true;
         $scope.sendEmailsView = true;
@@ -1132,12 +1132,12 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
 
             if (response.data.status === 1) {
                 emailJobStatus();
             } else {
-                $scope.cyberPanelLoading = true;
+                $scope.cpnLoading = true;
                 $scope.deleteTemplateBTN = false;
                 $scope.sendEmailBTN = false;
                 $scope.sendEmailsView = false;
@@ -1152,7 +1152,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -1166,7 +1166,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
     function emailJobStatus() {
 
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
         $scope.deleteTemplateBTN = true;
         $scope.sendEmailBTN = true;
         $scope.sendEmailsView = true;
@@ -1177,7 +1177,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
         var data = {
             domain: 'example.com',
-            statusFile: "/home/cyberpanel/" + $scope.selectedTemplate + "_pendingJob"
+            statusFile: "/home/cpn/" + $scope.selectedTemplate + "_pendingJob"
         };
 
         var config = {
@@ -1196,7 +1196,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
             if (response.data.abort === 1) {
 
                 if (response.data.installStatus === 1) {
-                    $scope.cyberPanelLoading = true;
+                    $scope.cpnLoading = true;
                     $scope.deleteTemplateBTN = false;
                     $scope.sendEmailBTN = false;
                     $scope.sendEmailsView = true;
@@ -1209,7 +1209,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
                 } else {
 
                     if (response.data.error_message.search('No such file') > -1) {
-                        $scope.cyberPanelLoading = true;
+                        $scope.cpnLoading = true;
                         $scope.deleteTemplateBTN = false;
                         $scope.sendEmailBTN = false;
                         $scope.sendEmailsView = true;
@@ -1217,7 +1217,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
                         $scope.goBackDisable = false;
                         return;
                     }
-                    $scope.cyberPanelLoading = true;
+                    $scope.cpnLoading = true;
                     $scope.deleteTemplateBTN = false;
                     $scope.sendEmailBTN = false;
                     $scope.sendEmailsView = true;
@@ -1230,7 +1230,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
             } else {
 
                 if (response.data.currentStatus.search('No such file') > -1) {
-                    $scope.cyberPanelLoading = true;
+                    $scope.cpnLoading = true;
                     $scope.deleteTemplateBTN = false;
                     $scope.sendEmailBTN = false;
                     $scope.sendEmailsView = true;
@@ -1242,7 +1242,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
                 $scope.currentStatus = response.data.currentStatus;
                 $timeout(emailJobStatus, 1000);
-                $scope.cyberPanelLoading = false;
+                $scope.cpnLoading = false;
                 $scope.deleteTemplateBTN = true;
                 $scope.sendEmailBTN = true;
                 $scope.sendEmailsView = true;
@@ -1253,7 +1253,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page.',
@@ -1267,7 +1267,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
     }
 
     $scope.goBack = function () {
-        $scope.cyberPanelLoading = true;
+        $scope.cpnLoading = true;
         $scope.deleteTemplateBTN = false;
         $scope.sendEmailBTN = false;
         $scope.sendEmailsView = false;
@@ -1277,7 +1277,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
     $scope.deleteTemplate = function () {
 
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/deleteTemplate";
 
@@ -1295,7 +1295,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
 
             if (response.data.status === 1) {
                 new PNotify({
@@ -1317,7 +1317,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -1329,7 +1329,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
     };
     $scope.deleteJob = function (id) {
 
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/deleteJob";
 
@@ -1347,7 +1347,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             $scope.fetchJobs();
 
             if (response.data.status === 1) {
@@ -1370,7 +1370,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',
@@ -1384,7 +1384,7 @@ app.controller('sendEmailsCTRL', function ($scope, $http, $timeout) {
 
 app.controller('configureVerify', function ($scope, $http) {
 
-    $scope.cyberPanelLoading = true;
+    $scope.cpnLoading = true;
     $scope.ipv4Hidden = true;
     $scope.ipv6Hidden = true;
     $scope.delayHidden = true;
@@ -1410,7 +1410,7 @@ app.controller('configureVerify', function ($scope, $http) {
 
     $scope.saveChanges = function () {
 
-        $scope.cyberPanelLoading = false;
+        $scope.cpnLoading = false;
 
         url = "/emailMarketing/saveConfigureVerify";
 
@@ -1434,7 +1434,7 @@ app.controller('configureVerify', function ($scope, $http) {
 
 
         function ListInitialDatas(response) {
-            $scope.cyberPanelLoading = true;
+            $scope.cpnLoading = true;
 
             if (response.data.status === 1) {
 
@@ -1453,7 +1453,7 @@ app.controller('configureVerify', function ($scope, $http) {
         }
 
         function cantLoadInitialDatas(response) {
-            $scope.cyberPanelLoading = false;
+            $scope.cpnLoading = false;
             new PNotify({
                 title: 'Operation Failed!',
                 text: 'Could not connect to server, please refresh this page',

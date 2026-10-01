@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load static %}
 
-{% block title %}{% trans "Plugin Development Guide - CyberPanel" %}{% endblock %}
+{% block title %}{% trans "Plugin Development Guide - CPN" %}{% endblock %}
 
 {% block content %}
 {% load i18n %}
@@ -24,7 +24,7 @@
                 <i class="fas fa-book" style="margin-right: 12px; color: #5856d6;"></i>
                 {% trans "Plugin Development Documentation" %}
             </h1>
-            <p>{% trans "Complete guide for developing, installing, and managing CyberPanel plugins" %}</p>
+            <p>{% trans "Complete guide for developing, installing, and managing CPN plugins" %}</p>
         </div>
 
         <!-- Navigation -->
@@ -54,7 +54,7 @@
         <!-- Quick Installation Guide -->
         <div class="docs-section active" id="quick-guide">
             <div class="docs-content">
-                <h1 class="section-title">Quick Installation Guide - CyberPanel Test Plugin</h1>
+                <h1 class="section-title">Quick Installation Guide - CPN Test Plugin</h1>
                 
                 <div class="feature-list">
                     <div class="feature-item">
@@ -73,12 +73,12 @@
 
                 <h2>One-Command Installation</h2>
                 <pre><code># Install the test plugin with a single command
-curl -sSL https://raw.githubusercontent.com/cyberpanel/testPlugin/main/install.sh | bash</code></pre>
+curl -sSL https://raw.githubusercontent.com/Control-Panel-Network/CPN-Plugins/main/testPlugin/install.sh | bash</code></pre>
 
                 <h2>Manual Installation</h2>
                 <ol>
                     <li><strong>Download the plugin</strong>
-                        <pre><code>git clone https://github.com/master3395/cyberpanel-plugins.git
+                        <pre><code>git clone https://github.com/Control-Panel-Network/CPN-Plugins.git
 cd testPlugin</code></pre>
                     </li>
                     <li><strong>Run the installation script</strong>
@@ -88,7 +88,7 @@ cd testPlugin</code></pre>
                     <li><strong>Access the plugin</strong>
                         <ul>
                             <li>URL: <code>https://your-domain:8090/testPlugin/</code></li>
-                            <li>Login with your CyberPanel admin credentials</li>
+                            <li>Login with your CPN admin credentials</li>
                         </ul>
                     </li>
                 </ol>
@@ -113,7 +113,7 @@ cd testPlugin</code></pre>
                     </div>
                     <div class="feature-item">
                         <h4>✅ Inline Integration</h4>
-                        <p>Loads within CyberPanel interface</p>
+                        <p>Loads within CPN interface</p>
                     </div>
                     <div class="feature-item">
                         <h4>✅ Responsive Design</h4>
@@ -128,16 +128,16 @@ cd testPlugin</code></pre>
                 <h2>Troubleshooting</h2>
                 <p>If you encounter any issues:</p>
                 <ol>
-                    <li><strong>Check CyberPanel logs</strong>
-                        <pre><code>tail -f /home/cyberpanel/logs/cyberpanel.log</code></pre>
+                    <li><strong>Check CPN logs</strong>
+                        <pre><code>tail -f /home/cpn/logs/cpn.log</code></pre>
                     </li>
-                    <li><strong>Restart CyberPanel services</strong>
+                    <li><strong>Restart CPN services</strong>
                         <pre><code>systemctl restart lscpd
-systemctl restart cyberpanel</code></pre>
+systemctl restart cpn</code></pre>
                     </li>
                     <li><strong>Verify installation</strong>
-                        <pre><code>ls -la /home/cyberpanel/plugins/testPlugin
-ls -la /usr/local/CyberCP/testPlugin</code></pre>
+                        <pre><code>ls -la /home/cpn/plugins/testPlugin
+ls -la /usr/local/cpn/testPlugin</code></pre>
                     </li>
                 </ol>
 
@@ -147,15 +147,15 @@ ls -la /usr/local/CyberCP/testPlugin</code></pre>
             </div>
         </div>
 
-        <!-- Official CyberPanel Plugin Development Guide -->
+        <!-- Official CPN Plugin Development Guide -->
         <div class="docs-section" id="official-guide">
             <div class="docs-content">
-                <h1 class="section-title">Getting Started with CyberPanel Plugin Development</h1>
+                <h1 class="section-title">Getting Started with CPN Plugin Development</h1>
                 
                 <div class="feature-list">
                     <div class="feature-item">
                         <h4>🎯 Official Documentation</h4>
-                        <p>Based on the official CyberPanel plugin development guide from the CyberPanel team.</p>
+                        <p>Based on the official CPN plugin development guide from the CPN team.</p>
                     </div>
                     <div class="feature-item">
                         <h4>📚 Step-by-Step Tutorial</h4>
@@ -163,12 +163,12 @@ ls -la /usr/local/CyberCP/testPlugin</code></pre>
                     </div>
                     <div class="feature-item">
                         <h4>🔧 Signal Integration</h4>
-                        <p>Learn how to hook into CyberPanel events and respond to core functionality.</p>
+                        <p>Learn how to hook into CPN events and respond to core functionality.</p>
                     </div>
                 </div>
 
                 <blockquote>
-                    <strong>Source:</strong> This guide is based on the official CyberPanel documentation and the <a href="https://github.com/usmannasir/beautiful_names" target="_blank" rel="noopener">beautiful_names plugin repository</a>.
+                    <strong>Source:</strong> This guide is based on the official CPN documentation and the <a href="https://github.com/usmannasir/beautiful_names" target="_blank" rel="noopener">beautiful_names plugin repository</a>.
                 </blockquote>
 
                 <h2>Prerequisites</h2>
@@ -179,18 +179,18 @@ ls -la /usr/local/CyberCP/testPlugin</code></pre>
                     <li><strong>CSS (Basic)</strong> - Basic CSS knowledge</li>
                 </ul>
 
-                <p><strong>Note:</strong> You can use plain JavaScript in your plugins or any JavaScript framework. You just have to follow the norms of Django framework, because CyberPanel plugin is just another Django app.</p>
+                <p><strong>Note:</strong> You can use plain JavaScript in your plugins or any JavaScript framework. You just have to follow the norms of Django framework, because CPN plugin is just another Django app.</p>
 
                 <h2>Step 1: Set up your Development Environment</h2>
                 
-                <h3>Clone CyberPanel Repository</h3>
-                <pre><code>git clone https://github.com/usmannasir/cyberpanel/ --single-branch v1.7.2-plugin</code></pre>
+                <h3>Clone CPN Repository</h3>
+                <pre><code>git clone https://github.com/Control-Panel-Network/CPN-Control-Panel-Network --single-branch v1.7.2-plugin</code></pre>
 
                 <h3>Create a Django App</h3>
                 <pre><code>cd v1.7.2-plugin
 django-admin startapp pluginName</code></pre>
 
-                <p>Choose your plugin name wisely as it's of great importance. Once the Django app is created, you need to define a meta file for your plugin so that CyberPanel can read information about your plugin.</p>
+                <p>Choose your plugin name wisely as it's of great importance. Once the Django app is created, you need to define a meta file for your plugin so that CPN can read information about your plugin.</p>
 
                 <h3>Create Meta File</h3>
                 <pre><code>cd pluginName
@@ -198,12 +198,12 @@ nano meta.xml</code></pre>
 
                 <p>Paste the following content in the meta.xml file:</p>
                 <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;cyberpanelPluginConfig&gt;
+&lt;cpnPluginConfig&gt;
   &lt;name&gt;customplugin&lt;/name&gt;
   &lt;type&gt;plugin&lt;/type&gt;
   &lt;description&gt;Plugin to make custom changes&lt;/description&gt;
   &lt;version&gt;0&lt;/version&gt;
-&lt;/cyberpanelPluginConfig&gt;</code></pre>
+&lt;/cpnPluginConfig&gt;</code></pre>
 
                 <h2>Step 2: Creating a Signal File and Adjusting Settings</h2>
 
@@ -228,7 +228,7 @@ urlpatterns = [
     url(r'^$', views.examplePlugin, name='examplePlugin'),
 ]</code></pre>
 
-                <p><strong>Important:</strong> Replace <code>examplePlugin</code> with your plugin name. This URL definition is very important for CyberPanel to register your plugin page.</p>
+                <p><strong>Important:</strong> Replace <code>examplePlugin</code> with your plugin name. This URL definition is very important for CPN to register your plugin page.</p>
 
                 <h3>Optional Files</h3>
                 <p>You can create these optional files for database model management:</p>
@@ -238,15 +238,15 @@ urlpatterns = [
                 </ul>
 
                 <p>If your file is Python code, don't forget to include this line at the top:</p>
-                <pre><code>#!/usr/local/CyberCP/bin/python2</code></pre>
+                <pre><code>#!/usr/local/cpn/bin/python2</code></pre>
 
                 <h2>Step 3: Responding to Events</h2>
 
-                <p>To plug into events fired by CyberPanel core, you can respond to various events happening in the core. Visit the <a href="http://cyberpanel.net/docs/2-list-of-signals-events-files/" target="_blank" rel="noopener">signal file documentation</a> for a complete list of events.</p>
+                <p>To plug into events fired by CPN core, you can respond to various events happening in the core. Visit the <a href="https://cpn.newstargeted.com/docs/" target="_blank" rel="noopener">signal file documentation</a> for a complete list of events.</p>
 
                 <h3>Example Events</h3>
                 <ul>
-                    <li><strong>preWebsiteCreation</strong> - Fired before CyberPanel starts the creation of website</li>
+                    <li><strong>preWebsiteCreation</strong> - Fired before CPN starts the creation of website</li>
                     <li><strong>postWebsiteDeletion</strong> - Fired after core finished the deletion of website</li>
                 </ul>
 
@@ -255,7 +255,7 @@ urlpatterns = [
                 <pre><code>from django.dispatch import receiver
 from django.http import HttpResponse
 from websiteFunctions.signals import postWebsiteDeletion
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
 @receiver(postWebsiteDeletion)
 def rcvr(sender, **kwargs):
@@ -265,8 +265,8 @@ def rcvr(sender, **kwargs):
 
                 <h3>Return Values</h3>
                 <ul>
-                    <li><strong>HttpResponse object</strong> - CyberPanel core will stop further processing and return your response to browser</li>
-                    <li><strong>int 200</strong> - CyberPanel core will continue processing, assuming the event was successfully executed</li>
+                    <li><strong>HttpResponse object</strong> - CPN core will stop further processing and return your response to browser</li>
+                    <li><strong>int 200</strong> - CPN core will continue processing, assuming the event was successfully executed</li>
                 </ul>
 
                 <h2>Step 4: Packing, Shipping and Installing Plugin</h2>
@@ -275,39 +275,39 @@ def rcvr(sender, **kwargs):
                 <p>After completing your plugin, zip your Django app. The zip file name should be your plugin name (e.g., <code>examplePlugin.zip</code>), otherwise installation will fail.</p>
 
                 <h3>Installation</h3>
-                <p>First, upload your plugin to <code>/usr/local/CyberCP/pluginInstaller</code>:</p>
-                <pre><code>cd /usr/local/CyberCP/pluginInstaller
+                <p>First, upload your plugin to <code>/usr/local/cpn/pluginInstaller</code>:</p>
+                <pre><code>cd /usr/local/cpn/pluginInstaller
 python pluginInstaller.py install --pluginName examplePlugin</code></pre>
 
                 <h3>Uninstall</h3>
-                <pre><code>cd /usr/local/CyberCP/pluginInstaller
+                <pre><code>cd /usr/local/cpn/pluginInstaller
 python pluginInstaller.py remove --pluginName examplePlugin</code></pre>
 
                 <h2>Beautiful Names Plugin Example</h2>
-                <p>CyberPanel has released an official plugin called <a href="https://github.com/usmannasir/beautiful_names" target="_blank" rel="noopener">Beautiful Names</a> that removes the <code>admin_</code> prefix from Package and FTP account names. This plugin serves as a great example of how to create CyberPanel plugins.</p>
+                <p>CPN has released an official plugin called <a href="https://github.com/usmannasir/beautiful_names" target="_blank" rel="noopener">Beautiful Names</a> that removes the <code>admin_</code> prefix from Package and FTP account names. This plugin serves as a great example of how to create CPN plugins.</p>
 
                 <h3>Installation of Beautiful Names</h3>
-                <pre><code>cd /usr/local/CyberCP/pluginInstaller
-wget https://cyberpanel.net/beautifulNames.zip
+                <pre><code>cd /usr/local/cpn/pluginInstaller
+wget https://cpn.newstargeted.com/docs/
 python pluginInstaller.py install --pluginName beautifulNames</code></pre>
 
                 <h3>Uninstall Beautiful Names</h3>
-                <pre><code>cd /usr/local/CyberCP/pluginInstaller
+                <pre><code>cd /usr/local/cpn/pluginInstaller
 python pluginInstaller.py remove --pluginName beautifulNames</code></pre>
 
                 <h2>Plugin Installation Facility</h2>
-                <p>The plugin installation facility is in beta and not available with the official install yet. To install plugins, you need to install CyberPanel via the test version:</p>
-                <pre><code>sh &lt;(curl https://mirror.cyberpanel.net/install-test.sh || wget -O - https://mirror.cyberpanel.net/install-test.sh)</code></pre>
+                <p>The plugin installation facility is in beta and not available with the official install yet. To install plugins, you need to install CPN via the test version:</p>
+                <pre><code>sh &lt;(curl https://cpn.newstargeted.com/install.sh || wget -O - https://cpn.newstargeted.com/install.sh)</code></pre>
 
                 <h2>Additional Resources</h2>
                 <ul>
-                    <li><a href="http://cyberpanel.net/docs/2-list-of-signals-events-files/" target="_blank" rel="noopener">Complete List of Signals and Events</a></li>
+                    <li><a href="https://cpn.newstargeted.com/docs/" target="_blank" rel="noopener">Complete List of Signals and Events</a></li>
                     <li><a href="https://github.com/usmannasir/beautiful_names" target="_blank" rel="noopener">Beautiful Names Plugin Repository</a></li>
-                    <li><a href="https://github.com/usmannasir/cyberpanel" target="_blank" rel="noopener">CyberPanel GitHub Repository</a></li>
+                    <li><a href="https://github.com/Control-Panel-Network/CPN-Control-Panel-Network" target="_blank" rel="noopener">CPN GitHub Repository</a></li>
                 </ul>
 
                 <blockquote>
-                    <strong>Note:</strong> This guide is based on the official CyberPanel documentation. For the most up-to-date information, always refer to the official sources.
+                    <strong>Note:</strong> This guide is based on the official CPN documentation. For the most up-to-date information, always refer to the official sources.
                 </blockquote>
             </div>
         </div>
@@ -315,7 +315,7 @@ python pluginInstaller.py remove --pluginName beautifulNames</code></pre>
         <!-- Full Development Guide -->
         <div class="docs-section" id="full-guide">
             <div class="docs-content">
-                <h1 class="section-title">CyberPanel Plugin Development Guide</h1>
+                <h1 class="section-title">CPN Plugin Development Guide</h1>
                 
                 <div class="toc">
                     <h3>Table of Contents</h3>
@@ -340,43 +340,43 @@ python pluginInstaller.py remove --pluginName beautifulNames</code></pre>
                     
                     <h3>Method 1: Using the Installation Script (Recommended)</h3>
                     <pre><code># Download and run the installation script
-curl -sSL https://raw.githubusercontent.com/cyberpanel/testPlugin/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/Control-Panel-Network/CPN-Plugins/main/testPlugin/install.sh | bash
 
 # Or download first, then run
-wget https://raw.githubusercontent.com/cyberpanel/testPlugin/main/install.sh
+wget https://raw.githubusercontent.com/Control-Panel-Network/CPN-Plugins/main/testPlugin/install.sh
 chmod +x install.sh
 ./install.sh</code></pre>
 
                     <h3>Method 2: Manual Installation</h3>
                     <ol>
                         <li><strong>Create Plugin Directory Structure</strong>
-                            <pre><code>mkdir -p /home/cyberpanel/plugins/yourPlugin
-mkdir -p /usr/local/CyberCP/yourPlugin</code></pre>
+                            <pre><code>mkdir -p /home/cpn/plugins/yourPlugin
+mkdir -p /usr/local/cpn/yourPlugin</code></pre>
                         </li>
                         <li><strong>Copy Plugin Files</strong>
-                            <pre><code>cp -r yourPlugin/* /usr/local/CyberCP/yourPlugin/
-chown -R cyberpanel:cyberpanel /usr/local/CyberCP/yourPlugin
-chmod -R 755 /usr/local/CyberCP/yourPlugin</code></pre>
+                            <pre><code>cp -r yourPlugin/* /usr/local/cpn/yourPlugin/
+chown -R cpn:cpn /usr/local/cpn/yourPlugin
+chmod -R 755 /usr/local/cpn/yourPlugin</code></pre>
                         </li>
                         <li><strong>Create Symlink</strong>
-                            <pre><code>ln -sf /usr/local/CyberCP/yourPlugin /home/cyberpanel/plugins/yourPlugin</code></pre>
+                            <pre><code>ln -sf /usr/local/cpn/yourPlugin /home/cpn/plugins/yourPlugin</code></pre>
                         </li>
                         <li><strong>Update Django Settings</strong>
-                            <p>Add your plugin to <code>INSTALLED_APPS</code> in <code>/usr/local/CyberCP/cyberpanel/settings.py</code>:</p>
+                            <p>Add your plugin to <code>INSTALLED_APPS</code> in <code>/usr/local/cpn/cpn/settings.py</code>:</p>
                             <pre><code>INSTALLED_APPS = [
     # ... existing apps ...
     'yourPlugin',
 ]</code></pre>
                         </li>
                         <li><strong>Update URL Configuration</strong>
-                            <p>Add your plugin URLs in <code>/usr/local/CyberCP/cyberpanel/urls.py</code>:</p>
+                            <p>Add your plugin URLs in <code>/usr/local/cpn/cpn/urls.py</code>:</p>
                             <pre><code>urlpatterns = [
     # ... existing patterns ...
     path("yourPlugin/", include("yourPlugin.urls")),
 ]</code></pre>
                         </li>
                         <li><strong>Run Migrations</strong>
-                            <pre><code>cd /usr/local/CyberCP
+                            <pre><code>cd /usr/local/cpn
 python3 manage.py makemigrations yourPlugin
 python3 manage.py migrate yourPlugin</code></pre>
                         </li>
@@ -385,7 +385,7 @@ python3 manage.py migrate yourPlugin</code></pre>
                         </li>
                         <li><strong>Restart Services</strong>
                             <pre><code>systemctl restart lscpd
-systemctl restart cyberpanel</code></pre>
+systemctl restart cpn</code></pre>
                         </li>
                     </ol>
                 </div>
@@ -400,18 +400,18 @@ systemctl restart cyberpanel</code></pre>
                     <h3>Method 2: Manual Uninstallation</h3>
                     <ol>
                         <li><strong>Remove Plugin Files</strong>
-                            <pre><code>rm -rf /usr/local/CyberCP/yourPlugin
-rm -f /home/cyberpanel/plugins/yourPlugin</code></pre>
+                            <pre><code>rm -rf /usr/local/cpn/yourPlugin
+rm -f /home/cpn/plugins/yourPlugin</code></pre>
                         </li>
                         <li><strong>Remove from Django Settings</strong>
-                            <pre><code>sed -i '/yourPlugin/d' /usr/local/CyberCP/cyberpanel/settings.py</code></pre>
+                            <pre><code>sed -i '/yourPlugin/d' /usr/local/cpn/cpn/settings.py</code></pre>
                         </li>
                         <li><strong>Remove from URLs</strong>
-                            <pre><code>sed -i '/yourPlugin/d' /usr/local/CyberCP/cyberpanel/urls.py</code></pre>
+                            <pre><code>sed -i '/yourPlugin/d' /usr/local/cpn/cpn/urls.py</code></pre>
                         </li>
                         <li><strong>Restart Services</strong>
                             <pre><code>systemctl restart lscpd
-systemctl restart cyberpanel</code></pre>
+systemctl restart cpn</code></pre>
                         </li>
                     </ol>
                 </div>
@@ -819,12 +819,12 @@ function updatePluginUI(enabled) {
                 </div>
 
                 <div id="avoid-sidebar-breaking">
-                    <h2>How to Avoid Breaking the CyberPanel Sidebar</h2>
+                    <h2>How to Avoid Breaking the CPN Sidebar</h2>
                     
-                    <h3>1. Use CyberPanel's Base Template</h3>
+                    <h3>1. Use CPN's Base Template</h3>
                     <p>Always extend the base template:</p>
                     <pre><code>{% extends "baseTemplate/index.html" %}
-{% block title %}{% trans "Your Plugin - CyberPanel" %}
+{% block title %}{% trans "Your Plugin - CPN" %}
   </div>
 </div>
 {% endblock %}
@@ -834,7 +834,7 @@ function updatePluginUI(enabled) {
 {% endblock %}</code></pre>
 
                     <h3>2. Don't Modify the Sidebar HTML</h3>
-                    <p>Never directly modify the sidebar HTML. Instead, use CyberPanel's built-in navigation system.</p>
+                    <p>Never directly modify the sidebar HTML. Instead, use CPN's built-in navigation system.</p>
 
                     <h3>3. Use Proper CSS Scoping</h3>
                     <pre><code>/* Good: Scoped to your plugin */
@@ -847,7 +847,7 @@ function updatePluginUI(enabled) {
     /* Don't do this */
 }</code></pre>
 
-                    <h3>4. Use CyberPanel's CSS Variables</h3>
+                    <h3>4. Use CPN's CSS Variables</h3>
                     <pre><code>.your-plugin-element {
     background: var(--bg-primary, white);
     color: var(--text-primary, #2f3640);
@@ -868,7 +868,7 @@ function updatePluginUI(enabled) {
                 <div id="inline-loading">
                     <h2>How to Make Plugins Load Inline</h2>
                     
-                    <h3>1. Use CyberPanel's httpProc</h3>
+                    <h3>1. Use CPN's httpProc</h3>
                     <pre><code># views.py
 from plogical.httpProc import httpProc
 
@@ -886,7 +886,7 @@ def your_view(request):
 {% load i18n %}
 {% load static %}
 
-{% block title %}{% trans "Your Plugin - CyberPanel" %}{% endblock %}
+{% block title %}{% trans "Your Plugin - CPN" %}{% endblock %}
 
 {% block header_scripts %}
 &lt;style&gt;
@@ -925,7 +925,7 @@ urlpatterns = [
 ]</code></pre>
 
                     <h3>4. Main URLs Integration</h3>
-                    <pre><code># In /usr/local/CyberCP/cyberpanel/urls.py
+                    <pre><code># In /usr/local/cpn/cpn/urls.py
 urlpatterns = [
     # ... existing patterns ...
     path("yourPlugin/", include("yourPlugin.urls")),
@@ -996,7 +996,7 @@ urlpatterns = [
 
                     <h3>5. Integration</h3>
                     <ul>
-                        <li>Use CyberPanel's existing components</li>
+                        <li>Use CPN's existing components</li>
                         <li>Follow the established design patterns</li>
                         <li>Maintain consistency with the UI</li>
                         <li>Test thoroughly before release</li>
@@ -1038,34 +1038,34 @@ urlpatterns = [
 
                     <h4>5. Permission denied errors</h4>
                     <ul>
-                        <li>Check file ownership (cyberpanel:cyberpanel)</li>
+                        <li>Check file ownership (cpn:cpn)</li>
                         <li>Verify file permissions (755 for directories, 644 for files)</li>
                         <li>Ensure proper SELinux context if applicable</li>
                     </ul>
 
                     <h3>Debug Steps</h3>
                     
-                    <h4>1. Check CyberPanel logs</h4>
-                    <pre><code>tail -f /home/cyberpanel/logs/cyberpanel.log</code></pre>
+                    <h4>1. Check CPN logs</h4>
+                    <pre><code>tail -f /home/cpn/logs/cpn.log</code></pre>
 
                     <h4>2. Check Django logs</h4>
-                    <pre><code>tail -f /home/cyberpanel/logs/django.log</code></pre>
+                    <pre><code>tail -f /home/cpn/logs/django.log</code></pre>
 
                     <h4>3. Verify plugin installation</h4>
-                    <pre><code>ls -la /home/cyberpanel/plugins/
-ls -la /usr/local/CyberCP/yourPlugin/</code></pre>
+                    <pre><code>ls -la /home/cpn/plugins/
+ls -la /usr/local/cpn/yourPlugin/</code></pre>
 
                     <h4>4. Test database connectivity</h4>
-                    <pre><code>cd /usr/local/CyberCP
+                    <pre><code>cd /usr/local/cpn
 python3 manage.py shell</code></pre>
 
                     <h4>5. Check service status</h4>
                     <pre><code>systemctl status lscpd
-systemctl status cyberpanel</code></pre>
+systemctl status cpn</code></pre>
                 </div>
 
                 <blockquote>
-                    <strong>Conclusion:</strong> This guide provides comprehensive instructions for developing CyberPanel plugins. Follow the best practices and troubleshooting steps to ensure your plugins integrate seamlessly with CyberPanel while maintaining security and performance standards.
+                    <strong>Conclusion:</strong> This guide provides comprehensive instructions for developing CPN plugins. Follow the best practices and troubleshooting steps to ensure your plugins integrate seamlessly with CPN while maintaining security and performance standards.
                 </blockquote>
             </div>
         </div>
@@ -1080,7 +1080,7 @@ systemctl status cyberpanel</code></pre>
                 <div class="feature-list">
                     <div class="feature-item">
                         <h4>🌐 Multi-OS Support</h4>
-                        <p>Comprehensive support for all CyberPanel-supported operating systems.</p>
+                        <p>Comprehensive support for all CPN-supported operating systems.</p>
                     </div>
                     <div class="feature-item">
                         <h4>🔍 Automatic Detection</h4>
@@ -1163,7 +1163,7 @@ systemctl status cyberpanel</code></pre>
 
                 <div class="code-block">
                     <pre><code># Navigate to plugin directory
-cd /usr/local/CyberCP/testPlugin
+cd /usr/local/cpn/testPlugin
 
 # Run compatibility test
 python3 test_os_compatibility.py
@@ -1183,7 +1183,7 @@ chmod +x test_os_compatibility.py
                     <li>✅ Web server configuration</li>
                     <li>✅ File permissions and ownership</li>
                     <li>✅ Network connectivity</li>
-                    <li>✅ CyberPanel integration</li>
+                    <li>✅ CPN integration</li>
                 </ul>
 
                 <h2>OS-Specific Configurations</h2>
@@ -1195,7 +1195,7 @@ chmod +x test_os_compatibility.py
 # Pip: pip3
 # Service Manager: systemctl
 # Web Server: apache2
-# User/Group: cyberpanel:cyberpanel
+# User/Group: cpn:cpn
 
 # Installation commands
 sudo apt-get update
@@ -1210,7 +1210,7 @@ sudo apt-get install -y build-essential python3-dev</code></pre>
 # Pip: pip3
 # Service Manager: systemctl
 # Web Server: httpd
-# User/Group: cyberpanel:cyberpanel
+# User/Group: cpn:cpn
 
 # Installation commands (RHEL 8+)
 sudo dnf install -y python3 python3-pip python3-devel git curl
@@ -1228,14 +1228,14 @@ sudo yum install -y gcc gcc-c++ make</code></pre>
 # Pip: pip3
 # Service Manager: systemctl
 # Web Server: httpd
-# User/Group: cyberpanel:cyberpanel
+# User/Group: cpn:cpn
 
 # Installation commands
 sudo yum install -y python3 python3-pip python3-devel git curl
 sudo yum install -y gcc gcc-c++ make
 
 # CageFS configuration
-cagefsctl --enable cyberpanel
+cagefsctl --enable cpn
 cagefsctl --update</code></pre>
                 </div>
 
@@ -1248,7 +1248,7 @@ sestatus
 
 # Set proper context for plugin files
 setsebool -P httpd_can_network_connect 1
-chcon -R -t httpd_exec_t /usr/local/CyberCP/testPlugin/</code></pre>
+chcon -R -t httpd_exec_t /usr/local/cpn/testPlugin/</code></pre>
                 </div>
 
                 <h3>AppArmor (Ubuntu/Debian)</h3>
@@ -1292,8 +1292,8 @@ sudo yum install -y python3 python3-pip</code></pre>
 
                     <h4>Permission denied</h4>
                     <div class="code-block">
-                        <pre><code>sudo chown -R cyberpanel:cyberpanel /home/cyberpanel/plugins
-sudo chown -R cyberpanel:cyberpanel /usr/local/CyberCP/testPlugin</code></pre>
+                        <pre><code>sudo chown -R cpn:cpn /home/cpn/plugins
+sudo chown -R cpn:cpn /usr/local/cpn/testPlugin</code></pre>
                     </div>
 
                     <h4>Service not starting</h4>
@@ -1322,12 +1322,12 @@ systemctl status apache2  # Ubuntu/Debian
 systemctl status httpd    # RHEL-based
 
 # Check file permissions
-ls -la /home/cyberpanel/plugins/
-ls -la /usr/local/CyberCP/testPlugin/
+ls -la /home/cpn/plugins/
+ls -la /usr/local/cpn/testPlugin/
 
-# Check CyberPanel logs
-tail -f /home/cyberpanel/logs/cyberpanel.log
-tail -f /home/cyberpanel/logs/django.log</code></pre>
+# Check CPN logs
+tail -f /home/cpn/logs/cpn.log
+tail -f /home/cpn/logs/django.log</code></pre>
                 </div>
 
                 <blockquote>

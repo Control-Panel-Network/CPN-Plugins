@@ -1,6 +1,6 @@
 <?php
 /**
- * Install: copy to /usr/local/CyberCP/plogical/lpma_policy_read.inc.php
+ * Install: copy to /usr/local/cpn/plogical/lpma_policy_read.inc.php
  * (included by phpmyadminsignin.php and public/phpmyadmin/index.php)
  */
 function lpma_read_limited_policy(): array
@@ -20,9 +20,9 @@ function lpma_read_limited_policy(): array
         'blocked_tabs' => $defaultBlocked,
     ];
     $paths = [
-        '/usr/local/CyberCP/pluginState/limited_phpmyadmin_policy.json',
-        '/var/lib/cyberpanel-panelstate/limited_phpmyadmin_policy.json',
-        '/etc/cyberpanel/limited_phpmyadmin_policy.json',
+        '/usr/local/cpn/pluginState/limited_phpmyadmin_policy.json',
+        '/var/lib/cpn-panelstate/limited_phpmyadmin_policy.json',
+        '/etc/cpn/limited_phpmyadmin_policy.json',
     ];
     foreach ($paths as $policyPath) {
         if (! @is_readable($policyPath)) {

@@ -1,7 +1,7 @@
 {% extends "baseTemplate/index.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Premium Plugin Settings - CyberPanel" %}{% endblock %}
+{% block title %}{% trans "Premium Plugin Settings - CPN" %}{% endblock %}
 
 {% block content %}
 {% include "pluginHolder/cpui_head.html" %}
@@ -97,7 +97,7 @@
         {% if show_payment_ui %}
         <script>
         document.addEventListener('DOMContentLoaded', function() {
-            async function persistActivationInCyberPanel(pluginName, activationKey) {
+            async function persistActivationInCPN(pluginName, activationKey) {
                 try {
                     if (!activationKey) return;
                     const formEl = document.getElementById('activation-form');
@@ -146,7 +146,7 @@
                         msg.style.background = data.success ? '#d4edda' : '#f8d7da';
                         msg.style.color = data.success ? '#155724' : '#721c24';
                         if (data.success) {
-                            await persistActivationInCyberPanel('premiumPlugin', key);
+                            await persistActivationInCPN('premiumPlugin', key);
                             document.getElementById('activation-key').value = '';
                             setTimeout(function() { location.reload(); }, 2000);
                         }

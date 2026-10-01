@@ -31,5 +31,5 @@ Thumbs.db
 .env
 config.local.py
 
-# CyberPanel
+# CPN
 migrations/0001_initial.py.bak

@@ -9,7 +9,7 @@ An example paid plugin demonstrating the premium plugin system with Patreon subs
 
 ## Description
 
-An example paid plugin that requires Patreon subscription to "CyberPanel Paid Plugin" tier. Users can install it but cannot run it without subscription.
+An example paid plugin that requires Patreon subscription to "CPN Paid Plugin" tier. Users can install it but cannot run it without subscription.
 
 ## Features
 
@@ -22,9 +22,9 @@ An example paid plugin that requires Patreon subscription to "CyberPanel Paid Pl
 ## Installation
 
 1. Download the plugin ZIP file
-2. Upload via CyberPanel Plugin Manager
+2. Upload via CPN Plugin Manager
 3. Install and activate
-4. Subscribe to "CyberPanel Paid Plugin" tier on Patreon to use
+4. Subscribe to "CPN Paid Plugin" tier on Patreon to use
 
 ## URLs
 
@@ -33,12 +33,12 @@ An example paid plugin that requires Patreon subscription to "CyberPanel Paid Pl
 
 ## Requirements
 
-- Patreon subscription to "CyberPanel Paid Plugin" tier
+- Patreon subscription to "CPN Paid Plugin" tier
 - Active internet connection for subscription verification
-- CyberPanel 2.5.5-dev or higher
+- CPN 2.5.5-dev or higher
 
 ## Subscription
 
-This plugin requires an active Patreon subscription to the **"CyberPanel Paid Plugin"** tier.
+This plugin requires an active Patreon subscription to the **"CPN Paid Plugin"** tier.
 
 [Subscribe on Patreon](https://www.patreon.com/membership/27789984)

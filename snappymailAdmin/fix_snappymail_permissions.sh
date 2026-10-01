@@ -1,12 +1,12 @@
 #!/bin/bash
 # Fix SnappyMail data folder permissions so the web app can access it.
 # Run as root: sudo bash fix_snappymail_permissions.sh
-# Use when you see: "SnappyMail can not access the data folder /usr/local/lscp/cyberpanel/snappymail/data/"
+# Use when you see: "SnappyMail can not access the data folder /usr/local/lscp/cpn/snappymail/data/"
 
 set -e
 
-SNAPPYMAIL_DATA='/usr/local/lscp/cyberpanel/snappymail/data'
-PUBLIC_SNAPPY='/usr/local/CyberCP/public/snappymail'
+SNAPPYMAIL_DATA='/usr/local/lscp/cpn/snappymail/data'
+PUBLIC_SNAPPY='/usr/local/cpn/public/snappymail'
 
 echo "SnappyMail data permission fix..."
 
@@ -29,11 +29,11 @@ mkdir -p "$SNAPPYMAIL_DATA/_data_/_default_/cache/"
 
 # Set ownership so lscpd (panel) and nobody (web) can access
 if id -u lscpd >/dev/null 2>&1; then
-    chown -R lscpd:lscpd /usr/local/lscp/cyberpanel/snappymail/
-    echo "Set ownership to lscpd:lscpd for /usr/local/lscp/cyberpanel/snappymail/"
+    chown -R lscpd:lscpd /usr/local/lscp/cpn/snappymail/
+    echo "Set ownership to lscpd:lscpd for /usr/local/lscp/cpn/snappymail/"
 else
     echo "WARNING: lscpd user not found. Trying nobody:nobody."
-    chown -R nobody:nobody /usr/local/lscp/cyberpanel/snappymail/ 2>/dev/null || true
+    chown -R nobody:nobody /usr/local/lscp/cpn/snappymail/ 2>/dev/null || true
 fi
 
 # Group-writable so PHP (often running as nobody) can write when in lscpd group

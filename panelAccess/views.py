@@ -10,7 +10,7 @@ from django.utils.translation import gettext as _
 from loginSystem.views import loadLoginPage
 from plogical.httpProc import httpProc
 from plogical.mailUtilities import mailUtilities
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter
+from plogical.CPNLogFileWriter import CPNLogFileWriter
 from plogical.processUtilities import ProcessUtilities
 from .apps import get_panel_csrf_origins_file, read_panel_csrf_origins
 from websiteFunctions.models import Websites, ChildDomains
@@ -31,7 +31,7 @@ def _ensure_origins_dir():
 
 
 def _get_all_domains():
-    """Get all domains and subdomains from CyberPanel database."""
+    """Get all domains and subdomains from CPN database."""
     domains = []
     try:
         # Get all main websites
@@ -97,7 +97,7 @@ def save_origins(request):
                     'error_message': _('Only administrators or users with plugin management can change Panel Access settings.'),
                 }, status=403)
         except Exception as e:
-            CyberCPLogFileWriter.writeToFile(f"Panel Access: Authorization check error: {str(e)}")
+            CPNLogFileWriter.writeToFile(f"Panel Access: Authorization check error: {str(e)}")
             return JsonResponse({
                 'save': 0,
                 'error_message': _('Authorization check failed.'),
@@ -137,7 +137,7 @@ def save_origins(request):
                 'error_message': _('Could not write config file: %s') % str(e),
             })
 
-        message = _('Custom domains saved. Restart the CyberPanel backend (e.g. systemctl restart lscpd) for CSRF to take effect.')
+        message = _('Custom domains saved. Restart the CPN backend (e.g. systemctl restart lscpd) for CSRF to take effect.')
         proxy_results = []
 
         setup_ols = request.POST.get('setup_ols_proxy', '').strip().lower() in ('1', 'true', 'yes', 'on')
@@ -145,9 +145,9 @@ def save_origins(request):
             try:
                 from .ols_proxy import setup_panel_proxy_vhost, domain_from_origin
             except ImportError as e:
-                CyberCPLogFileWriter.writeToFile(f"Panel Access: Failed to import ols_proxy: {str(e)}")
+                CPNLogFileWriter.writeToFile(f"Panel Access: Failed to import ols_proxy: {str(e)}")
             except Exception as e:
-                CyberCPLogFileWriter.writeToFile(f"Panel Access: Error importing ols_proxy: {str(e)}")
+                CPNLogFileWriter.writeToFile(f"Panel Access: Error importing ols_proxy: {str(e)}")
             else:
                 try:
                     seen = set()
@@ -160,10 +160,10 @@ def save_origins(request):
                             ok, msg = setup_panel_proxy_vhost(domain)
                             proxy_results.append({'domain': domain, 'success': ok, 'message': msg})
                         except Exception as e:
-                            CyberCPLogFileWriter.writeToFile(f"Panel Access: Error processing origin {origin}: {str(e)}")
+                            CPNLogFileWriter.writeToFile(f"Panel Access: Error processing origin {origin}: {str(e)}")
                             proxy_results.append({'domain': origin, 'success': False, 'message': f'Error: {str(e)}'})
                 except Exception as e:
-                    CyberCPLogFileWriter.writeToFile(f"Panel Access: Error in OLS proxy setup: {str(e)}")
+                    CPNLogFileWriter.writeToFile(f"Panel Access: Error in OLS proxy setup: {str(e)}")
                     # Don't fail the entire save if OLS setup fails
                 if proxy_results:
                     parts = [message]
@@ -175,20 +175,20 @@ def save_origins(request):
         restart_ok = False
         restart_error = None
         try:
-            # Use ProcessUtilities like RestartCyberPanel does
+            # Use ProcessUtilities like RestartCPN does
             command = 'systemctl restart lscpd'
             ProcessUtilities.popenExecutioner(command)
             restart_ok = True
         except Exception as e:
             restart_error = str(e)
-            CyberCPLogFileWriter.writeToFile(f"Panel Access: Failed to restart lscpd: {str(e)}")
+            CPNLogFileWriter.writeToFile(f"Panel Access: Failed to restart lscpd: {str(e)}")
 
         if restart_ok:
-            message = _('Custom domains saved. CyberPanel backend (lscpd) restarted; CSRF changes are active.')
+            message = _('Custom domains saved. CPN backend (lscpd) restarted; CSRF changes are active.')
             if proxy_results:
                 message = message + ' ' + ' '.join('{}: {}.'.format(r['domain'], r['message']) for r in proxy_results)
         else:
-            message = _('Custom domains saved. Restart the CyberPanel backend manually (systemctl restart lscpd) for CSRF to take effect.')
+            message = _('Custom domains saved. Restart the CPN backend manually (systemctl restart lscpd) for CSRF to take effect.')
             if restart_error:
                 message = message + ' ' + _('Restart failed: %s') % restart_error
             if proxy_results:
@@ -201,9 +201,9 @@ def save_origins(request):
             'lscpd_restarted': restart_ok,
         })
     except Exception as e:
-        CyberCPLogFileWriter.writeToFile(f"Panel Access: Save error: {str(e)}")
+        CPNLogFileWriter.writeToFile(f"Panel Access: Save error: {str(e)}")
         import traceback
-        CyberCPLogFileWriter.writeToFile(f"Panel Access: Traceback: {traceback.format_exc()}")
+        CPNLogFileWriter.writeToFile(f"Panel Access: Traceback: {traceback.format_exc()}")
         return JsonResponse({
             'save': 0,
             'error_message': _('An error occurred while saving: %s') % str(e),

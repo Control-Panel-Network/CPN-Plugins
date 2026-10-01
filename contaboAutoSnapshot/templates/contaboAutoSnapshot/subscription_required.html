@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data && data.message) return data.message;
         return 'Invalid activation key for this plugin.';
     }
-    async function persistActivationInCyberPanel(pluginName, activationKey) {
+    async function persistActivationInCPN(pluginName, activationKey) {
         try {
             if (!activationKey) return;
             await fetch('/plugins/api/store-activation/' + encodeURIComponent(pluginName) + '/', {
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 msg.style.background = ok ? '#d4edda' : '#f8d7da';
                 msg.style.color = ok ? '#155724' : '#721c24';
                 if (ok) {
-                    await persistActivationInCyberPanel(CP_PLUGIN_SLUG, key);
+                    await persistActivationInCPN(CP_PLUGIN_SLUG, key);
                     input.value = '';
                     setTimeout(function() { location.reload(); }, 2000);
                 }

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-One-time phpMyAdmin launch URLs (POST into CyberPanel phpmyadminsignin.php signon flow).
+One-time phpMyAdmin launch URLs (POST into CPN phpmyadminsignin.php signon flow).
 """
 import html
 import json
@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
 from . import acl_helpers
 from . import crypto_util
@@ -23,9 +23,9 @@ from .models import LimitedPhpmyAdminGrant, PmaLaunchToken
 
 SIGNON_PATH = '/phpmyadmin/phpmyadminsignin.php'
 POLICY_PATHS = (
-    '/usr/local/CyberCP/pluginState/limited_phpmyadmin_policy.json',
-    '/var/lib/cyberpanel-panelstate/limited_phpmyadmin_policy.json',
-    '/etc/cyberpanel/limited_phpmyadmin_policy.json',
+    '/usr/local/cpn/pluginState/limited_phpmyadmin_policy.json',
+    '/var/lib/cpn-panelstate/limited_phpmyadmin_policy.json',
+    '/etc/cpn/limited_phpmyadmin_policy.json',
 )
 
 
@@ -33,7 +33,7 @@ def _json(data, status=200):
     return JsonResponse(data, status=status, json_dumps_params={'ensure_ascii': False})
 
 
-def _cyberpanel_api_login_required(view_func):
+def _cpn_api_login_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         try:
@@ -60,7 +60,7 @@ def _catch_json_api_errors(view_func):
             return _json(
                 {
                     'success': False,
-                    'error': 'Unexpected server error. Check CyberPanel logs.',
+                    'error': 'Unexpected server error. Check CPN logs.',
                 },
                 500,
             )
@@ -137,7 +137,7 @@ def _effective_launch_for_grant(grant):
     return ttl, single_use
 
 
-@_cyberpanel_api_login_required
+@_cpn_api_login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 @_catch_json_api_errors

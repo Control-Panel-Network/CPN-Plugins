@@ -7,11 +7,11 @@ Handles secure storage and retrieval of Discord OAuth2 credentials
 import os
 import json
 from django.conf import settings
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 
 
-CONFIG_FILE = '/usr/local/CyberCP/discordAuth/config.json'
-CONFIG_DIR = '/usr/local/CyberCP/discordAuth'
+CONFIG_FILE = '/usr/local/cpn/discordAuth/config.json'
+CONFIG_DIR = '/usr/local/cpn/discordAuth'
 
 
 def ensure_config_dir():

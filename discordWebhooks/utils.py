@@ -4,7 +4,7 @@ import json
 import psutil
 import subprocess
 from datetime import datetime
-from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
+from plogical.CPNLogFileWriter import CPNLogFileWriter as logging
 from .models import DiscordWebhook, WebhookSettings
 
 
@@ -131,7 +131,7 @@ def format_ssh_login_embed(ip, username, timestamp, success=True):
             'icon_url': LOGO_URL
         },
         'author': {
-            'name': 'CyberPanel Discord Webhooks',
+            'name': 'CPN Discord Webhooks',
             'icon_url': LOGO_URL
         },
         'timestamp': timestamp.isoformat() if isinstance(timestamp, datetime) else datetime.now().isoformat()
@@ -189,7 +189,7 @@ def format_security_warning_embed(warning_type, message, severity='warning', sou
             'icon_url': LOGO_URL
         },
         'author': {
-            'name': 'CyberPanel Discord Webhooks',
+            'name': 'CPN Discord Webhooks',
             'icon_url': LOGO_URL
         },
         'timestamp': datetime.now().isoformat()
@@ -268,7 +268,7 @@ def format_server_usage_embed(metrics, threshold_mode=True):
             'icon_url': LOGO_URL
         },
         'author': {
-            'name': 'CyberPanel Discord Webhooks',
+            'name': 'CPN Discord Webhooks',
             'icon_url': LOGO_URL,
             'url': 'https://newstargeted.com'
         },

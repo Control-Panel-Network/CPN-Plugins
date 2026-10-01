@@ -1,9 +1,9 @@
 #!/bin/bash
-# One-shot: ensure redisManager is deployed and installed on this CyberPanel server.
+# One-shot: ensure redisManager is deployed and installed on this CPN server.
 # Run on the server: curl -sSL <url> | bash   OR   ./run-deploy-redis-manager.sh
 
 set -e
-REPO_DIR="${REPO_DIR:-/home/cyberpanel-plugins}"
+REPO_DIR="${REPO_DIR:-/home/cpn-plugins}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
 if [ -n "$SCRIPT_DIR" ] && [ -d "$SCRIPT_DIR" ]; then
     REPO_DIR="$SCRIPT_DIR"

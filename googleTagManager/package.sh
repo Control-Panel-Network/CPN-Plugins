@@ -1,9 +1,9 @@
 #!/bin/bash
-# Package Google Tag Manager Plugin for CyberPanel
+# Package Google Tag Manager Plugin for CPN
 # Author: master3395
 
 PLUGIN_NAME="googleTagManager"
-PLUGIN_DIR="/home/cyberpanel-plugins/${PLUGIN_NAME}"
+PLUGIN_DIR="/home/cpn-plugins/${PLUGIN_NAME}"
 PACKAGE_NAME="${PLUGIN_NAME}.zip"
 
 echo "Packaging Google Tag Manager Plugin..."

@@ -5,10 +5,15 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-01] - Remove legacy panel identifiers
+
+### Changed
+- Rebranded every plugin, doc, script, template and helper to CPN only: legacy product names, install paths (now under /usr/local/cpn, /etc/cpn, /var/log/cpn, /home/cpn), env and helper names, UI strings and upstream links were replaced with CPN equivalents. Helper scripts under scripts/sudo are now named cpn-safe-fail2ban-logs and cpn-safe-fail2ban-logs-clear.
+
 ## [2026-09-14] - Roundcube host-package redirect
 
 ### Changed
-- **roundcubeWebmail** (1.0.0 → **1.1.0**): Catalog entry no longer deploys under legacy panel public paths. Description and install hooks redirect operators to **Plugins > Host packages (Email)** / `cpn app install --name roundcube` (`/opt/cpn-webmail/roundcube`, panel proxy `/roundcube/`). Removed CyberPanel path strings from `meta.xml` and path helpers.
+- **roundcubeWebmail** (1.0.0 → **1.1.0**): Catalog entry no longer deploys under legacy panel public paths. Description and install hooks redirect operators to **Plugins > Host packages (Email)** / `cpn app install --name roundcube` (`/opt/cpn-webmail/roundcube`, panel proxy `/roundcube/`). Removed CPN path strings from `meta.xml` and path helpers.
 
 ## [2026-09-14] - Catalog dates and Featured metadata
 
@@ -29,10 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **ntHostingBilling** (1.0.0): Paid hosting business layer for CPN (clients linked to CPN users, products/packages, orders, invoices, subscriptions, site ownership, manual + PayPal billing, client password recovery). Entitlement via `api.newstargeted.com`. Public UI under site `/nt-billing` after `install-host.sh`.
 - `catalog.json` entry for `ntHostingBilling`.
 
-## [2026-09-12] - Drop CyberPanel disclaimer boilerplate
+## [2026-09-12] - Drop CPN disclaimer boilerplate
 
 ### Changed
-- Removed repeated "not CyberPanel" / "no API keys in package" disclaimer lines from root README, `clamav` README, `ntMalwareApi` README/`meta.xml`, and `fail2ban/CPN.md`. Install and entitlement docs kept.
+- Removed repeated "not CPN" / "no API keys in package" disclaimer lines from root README, `clamav` README, `ntMalwareApi` README/`meta.xml`, and `fail2ban/CPN.md`. Install and entitlement docs kept.
 
 ## [2026-09-12] - ClamAV and paid malware API catalog packages
 
@@ -51,21 +56,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **fail2ban** (1.4.0 → **1.4.1**): Security Logs pagination (default 5 per page, go-to-page), dark mobile-friendly log cards, **Clear log** with confirmation (allowlisted sudo truncate of `/var/log/fail2ban.log`).
-- `scripts/sudo/cyberpanel-safe-fail2ban-logs` and `cyberpanel-safe-fail2ban-logs-clear` helpers.
+- `scripts/sudo/cpn-safe-fail2ban-logs` and `cpn-safe-fail2ban-logs-clear` helpers.
 
 ### Fixed
 - Manage modal opaque backgrounds in dark mode (CPUI `cpui.css`).
 - Empty log no longer falls back to unrelated journal lines after clear.
 
-## [2026-08-05] - CyberPanel 2.5.5 sync (Fail2ban 1.4.0)
+## [2026-08-05] - CPN 2.5.5 sync (Fail2ban 1.4.0)
 
 ### Added
 - **fail2ban** (1.3.0 → **1.4.0**): Unified Fail2ban Security Manager UI with URL tabs, server-side banned-IP pagination/search, whitelist search/pagination, firewall trusted-IP sync into fail2ban `ignoreip`, batched firewall ban import, live statistics, and per-row **Manage** modal (unban layers, whitelist/blacklist moves, labels). Shared opaque modal CSS for dark mode (CPUI `cpui.css` 1.0.8).
-- **docs/cpui-assets**: Canonical `cpui.css` / `cpui_head.html` snapshot for CyberPanel `pluginHolder` when mirroring into `v2.5.5-dev`.
+- **docs/cpui-assets**: Canonical `cpui.css` / `cpui_head.html` snapshot for CPN `pluginHolder` when mirroring into `v2.5.5-dev`.
 
 ### Changed
-- All plugin `meta.xml` files: `<min_version>2.5.5</min_version>` and `<max_version>3.0.0</max_version>` for CyberPanel 2.5.5+ store compatibility.
-- Synced live working plugin trees from production CyberPanel 2.5.5 into this repo (CPUI-styled settings templates and related views across Auto Ban, Contabo Snapshot, CSP, Discord Auth/Webhooks, Email Marketing, GTM, Limited phpMyAdmin, Memcache/Redis/PM2, Panel Access, Port Manager, Premium/PayPal examples, SnappyMail Admin, Example/Test plugins).
+- All plugin `meta.xml` files: `<min_version>2.5.5</min_version>` and `<max_version>3.0.0</max_version>` for CPN 2.5.5+ store compatibility.
+- Synced live working plugin trees from production CPN 2.5.5 into this repo (CPUI-styled settings templates and related views across Auto Ban, Contabo Snapshot, CSP, Discord Auth/Webhooks, Email Marketing, GTM, Limited phpMyAdmin, Memcache/Redis/PM2, Panel Access, Port Manager, Premium/PayPal examples, SnappyMail Admin, Example/Test plugins).
 - Patch version bumps for synced plugins (see `meta.xml` per plugin).
 
 ### Fixed
@@ -74,17 +79,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-06-27] - PostgreSQL Manager 1.0.0
 
 ### Added
-- **postgresManager**: Free plugin by KraoESPfan1n. Installs PostgreSQL, configures a dedicated local admin role, installs PHP PostgreSQL support for CyberPanel LSAPI, and exposes Adminer at `/postgres-adminer/` with automatic login from the plugin page.
+- **postgresManager**: Free plugin by KraoESPfan1n. Installs PostgreSQL, configures a dedicated local admin role, installs PHP PostgreSQL support for CPN LSAPI, and exposes Adminer at `/postgres-adminer/` with automatic login from the plugin page.
 
-## [2026-03-27] - Firewall UI parity (CyberPanel v2.5.5-dev)
+## [2026-03-27] - Firewall UI parity (CPN v2.5.5-dev)
 
 ### Note (core panel, not this repo’s plugin code)
-- **CyberPanel `firewallManager.getBannedIPs`**: Merges **Auto Ban Security Alerts** `AutoBanLog` rows (latest event per IP) when an IP is not already listed from the firewall DB or `banned_ips.json`, so **Security → Firewall → Banned IPs** matches bans shown under `/plugins/autoBanSecurityAlerts/settings/`. Synthetic row ids use the form `ablog-<log_pk>`; unban/delete routes through the same IP unban flow and removes the log row.
+- **CPN `firewallManager.getBannedIPs`**: Merges **Auto Ban Security Alerts** `AutoBanLog` rows (latest event per IP) when an IP is not already listed from the firewall DB or `banned_ips.json`, so **Security → Firewall → Banned IPs** matches bans shown under `/plugins/autoBanSecurityAlerts/settings/`. Synthetic row ids use the form `ablog-<log_pk>`; unban/delete routes through the same IP unban flow and removes the log row.
 
 ## [2026-03-07] - PM2 Manager 1.2.0
 
 ### Fixed
-- **pm2Manager** (1.1.1 → 1.2.0): Dashboard table column alignment and data placement. Table rows are now built with DOM (`insertRow`/`insertCell`) so ID, App Name, Namespace, Version, Mode, Status, CPU, Memory, Uptime, Restarts, User, Watching, and Actions align correctly with headers. ID column shows only numeric PM2 id (or –). Fixed static file serving: after plugin updates, copy `pm2Manager/static/**` to CyberPanel `STATIC_ROOT` (e.g. `/usr/local/CyberCP/static/pm2Manager/`) or run `collectstatic` so the panel serves the updated JS/CSS.
+- **pm2Manager** (1.1.1 → 1.2.0): Dashboard table column alignment and data placement. Table rows are now built with DOM (`insertRow`/`insertCell`) so ID, App Name, Namespace, Version, Mode, Status, CPU, Memory, Uptime, Restarts, User, Watching, and Actions align correctly with headers. ID column shows only numeric PM2 id (or –). Fixed static file serving: after plugin updates, copy `pm2Manager/static/**` to CPN `STATIC_ROOT` (e.g. `/usr/local/cpn/static/pm2Manager/`) or run `collectstatic` so the panel serves the updated JS/CSS.
 
 ### Changed
 - **pm2Manager**: Sortable column headers; explicit table and column widths; cache-bust script tag (`dashboard.js?v=15`).
@@ -99,11 +104,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - **emailMarketing**: Added `settings/` route (version already 1.0.2). All plugins with a settings page now expose `/plugins/<name>/settings/` for the store.
 
-## [2026-02-02] - Redis Manager & Memcache Manager 1.1.0 (CyberPanel 2.5.5-dev)
+## [2026-02-02] - Redis Manager & Memcache Manager 1.1.0 (CPN 2.5.5-dev)
 
 ### Added
 - **Redis Manager** (1.0.0 → 1.1.0): Confirmations on all Actions (Start, Stop, Restart, Flush All) and Save Settings; Load Default button to restore Redis config defaults; Fix permissions button and API when config file is unreadable; auto-detect config path (Redis INFO, process, systemd, find); deploy script and fix-permissions script.
-- **Memcache Manager** (1.0.0 → 1.1.0): Version bump for CyberPanel 2.5.5-dev compatibility.
+- **Memcache Manager** (1.0.0 → 1.1.0): Version bump for CPN 2.5.5-dev compatibility.
 - **README**: Added Redis Manager and Memcache Manager to Available Plugins table.
 
 ### Changed

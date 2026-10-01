@@ -12,7 +12,7 @@ class LimitedPhpmyAdminGrant(models.Model):
     SUBJECT_CPUSER = 'cpuser'
     SUBJECT_CHOICES = (
         (SUBJECT_FTP, 'FTP user'),
-        (SUBJECT_CPUSER, 'CyberPanel user'),
+        (SUBJECT_CPUSER, 'CPN user'),
     )
 
     website = models.ForeignKey(Websites, on_delete=models.CASCADE, related_name='limited_pma_grants')
@@ -54,7 +54,7 @@ class LimitedPhpmyAdminGrant(models.Model):
 class PmaLaunchToken(models.Model):
     """
     Short-lived, single-use token so an end user can open phpMyAdmin via the panel
-    signon script without CyberPanel admin credentials.
+    signon script without CPN admin credentials.
     """
 
     grant = models.ForeignKey(
