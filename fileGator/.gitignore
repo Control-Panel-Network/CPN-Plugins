@@ -1,0 +1,7 @@
+# Downloaded FileGator application (created by install.sh / heal.sh)
+/app/
+*.zip
+*.tar.gz
+/private-local/
+_lab_*.py
+.install-state.json

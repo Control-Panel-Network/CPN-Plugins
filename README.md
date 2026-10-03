@@ -32,6 +32,12 @@ sudo cpn plugin list --catalog
 | `mtaSts` | free | Unlocks Email → MTA-STS in CPN Panel |
 | `bimi` | free | Unlocks Email → BIMI in CPN Panel |
 
+## Site utility plugins
+
+| Id | Pricing | Role |
+|----|---------|------|
+| `fileGator` | free | Enhanced multi-user FileGator for one site; see `fileGator/CPN.md` (`install.sh` after Store install) |
+
 Host packages such as MariaDB, OpenLiteSpeed, and phpMyAdmin stay on the panel **Plugins → Host packages** tab (`cpn app`), not as separate catalog folders unless a site-scoped drop-in exists.
 
 ## License
