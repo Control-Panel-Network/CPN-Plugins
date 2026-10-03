@@ -11,6 +11,7 @@
     { "id": "emailMarketing", "path": "emailMarketing" },
     { "id": "examplePlugin", "path": "examplePlugin" },
     { "id": "fail2ban", "path": "fail2ban" },
+    { "id": "fileGator", "path": "fileGator" },
     { "id": "googleTagManager", "path": "googleTagManager" },
     { "id": "limitedPhpmyAdmin", "path": "limitedPhpmyAdmin" },
     { "id": "memcacheManager", "path": "memcacheManager" },

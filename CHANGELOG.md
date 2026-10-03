@@ -5,6 +5,12 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-03] - FileGator site file manager
+
+### Added
+- **fileGator** (1.0.0): Free site plugin that deploys pinned FileGator **7.16.5** under `/home/<domain>/plugins/fileGator/`, jails the repository to the site home (or docroot), publishes clean `/filegator`, and stores a generated admin password under `/var/lib/cpn/filegator/<domain>/` (mode 600). Includes `install.sh`, `heal.sh`, `uninstall.sh`, and `CPN.md`.
+- `catalog.json` entry for `fileGator`.
+
 ## [2026-10-01] - Remove legacy panel identifiers
 
 ### Changed

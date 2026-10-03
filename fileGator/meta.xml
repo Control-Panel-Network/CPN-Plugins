@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>FileGator File Manager</name>
+    <type>Utility</type>
+    <version>1.0.0</version>
+    <description>Enhanced multi-user FileGator file manager for one site. Installs a pinned FileGator release under the site plugins folder, jails the repository to that site home, and publishes a clean /filegator URL. Free.</description>
+    <author>master3395</author>
+    <website>https://github.com/filegator/filegator</website>
+    <license>MIT</license>
+    <category>Utility</category>
+    <paid>false</paid>
+    <pricing>free</pricing>
+    <compatibility>
+        <min_version>0.2.0</min_version>
+    </compatibility>
+    <requirements>
+        <os>AlmaLinux 8+</os>
+        <os>AlmaLinux 9+</os>
+        <os>AlmaLinux 10+</os>
+        <software>php</software>
+        <software>php-zip</software>
+        <software>cpn-panel</software>
+    </requirements>
+    <features>
+        <feature>Pinned FileGator 7.16.5 download with SHA256 verify</feature>
+        <feature>Site-jailed repository root (site home by default)</feature>
+        <feature>Clean public URL /filegator under the site docroot</feature>
+        <feature>Secure first-boot admin password (stored under /var/lib/cpn/)</feature>
+        <feature>Update-safe heal preserves private data and credentials</feature>
+    </features>
+    <uninstall_impact>Site /filegator URL and FileGator app under the site plugins folder are removed</uninstall_impact>
+    <uninstall_impact>Admin credentials under /var/lib/cpn/filegator/&lt;domain&gt;/ remain until cleaned manually</uninstall_impact>
+    <url>/filegator</url>
+    <settings_url>/plugins/settings</settings_url>
+    <released>2026-10-03</released>
+    <updated>2026-10-03</updated>
+    <install_count>0</install_count>
+    <featured>true</featured>
+</plugin>

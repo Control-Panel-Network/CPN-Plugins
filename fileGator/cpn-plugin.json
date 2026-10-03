@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "id": "fileGator",
+  "name": "FileGator File Manager",
+  "category": "Utility",
+  "version": "1.0.0",
+  "description": "Enhanced multi-user FileGator file manager for one site. Pinned FileGator release, site-jailed repository, clean /filegator URL. Free.",
+  "author": "master3395",
+  "pricing": "free",
+  "show_in_sidebar": true,
+  "has_dashboard": true,
+  "uninstall_impacts": [
+    "Site /filegator URL stops working",
+    "FileGator app under the site plugins folder is removed"
+  ],
+  "settings_fields": [
+    {
+      "key": "public_path",
+      "label": "Public URL path (after install.sh)",
+      "field_type": "text",
+      "default": "/filegator"
+    },
+    {
+      "key": "repo_scope",
+      "label": "Repository scope: home (site home) or docroot",
+      "field_type": "text",
+      "default": "home"
+    },
+    {
+      "key": "notes",
+      "label": "Operator notes (optional)",
+      "field_type": "text",
+      "default": "After Store install, run: sudo bash install.sh <domain>"
+    }
+  ]
+}
