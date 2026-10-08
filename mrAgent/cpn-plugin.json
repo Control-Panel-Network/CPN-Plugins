@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "mrAgent",
+  "name": "Mr Agent",
+  "category": "Utility",
+  "version": "1.0.0",
+  "description": "AI chat assistant for CPN with provider API keys plus a free lightweight CPN help helper.",
+  "author": "master3395",
+  "pricing": "free",
+  "show_in_sidebar": true,
+  "has_dashboard": true,
+  "uninstall_impacts": [
+    "Site /mr-agent URL stops working",
+    "Mr Agent app under the site plugins folder is removed",
+    "Secrets under /var/lib/cpn/mr-agent/<domain>/ remain until cleaned manually"
+  ],
+  "settings_fields": [
+    {
+      "key": "public_path",
+      "label": "Public URL path (after install.sh)",
+      "field_type": "text",
+      "default": "/mr-agent"
+    },
+    {
+      "key": "enabled",
+      "label": "Enable Mr Agent chat for this site",
+      "field_type": "checkbox",
+      "default": "1"
+    },
+    {
+      "key": "visibility",
+      "label": "Who can use chat: admins_only | all_authenticated | packages",
+      "field_type": "text",
+      "default": "admins_only"
+    },
+    {
+      "key": "package_ids",
+      "label": "Allowed package ids (comma list when visibility=packages)",
+      "field_type": "text",
+      "default": ""
+    },
+    {
+      "key": "allow_user_keys",
+      "label": "Allow users to add their own provider API keys",
+      "field_type": "checkbox",
+      "default": "1"
+    },
+    {
+      "key": "default_provider",
+      "label": "Default provider: free | openai | anthropic | custom",
+      "field_type": "text",
+      "default": "free"
+    },
+    {
+      "key": "rate_limit_per_hour",
+      "label": "Max chat messages per user per hour",
+      "field_type": "number",
+      "default": "60"
+    },
+    {
+      "key": "notes",
+      "label": "Operator notes (optional)",
+      "field_type": "text",
+      "default": "After Store install, run: sudo bash install.sh <domain>"
+    }
+  ]
+}

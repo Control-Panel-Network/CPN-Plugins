@@ -1,0 +1,7 @@
+config.php
+data/*.json
+data/*.sqlite
+data/rate-limit/
+!data/help/
+!data/help/**
+*.log

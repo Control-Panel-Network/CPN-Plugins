@@ -15,6 +15,7 @@
     { "id": "googleTagManager", "path": "googleTagManager" },
     { "id": "limitedPhpmyAdmin", "path": "limitedPhpmyAdmin" },
     { "id": "memcacheManager", "path": "memcacheManager" },
+    { "id": "mrAgent", "path": "mrAgent" },
     { "id": "mtaSts", "path": "mtaSts" },
     { "id": "ntMalwareApi", "path": "ntMalwareApi" },
     { "id": "ntHostingBilling", "path": "ntHostingBilling" },
