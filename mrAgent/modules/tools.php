@@ -4,44 +4,22 @@ if (!defined('MRA_INIT')) {
 }
 
 /**
- * Safe read-oriented tools (MCP-style). No shell, no destructive panel actions in MVP.
+ * MCP tool surface for Mr Agent.
+ * Tool definitions and execution come from the skills registry (one skill per CPN area).
  *
  * @return array<int,array<string,mixed>>
  */
 function mra_tool_definitions()
 {
-    return [
-        [
-            'name' => 'search_menu',
-            'description' => 'Search CPN Panel sidebar and common routes by keyword. Use for "where is X" questions.',
-            'parameters' => [
-                'type' => 'object',
-                'properties' => [
-                    'query' => ['type' => 'string', 'description' => 'Search words'],
-                ],
-                'required' => ['query'],
-            ],
-        ],
-        [
-            'name' => 'search_docs',
-            'description' => 'Search bundled CPN help hints for a topic (routes, settings, plugins).',
-            'parameters' => [
-                'type' => 'object',
-                'properties' => [
-                    'query' => ['type' => 'string', 'description' => 'Topic or feature name'],
-                ],
-                'required' => ['query'],
-            ],
-        ],
-        [
-            'name' => 'list_providers',
-            'description' => 'List available chat providers and whether a key is configured (never returns key values).',
-            'parameters' => [
-                'type' => 'object',
-                'properties' => (object) [],
-            ],
-        ],
-    ];
+    $defs = [];
+    foreach (mra_skills_tool_definitions() as $t) {
+        $defs[] = [
+            'name' => $t['name'],
+            'description' => $t['description'],
+            'parameters' => $t['parameters'],
+        ];
+    }
+    return $defs;
 }
 
 function mra_load_help_corpus()
@@ -114,7 +92,7 @@ function mra_search_corpus($query, $limit = 8)
 }
 
 /**
- * Execute a single allowlisted tool.
+ * Execute a single allowlisted MCP tool via skills.
  *
  * @param array<string,mixed> $cfg
  * @param array<string,mixed> $args
@@ -122,17 +100,7 @@ function mra_search_corpus($query, $limit = 8)
  */
 function mra_tool_execute($name, array $args, array $cfg, $username)
 {
-    $name = strtolower(trim((string) $name));
-    if ($name === 'search_menu' || $name === 'search_docs') {
-        $q = isset($args['query']) ? (string) $args['query'] : '';
-        $hits = mra_search_corpus($q, 8);
-        return ['ok' => true, 'tool' => $name, 'query' => $q, 'results' => $hits];
-    }
-    if ($name === 'list_providers') {
-        $providers = mra_provider_status($cfg, $username);
-        return ['ok' => true, 'tool' => $name, 'providers' => $providers];
-    }
-    return ['ok' => false, 'error' => 'Tool not allowed in MVP: ' . $name];
+    return mra_skills_execute($name, $args, $cfg, $username);
 }
 
 /**

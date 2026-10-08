@@ -2,11 +2,12 @@
 <plugin>
     <name>Mr Agent</name>
     <type>Utility</type>
-    <version>1.0.0</version>
-    <description>AI chat assistant for CPN with MCP (Model Context Protocol) tool calling. Users connect their own provider API keys (OpenAI, Anthropic, custom OpenAI-compatible). Includes a free lightweight CPN help and menu search path that needs no paid key. Owner settings control who can see chat.</description>
-    <keywords>ai, mcp, assistant, openai, anthropic, chatbot, model context protocol</keywords>
+    <version>1.1.0</version>
+    <description>AI chat assistant for CPN. MCP is the panel-wide tool protocol; Mr Agent skills cover Help/Menu, Websites, Packages, and stub areas (Email, DNS, PHP, Plugins, Accounts). Provider API keys optional for free help.</description>
+    <keywords>ai, mcp, skills, assistant, openai, anthropic, chatbot, model context protocol</keywords>
     <keyword>ai</keyword>
     <keyword>mcp</keyword>
+    <keyword>skills</keyword>
     <keyword>assistant</keyword>
     <keyword>openai</keyword>
     <keyword>anthropic</keyword>
@@ -32,7 +33,9 @@
         <feature>In-site chat UI with provider and model picker</feature>
         <feature>OpenAI-compatible, Anthropic, and custom base URL providers</feature>
         <feature>Free lightweight CPN help and menu search without a paid key</feature>
-        <feature>Safe read-oriented tools (menu search, docs hints) for tool calling</feature>
+        <feature>Panel-wide MCP tool surface with per-area skills under skills/</feature>
+        <feature>Active skills: Help/Menu, Providers, Websites list, Packages list</feature>
+        <feature>Stub skills: Email, DNS, PHP, Plugins, Accounts</feature>
         <feature>Owner ACL: admins only, all users, or package id list</feature>
         <feature>Provider API keys stored under /var/lib/cpn/mr-agent/ (mode 600)</feature>
     </features>

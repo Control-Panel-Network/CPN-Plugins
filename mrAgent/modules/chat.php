@@ -43,9 +43,11 @@ function mra_chat_handle($message, $provider, $model, array $cfg, $username)
     }
 
     $system = 'You are Mr Agent, a friendly AI assistant inside CPN Panel. '
-        . 'Use tools to search menus and docs when the user asks where something is. '
+        . 'MCP is the panel-wide tool protocol. Skills are per-area modules (Help, Websites, Packages, Email, DNS, etc.). '
+        . 'Call list_skills to discover tools. Prefer Help skill for "where is X". '
+        . 'Use list_websites / list_packages only when the user asks for inventory (owner tools). '
         . 'Never invent destructive admin actions. Never ask users to paste provider API keys into chat. '
-        . 'Call keys "provider API keys", not MCP keys. MCP means Model Context Protocol tool calling only.';
+        . 'Call keys "provider API keys", not MCP keys.';
 
     if ($provider === 'anthropic') {
         return mra_chat_anthropic_with_tools($message, $model, $cfg, $username, $system);

@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-08] - Mr Agent MCP skills
+
+### Changed
+- **mrAgent** (1.0.0 → **1.1.0**): Aligns product language: **MCP** is the panel-wide tool protocol; **skills** are per CPN area. Adds `skills/` registry (Help, Providers, Websites list, Packages list active; Email/DNS/PHP/Plugins/Accounts stubs), `list_skills`, `GET ?api=skills`, `POST ?api=mcp`, and `to-do/ARCHITECTURE-MCP-SKILLS.md`. Chat UI remains site-published at `/mr-agent`; inventory tools read host `/var/lib/cpn` with owner authz.
+
 ## [2026-10-08] - Mr Agent AI chat
 
 ### Added

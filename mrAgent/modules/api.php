@@ -215,5 +215,49 @@ function mra_api_dispatch($api, array $cfg)
         mra_json(['ok' => true, 'results' => mra_search_corpus($q, 10)]);
     }
 
+    if ($api === 'skills' && $method === 'GET') {
+        mra_json([
+            'ok' => true,
+            'mcp' => 'Panel-wide tool protocol used by Mr Agent skills',
+            'skills' => mra_skills_catalog(),
+            'tools' => array_map(function ($t) {
+                return [
+                    'name' => $t['name'],
+                    'description' => $t['description'],
+                ];
+            }, mra_tool_definitions()),
+        ]);
+    }
+
+    if ($api === 'mcp' && $method === 'POST') {
+        $body = mra_body_json();
+        if (!mra_csrf_check(isset($body['csrf']) ? $body['csrf'] : null)) {
+            mra_json(['ok' => false, 'error' => 'Invalid CSRF token'], 403);
+        }
+        $action = strtolower(trim((string) ($body['action'] ?? 'list_tools')));
+        if ($action === 'list_tools' || $action === 'tools/list') {
+            mra_json([
+                'ok' => true,
+                'protocol' => 'mcp-style',
+                'tools' => mra_tool_definitions(),
+                'skills' => mra_skills_catalog(),
+            ]);
+        }
+        if ($action === 'call_tool' || $action === 'tools/call') {
+            $tool = isset($body['name']) ? (string) $body['name'] : (string) ($body['tool'] ?? '');
+            $args = isset($body['arguments']) && is_array($body['arguments']) ? $body['arguments'] : [];
+            if ($tool === '' && isset($body['params']['name'])) {
+                $tool = (string) $body['params']['name'];
+                if (isset($body['params']['arguments']) && is_array($body['params']['arguments'])) {
+                    $args = $body['params']['arguments'];
+                }
+            }
+            $result = mra_tool_execute($tool, $args, $cfg, mra_user());
+            $code = !empty($result['ok']) ? 200 : 400;
+            mra_json(['ok' => !empty($result['ok']), 'result' => $result], $code);
+        }
+        mra_json(['ok' => false, 'error' => 'Unknown MCP action. Use list_tools or call_tool.'], 400);
+    }
+
     mra_json(['ok' => false, 'error' => 'Unknown API'], 404);
 }

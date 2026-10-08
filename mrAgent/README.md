@@ -6,6 +6,16 @@ AI chat assistant for **CPN Panel**. Users connect their own **provider API keys
 - Display name: Mr Agent
 - Author: master3395
 - Pricing: free
+- Version: 1.1.0
+
+## MCP vs skills (tell others this)
+
+| Term | Meaning |
+|------|---------|
+| **MCP** | Panel-wide tool protocol (list/call allowlisted tools with authz) |
+| **Skills** | Per CPN area: Help, Websites, Packages, Email, DNS, PHP, Plugins, Accounts |
+| **Provider API keys** | LLM credentials (not "MCP keys") |
+| **Mr Agent** | Chat UI + keys + ACL that uses skills through MCP |
 
 ## Install
 
@@ -27,11 +37,28 @@ sudo bash /home/<domain>/plugins/mrAgent/install.sh <domain>
 
 No provider API key required:
 
-- Keyword search over bundled CPN routes/help (`data/help/cpn-routes.json`)
+- **Help** skill: keyword search over bundled CPN routes/help (`data/help/cpn-routes.json`)
 - Answers "where is X in CPN" style questions
-- Optionally uses a local OpenAI-compatible endpoint on loopback (`127.0.0.1` / `localhost`) if configured (for example Ollama)
+- Optionally uses a local OpenAI-compatible endpoint on loopback if configured
 
-Cloud models are only used when you add provider API keys.
+Cloud models are only used when you add provider API keys. Owner inventory tools (`list_websites`, `list_packages`) also work without a paid key when you are signed in as owner/admin.
+
+## Skills tree
+
+```text
+skills/
+  help/        # search_menu, search_docs
+  providers/   # list_providers
+  websites/    # list_websites (read-only, owner)
+  packages/    # list_packages (read-only, owner)
+  email/       # stub
+  dns/         # stub
+  php/         # stub
+  plugins/     # stub
+  accounts/    # stub
+```
+
+APIs: `GET ?api=skills`, `POST ?api=mcp` (`list_tools` / `call_tool`).
 
 ## Providers
 
@@ -55,16 +82,6 @@ Configure in CPN Plugin settings and/or Mr Agent Owner settings:
 - `default_provider`: `free` | `openai` | `anthropic` | `custom` | `local`
 - `rate_limit_per_hour`: basic abuse control
 
-## Tools (MCP-style)
-
-MVP exposes safe read-oriented tools for tool calling:
-
-- `search_menu`
-- `search_docs`
-- `list_providers` (never returns secret values)
-
-Destructive panel actions are not exposed. Full MCP server expansion can build on `modules/tools.php`.
-
 ## Uninstall
 
 ```bash
@@ -76,4 +93,5 @@ Add `--purge-secrets` to remove `/var/lib/cpn/mr-agent/<domain>/`.
 
 ## Docs
 
-See `CPN.md` for operator notes.
+- `CPN.md` : operator notes
+- `to-do/ARCHITECTURE-MCP-SKILLS.md` : MCP vs skills product alignment
