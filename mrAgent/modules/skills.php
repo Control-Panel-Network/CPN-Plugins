@@ -133,8 +133,19 @@ function mra_skills_tool_definitions()
 function mra_skills_execute($name, array $args, array $cfg, $username)
 {
     $name = strtolower(trim((string) $name));
+    // Always bind tools to the authenticated session user (ignore spoofed args).
+    $sessionUser = strtolower(trim((string) mra_user()));
+    if ($sessionUser === '') {
+        return ['ok' => false, 'error' => 'Sign in required.'];
+    }
+    $username = $sessionUser;
+
     if ($name === 'list_skills') {
-        return ['ok' => true, 'tool' => 'list_skills', 'skills' => mra_skills_catalog()];
+        return mra_scope_annotate([
+            'ok' => true,
+            'tool' => 'list_skills',
+            'skills' => mra_skills_catalog(),
+        ]);
     }
 
     foreach (mra_skills_all() as $skill) {
@@ -168,6 +179,8 @@ function mra_skills_execute($name, array $args, array $cfg, $username)
                 'tool' => $name,
             ];
         }
+        // Strip any client-supplied identity overrides from tool args.
+        unset($args['username'], $args['userid'], $args['user_id'], $args['role'], $args['as_user']);
         $result = call_user_func($run, $name, $args, $cfg, $username);
         if (!is_array($result)) {
             return ['ok' => false, 'error' => 'Skill returned invalid result', 'skill' => $skill['id']];
@@ -184,14 +197,4 @@ function mra_skills_execute($name, array $args, array $cfg, $username)
     return ['ok' => false, 'error' => 'Tool not allowed: ' . $name];
 }
 
-/**
- * CPN data directory (panel host state). Never write secrets here from skills.
- */
-function mra_cpn_data_dir()
-{
-    $env = getenv('CPN_DATA_DIR');
-    if (is_string($env) && $env !== '' && is_dir($env)) {
-        return rtrim($env, "/\\");
-    }
-    return '/var/lib/cpn';
-}
+// mra_cpn_data_dir() lives in modules/scope.php (loaded before skills).

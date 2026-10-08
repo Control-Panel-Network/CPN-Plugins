@@ -23,25 +23,48 @@ Do not call provider API keys "MCP keys".
 
 See `to-do/ARCHITECTURE-MCP-SKILLS.md`.
 
-## Skills (1.1.0)
+## Skills (1.4.0)
 
-| Skill | Status | Tools (examples) |
-|-------|--------|------------------|
-| Help and Menu | active (free) | `search_menu`, `search_docs` |
-| Providers | active | `list_providers` |
-| Websites | active (owner) | `list_websites` |
-| Packages | active (owner) | `list_packages` |
-| Email, DNS, PHP, Plugins, Accounts | stub | `*_skill_status` |
+| Skill | Status | Tools (examples) | Scope |
+|-------|--------|------------------|-------|
+| Help and Menu | active (free) | `search_menu`, `search_docs` | No tenant data |
+| Providers | active | `list_providers` | Current user keys only |
+| Websites | active | `list_websites` | Owned / site-ACL domains; admin: all |
+| Packages | active | `list_packages` | Assigned package; admin: all |
+| Email | active | `list_mailboxes` | Mailboxes for scoped domains |
+| DNS, PHP, Plugins, Accounts | stub | `*_skill_status` | Host-wide: admin only |
 
 Builtin: `list_skills`.
+
+## Host install isolation (1.4.0)
+
+When Mr Agent is installed once for the **Host** (shared float chat / host-plugins tree), every CPN login still only sees **their own** account data through chat, MCP, and skills.
+
+| Identity source | How |
+|-----------------|-----|
+| Panel float chat | Trusted CLI `panel_bridge.php` stdin: `username`, `role`, `package_id` from the signed-in panel session (not a shared owner token) |
+| Site `/mr-agent` UI | Mr Agent session after login (`mra_user` / `mra_role`) |
+
+Rules:
+
+- Deny by default; never load `/home/<other>` or another user's mail stores
+- Websites/subdomains: owner match or `site-acl.json` grants (same idea as panel site ACL)
+- Email: `mail-accounts.json` rows whose domain is in the actor's allowed sites (no passwords)
+- Packages: assigned `package_id` only (admins see the full catalog)
+- DNS/PHP/Accounts host stubs: panel owner/admin only
+- Broader admin scope only when role is owner/admin (same as panel pages; no Mr Agent bypass)
+
+Verify: `php modules/cli_scope_check.php` (two fake users + admin).
 
 ## Install paths
 
 | Path | Role |
 |------|------|
-| `/home/<domain>/plugins/mrAgent/` | Catalog install tree |
+| `/var/lib/cpn/host-plugins/mrAgent/` | Host catalog install (when panel Host target is used) |
+| `/home/<domain>/plugins/mrAgent/` | Site catalog install tree |
 | `/home/<domain>/public_html/mr-agent` | Symlink to `public/` after `install.sh` |
-| `/var/lib/cpn/mr-agent/<domain>/` | Secrets, keys, owner settings (mode 700/600) |
+| `/var/lib/cpn/mr-agent/<domain>/` | Site secrets, keys, owner settings (mode 700/600) |
+| `/var/lib/cpn/mr-agent/_host/` | Host secrets when installed on Host |
 | `/var/lib/cpn/mr-agent/<domain>/chats/` | Conversation JSON (pruned by retention/count/disk MB) |
 | `/var/lib/cpn/mr-agent/<domain>/locks/` | Concurrent-request lock files |
 | `settings.json` (plugin dir) | CPN panel plugin settings fields |
@@ -59,12 +82,14 @@ Or install from Store after this plugin lands on `main` and the catalog cache re
 ## Security
 
 - CSRF on POST APIs (`csrf` field or `X-CSRF-Token`)
-- Authz: login gate + visibility ACL; owner role for host inventory skills
-- Secrets never logged (redaction helper)
+- Authz: login gate + visibility ACL + **per-user resource scope** (`modules/scope.php`)
+- Host inventory (DNS/PHP/Accounts stubs): owner/admin role only
+- Secrets never logged (redaction helper); mode 600 under `/var/lib/cpn/mr-agent/`
 - HTTP client blocks private/metadata hosts except explicit loopback local provider
 - Storage/resource caps: retention days, max conversations, disk MB, rate limit, max tokens, message length, concurrency 1 or 2, local timeout/response bytes, upload size
 - No `shell_exec` / command tools in MVP
 - Plugin root `.htaccess` denies direct access to PHP/modules
+- MFA material under `/var/lib/cpn/mfa/` is never read or cleared by Mr Agent
 
 ## Panel sidebar vs floating bubble
 

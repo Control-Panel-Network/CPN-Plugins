@@ -4,7 +4,7 @@ if (!defined('MRA_INIT')) {
 }
 
 /**
- * Read-only websites list from panel site registry JSON.
+ * Read-only websites list scoped to the authenticated CPN user.
  *
  * @param array<string,mixed> $args
  * @param array<string,mixed> $cfg
@@ -17,14 +17,9 @@ function mra_skill_websites_run($tool, array $args, array $cfg, $username)
         return ['ok' => false, 'error' => 'Unknown websites tool: ' . $tool];
     }
 
-    $dir = mra_cpn_data_dir() . '/sites';
-    if (!is_dir($dir)) {
-        return [
-            'ok' => true,
-            'tool' => 'list_websites',
-            'websites' => [],
-            'note' => 'No site registry directory found at ' . $dir . '. Panel host data may live elsewhere.',
-        ];
+    $actor = mra_scope_actor();
+    if ($actor['username'] === '') {
+        return ['ok' => false, 'error' => 'Sign in required.'];
     }
 
     $q = isset($args['query']) ? strtolower(trim((string) $args['query'])) : '';
@@ -36,36 +31,14 @@ function mra_skill_websites_run($tool, array $args, array $cfg, $username)
         $limit = 200;
     }
 
-    $files = glob($dir . '/*.json');
-    if (!is_array($files)) {
-        $files = [];
-    }
-    sort($files);
-
     $websites = [];
-    foreach ($files as $file) {
-        if (!is_file($file) || !is_readable($file)) {
-            continue;
+    foreach (mra_scope_list_websites($actor) as $row) {
+        // Never expose another tenant home path even if registry is wrong.
+        $doc = (string) ($row['docroot'] ?? '');
+        if ($doc !== '' && !mra_scope_path_allowed($doc, $actor)) {
+            $row['docroot'] = '';
+            $row['docroot_hidden'] = true;
         }
-        $raw = (string) @file_get_contents($file);
-        $data = json_decode($raw, true);
-        if (!is_array($data)) {
-            continue;
-        }
-        $domain = (string) ($data['domain'] ?? $data['name'] ?? pathinfo($file, PATHINFO_FILENAME));
-        if ($domain === '' || $domain === '.' || $domain === '..') {
-            continue;
-        }
-        // Skip incomplete stubs (no domain-like key and empty owner).
-        if ($domain === 'filegator-lab.local') {
-            continue;
-        }
-        $row = [
-            'domain' => $domain,
-            'php' => isset($data['php_version']) ? (string) $data['php_version'] : (isset($data['php']) ? (string) $data['php'] : ''),
-            'owner' => isset($data['owner']) ? (string) $data['owner'] : (isset($data['username']) ? (string) $data['username'] : ''),
-            'docroot' => isset($data['docroot']) ? (string) $data['docroot'] : (isset($data['document_root']) ? (string) $data['document_root'] : ''),
-        ];
         if ($q !== '') {
             $hay = strtolower($row['domain'] . ' ' . $row['owner'] . ' ' . $row['php']);
             if (strpos($hay, $q) === false) {
@@ -78,28 +51,28 @@ function mra_skill_websites_run($tool, array $args, array $cfg, $username)
         }
     }
 
-    return [
+    return mra_scope_annotate([
         'ok' => true,
         'tool' => 'list_websites',
         'count' => count($websites),
         'websites' => $websites,
-        'note' => 'Read-only MCP skill. No create/delete. Owner/admin Mr Agent role required.',
-    ];
+        'note' => 'Read-only. Results are limited to sites you own or may manage (panel site ACL). Admins see all registered sites.',
+    ], $actor);
 }
 
 return [
     'id' => 'websites',
     'name' => 'Websites',
-    'description' => 'Panel-wide read-only website registry (list domains from CPN site JSON).',
+    'description' => 'Read-only website registry scoped to the signed-in CPN user (owner/grant). Admins see all.',
     'area' => 'websites',
     'free' => true,
-    'authz' => 'owner',
+    'authz' => 'any',
     'status' => 'active',
     'run' => 'mra_skill_websites_run',
     'tools' => [
         [
             'name' => 'list_websites',
-            'description' => 'List CPN websites from the host site registry (read-only). Optional query filters by domain/owner.',
+            'description' => 'List CPN websites the current user may manage (read-only). Optional query filters by domain/owner.',
             'parameters' => [
                 'type' => 'object',
                 'properties' => [

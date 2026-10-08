@@ -4,7 +4,7 @@ if (!defined('MRA_INIT')) {
 }
 
 /**
- * Read-only hosting packages from /var/lib/cpn/packages.json.
+ * Read-only hosting packages scoped to the authenticated CPN user.
  *
  * @param array<string,mixed> $args
  * @param array<string,mixed> $cfg
@@ -17,14 +17,19 @@ function mra_skill_packages_run($tool, array $args, array $cfg, $username)
         return ['ok' => false, 'error' => 'Unknown packages tool: ' . $tool];
     }
 
+    $actor = mra_scope_actor();
+    if ($actor['username'] === '') {
+        return ['ok' => false, 'error' => 'Sign in required.'];
+    }
+
     $path = mra_cpn_data_dir() . '/packages.json';
     if (!is_file($path) || !is_readable($path)) {
-        return [
+        return mra_scope_annotate([
             'ok' => true,
             'tool' => 'list_packages',
             'packages' => [],
             'note' => 'packages.json not readable at ' . $path,
-        ];
+        ], $actor);
     }
 
     $raw = (string) @file_get_contents($path);
@@ -41,7 +46,7 @@ function mra_skill_packages_run($tool, array $args, array $cfg, $username)
     }
 
     $q = isset($args['query']) ? strtolower(trim((string) $args['query'])) : '';
-    $out = [];
+    $normalized = [];
     foreach ($list as $pkg) {
         if (!is_array($pkg)) {
             continue;
@@ -65,31 +70,33 @@ function mra_skill_packages_run($tool, array $args, array $cfg, $username)
                 continue;
             }
         }
-        $out[] = $row;
+        $normalized[] = $row;
     }
 
-    return [
+    $out = mra_scope_filter_packages($normalized, $actor);
+
+    return mra_scope_annotate([
         'ok' => true,
         'tool' => 'list_packages',
         'count' => count($out),
         'packages' => $out,
-        'note' => 'Read-only. Limit -1 means unlimited; 0 means none. Owner/admin Mr Agent role required.',
-    ];
+        'note' => 'Read-only. Non-admins see only their assigned package. Admins see all packages. Limit -1 means unlimited; 0 means none.',
+    ], $actor);
 }
 
 return [
     'id' => 'packages',
     'name' => 'Packages',
-    'description' => 'Panel-wide read-only hosting packages (limits from packages.json).',
+    'description' => 'Read-only hosting packages scoped to the signed-in user (assigned package). Admins see all.',
     'area' => 'packages',
     'free' => true,
-    'authz' => 'owner',
+    'authz' => 'any',
     'status' => 'active',
     'run' => 'mra_skill_packages_run',
     'tools' => [
         [
             'name' => 'list_packages',
-            'description' => 'List CPN hosting packages and common limits (read-only). Optional query filters by id/name.',
+            'description' => 'List CPN hosting packages visible to the current user (read-only). Optional query filters by id/name.',
             'parameters' => [
                 'type' => 'object',
                 'properties' => [

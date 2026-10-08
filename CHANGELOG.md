@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-08] - Mr Agent per-user Host isolation
+
+### Added
+- **mrAgent** (1.3.0 → **1.4.0**): Per-user data isolation for Host (and Site) installs. Float-chat / session identity drives every list/read skill: websites and mailboxes only for owned or site-ACL domains; packages only the assigned package; host-wide DNS/PHP/Accounts stubs require panel owner/admin (same as panel pages). Deny-by-default path checks block `/home/<other>`. New `modules/scope.php`, bridge `call_tool`, and `php modules/cli_scope_check.php` (two fake users). No panel float-chat change required (username/role/package_id already passed securely).
+
 ## [2026-10-08] - Mr Agent storage and resource limits
 
 ### Added

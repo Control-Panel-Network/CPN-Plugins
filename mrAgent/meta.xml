@@ -2,8 +2,8 @@
 <plugin>
     <name>Mr Agent</name>
     <type>Utility</type>
-    <version>1.3.0</version>
-    <description>AI chat assistant for CPN. MCP tools, per-area skills, optional floating bubble, and owner storage/resource limits (retention, disk cap, rate/token/concurrency guards) so chat logs cannot fill the host.</description>
+    <version>1.4.0</version>
+    <description>AI chat for CPN. MCP skills with per-user Host isolation, floating bubble, and storage/resource limits (retention, disk cap, rate/token/concurrency) so chat logs cannot fill the host.</description>
     <keywords>ai, mcp, skills, assistant, openai, anthropic, chatbot, model context protocol</keywords>
     <keyword>ai</keyword>
     <keyword>mcp</keyword>
@@ -34,8 +34,9 @@
         <feature>OpenAI-compatible, Anthropic, and custom base URL providers</feature>
         <feature>Free lightweight CPN help and menu search without a paid key</feature>
         <feature>Panel-wide MCP tool surface with per-area skills under skills/</feature>
-        <feature>Active skills: Help/Menu, Providers, Websites list, Packages list</feature>
-        <feature>Stub skills: Email, DNS, PHP, Plugins, Accounts</feature>
+        <feature>Active skills: Help/Menu, Providers, Websites, Packages, Email mailboxes</feature>
+        <feature>Stub skills: DNS, PHP, Plugins, Accounts (admin-gated where host-wide)</feature>
+        <feature>Per-user data isolation on Host (and Site): sites, mailboxes, packages scoped to the signed-in CPN account</feature>
         <feature>Owner ACL: admins only, all users, or package id list</feature>
         <feature>Floating chat bubble in CPN Panel when enabled and ACL allows</feature>
         <feature>Provider API keys stored under /var/lib/cpn/mr-agent/ (mode 600)</feature>

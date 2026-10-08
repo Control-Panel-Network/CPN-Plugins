@@ -44,5 +44,6 @@ Free lightweight path uses the **Help** skill (menu/docs search) without paid pr
 ## Security
 
 - Read-only tools in MVP (no shell, no destructive panel writes)
-- Owner authz for Websites / Packages / stub area status tools
-- Secrets only under `/var/lib/cpn/mr-agent/<domain>/` mode 600
+- **Per-user isolation (1.4.0):** `modules/scope.php` filters websites, mailboxes, packages by the authenticated CPN user; host-wide stubs need admin; deny `/home/<other>`
+- Secrets only under `/var/lib/cpn/mr-agent/<domain>/` (or `_host/`) mode 600
+- Float bridge identity: panel session `username` + `role` + `package_id` (trusted CLI stdin)
