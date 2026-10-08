@@ -2,9 +2,9 @@
 <plugin>
     <name>Mr Agent</name>
     <type>Utility</type>
-    <version>1.5.0</version>
-    <description>AI chat for CPN. Local LLM (Ollama/LM Studio/Bionic) is first-class. MCP skills with per-user Host isolation, floating bubble, and storage/resource limits so chat logs cannot fill the host.</description>
-    <keywords>ai, mcp, skills, assistant, openai, anthropic, chatbot, local llm, ollama, model context protocol</keywords>
+    <version>1.6.0</version>
+    <description>AI chat for CPN. Host or Site install with per-user Host isolation. Folder /mr-agent/ by default; vhost takeover only with CONFIRM=yes. MCP skills, floating bubble, storage/resource limits.</description>
+    <keywords>ai, mcp, skills, assistant, openai, anthropic, chatbot, model context protocol, host install, mr-agent</keywords>
     <keyword>ai</keyword>
     <keyword>mcp</keyword>
     <keyword>skills</keyword>
@@ -12,12 +12,15 @@
     <keyword>openai</keyword>
     <keyword>anthropic</keyword>
     <keyword>chatbot</keyword>
+    <keyword>host install</keyword>
+    <keyword>mr-agent</keyword>
     <author>master3395</author>
     <website>https://newstargeted.com</website>
     <license>MIT</license>
     <category>Utility</category>
     <paid>false</paid>
     <pricing>free</pricing>
+    <scope>dual</scope>
     <compatibility>
         <min_version>0.2.0</min_version>
     </compatibility>
@@ -32,23 +35,27 @@
     <features>
         <feature>In-site chat UI with provider and model picker</feature>
         <feature>OpenAI-compatible, Anthropic, and custom base URL providers</feature>
-        <feature>First-class local LLM (Ollama, LM Studio, Bionic) on the CPN server</feature>
         <feature>Free lightweight CPN help and menu search without a paid key</feature>
         <feature>Panel-wide MCP tool surface with per-area skills under skills/</feature>
-        <feature>Active skills: Help/Menu, Providers, Websites, Packages, Email mailboxes</feature>
-        <feature>Stub skills: DNS, PHP, Plugins, Accounts (admin-gated where host-wide)</feature>
-        <feature>Per-user data isolation on Host (and Site): sites, mailboxes, packages scoped to the signed-in CPN account</feature>
+        <feature>Active skills: Help/Menu, Providers, Websites list, Packages list</feature>
+        <feature>Stub skills: Email, DNS, PHP, Plugins, Accounts</feature>
         <feature>Owner ACL: admins only, all users, or package id list</feature>
         <feature>Floating chat bubble in CPN Panel when enabled and ACL allows</feature>
         <feature>Provider API keys stored under /var/lib/cpn/mr-agent/ (mode 600)</feature>
         <feature>Storage and resource limits: retention, disk MB cap, rate/token/concurrency, local timeouts</feature>
         <feature>CLI prune for chat logs under /var/lib/cpn/mr-agent/&lt;domain&gt;/chats/</feature>
+        <feature>Host install: panel chat without site docroot takeover</feature>
+        <feature>Site folder mode under /mr-agent/ without replacing the site index</feature>
+        <feature>Optional vhost mode with explicit CONFIRM=yes (never silent)</feature>
+            <feature>First-class local LLM (Ollama, LM Studio, Bionic) on the CPN server</feature>
+            <feature>Per-user data isolation on Host (and Site): sites, mailboxes, packages scoped to the signed-in CPN account</feature>
     </features>
-    <uninstall_impact>Site /mr-agent URL stops working</uninstall_impact>
-    <uninstall_impact>Chat app under the site plugins folder is removed</uninstall_impact>
+    <uninstall_impact>Site /mr-agent URL stops working when folder publish is removed</uninstall_impact>
+    <uninstall_impact>Vhost mode restores the previous document root on uninstall.sh</uninstall_impact>
+    <uninstall_impact>Chat app under the site or host plugins folder is removed</uninstall_impact>
     <uninstall_impact>Floating bubble disappears from CPN Panel</uninstall_impact>
-    <uninstall_impact>Secrets under /var/lib/cpn/mr-agent/&lt;domain&gt;/ remain until cleaned manually</uninstall_impact>
-    <url>/mr-agent</url>
+    <uninstall_impact>Secrets under /var/lib/cpn/mr-agent/ remain until cleaned manually</uninstall_impact>
+    <url>/plugins/mr-agent</url>
     <settings_url>/plugins/settings</settings_url>
     <released>2026-10-08</released>
     <updated>2026-10-08</updated>

@@ -5,30 +5,36 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-08] - Mr Agent Host/Site install modes
+
+### Added
+- **mrAgent** (1.5.0 -> **1.6.0**): Dual catalog scope (Host + Site). Host install via `install-host.sh` / Store Host target serves chat from the panel (`/plugins/mr-agent`) with no site takeover. Site default `INSTALL_MODE=folder` publishes `/mr-agent/` under the docroot without wiping the site index. `INSTALL_MODE=vhost` requires `CONFIRM=yes` (refuses silent docroot takeover). Settings: `install_mode`, `expand_via`. Uninstall restores previous docroot after vhost mode.
+
+
 ## [2026-10-08] - Mr Agent local LLM + smarter free path
 
 ### Added
-- **mrAgent** (1.4.0 → **1.5.0**): Local LLM is a first-class provider (Ollama / LM Studio / Bionic / any OpenAI-compatible on the CPN server). Owner settings: `local_base_url`, `local_model`, `local_only_mode`, `local_allow_lan`. Free/auto routing prefers local for general chat; CPN help only for panel navigation (no more unrelated websites dumps for "what day is it"). Float bubble always uses panel `/plugins/float-chat` proxy with `provider=auto`. Documents that the browser cannot reach Windows Ollama unless exposed to the server.
+- **mrAgent** (1.4.0 -> **1.5.0**): Local LLM is a first-class provider (Ollama / LM Studio / Bionic / any OpenAI-compatible on the CPN server). Owner settings: `local_base_url`, `local_model`, `local_only_mode`, `local_allow_lan`. Free/auto routing prefers local for general chat; CPN help only for panel navigation (no more unrelated websites dumps for "what day is it"). Float bubble always uses panel `/plugins/float-chat` proxy with `provider=auto`. Documents that the browser cannot reach Windows Ollama unless exposed to the server.
 
 ## [2026-10-08] - Mr Agent per-user Host isolation
 
 ### Added
-- **mrAgent** (1.3.0 → **1.4.0**): Per-user data isolation for Host (and Site) installs. Float-chat / session identity drives every list/read skill: websites and mailboxes only for owned or site-ACL domains; packages only the assigned package; host-wide DNS/PHP/Accounts stubs require panel owner/admin (same as panel pages). Deny-by-default path checks block `/home/<other>`. New `modules/scope.php`, bridge `call_tool`, and `php modules/cli_scope_check.php` (two fake users). No panel float-chat change required (username/role/package_id already passed securely).
+- **mrAgent** (1.3.0 -> **1.4.0**): Per-user data isolation for Host (and Site) installs. Float-chat / session identity drives every list/read skill: websites and mailboxes only for owned or site-ACL domains; packages only the assigned package; host-wide DNS/PHP/Accounts stubs require panel owner/admin (same as panel pages). Deny-by-default path checks block `/home/<other>`. New `modules/scope.php`, bridge `call_tool`, and `php modules/cli_scope_check.php` (two fake users). No panel float-chat change required (username/role/package_id already passed securely).
 
 ## [2026-10-08] - Mr Agent storage and resource limits
 
 ### Added
-- **mrAgent** (1.2.0 → **1.3.0**): Owner storage/resource restrictions so chat cannot clog host disk or abuse concurrency. New settings (Store fields + Owner UI): `max_history_messages` (100), `max_stored_conversations` (200), `chat_retention_days` (30), `max_chat_disk_mb` (50), `max_tokens_per_reply` (1024), `max_message_length` (4000), `concurrent_requests` (1 or 2, default 2), `local_timeout_seconds` (45), `local_max_response_bytes` (1 MiB), `max_upload_bytes` (256 KiB); keeps `rate_limit_per_hour` (60). Conversations under `/var/lib/cpn/mr-agent/<domain>/chats/`; opportunistic prune on chat send, settings save, `install.sh`, bridge `prune`, and `modules/cli_prune.php`. HTTP client caps request/response bytes; local provider uses timeout + max response bytes.
+- **mrAgent** (1.2.0 -> **1.3.0**): Owner storage/resource restrictions so chat cannot clog host disk or abuse concurrency. New settings (Store fields + Owner UI): `max_history_messages` (100), `max_stored_conversations` (200), `chat_retention_days` (30), `max_chat_disk_mb` (50), `max_tokens_per_reply` (1024), `max_message_length` (4000), `concurrent_requests` (1 or 2, default 2), `local_timeout_seconds` (45), `local_max_response_bytes` (1 MiB), `max_upload_bytes` (256 KiB); keeps `rate_limit_per_hour` (60). Conversations under `/var/lib/cpn/mr-agent/<domain>/chats/`; opportunistic prune on chat send, settings save, `install.sh`, bridge `prune`, and `modules/cli_prune.php`. HTTP client caps request/response bytes; local provider uses timeout + max response bytes.
 
 ## [2026-10-08] - Mr Agent floating bubble
 
 ### Added
-- **mrAgent** (1.1.0 → **1.2.0**): Floating chat bubble in CPN Panel (bottom-right) when **Show floating chat bubble** is on, the plugin is Active/enabled, and the signed-in user passes visibility ACL (`admins_only` / `all_authenticated` / `packages`). Declares `panel_float` + `show_floating_bubble` settings fields. Ships `public/assets/panel-float/` and CLI `modules/panel_bridge.php` for panel-proxied free chat. Expand opens `https://<domain>/mr-agent`. Requires a panel build that injects Active plugin float widgets (CPN-Control-Panel-Network).
+- **mrAgent** (1.1.0 -> **1.2.0**): Floating chat bubble in CPN Panel (bottom-right) when **Show floating chat bubble** is on, the plugin is Active/enabled, and the signed-in user passes visibility ACL (`admins_only` / `all_authenticated` / `packages`). Declares `panel_float` + `show_floating_bubble` settings fields. Ships `public/assets/panel-float/` and CLI `modules/panel_bridge.php` for panel-proxied free chat. Expand opens `https://<domain>/mr-agent`. Requires a panel build that injects Active plugin float widgets (CPN-Control-Panel-Network).
 
 ## [2026-10-08] - Mr Agent MCP skills
 
 ### Changed
-- **mrAgent** (1.0.0 → **1.1.0**): Aligns product language: **MCP** is the panel-wide tool protocol; **skills** are per CPN area. Adds `skills/` registry (Help, Providers, Websites list, Packages list active; Email/DNS/PHP/Plugins/Accounts stubs), `list_skills`, `GET ?api=skills`, `POST ?api=mcp`, and `to-do/ARCHITECTURE-MCP-SKILLS.md`. Chat UI remains site-published at `/mr-agent`; inventory tools read host `/var/lib/cpn` with owner authz.
+- **mrAgent** (1.0.0 -> **1.1.0**): Aligns product language: **MCP** is the panel-wide tool protocol; **skills** are per CPN area. Adds `skills/` registry (Help, Providers, Websites list, Packages list active; Email/DNS/PHP/Plugins/Accounts stubs), `list_skills`, `GET ?api=skills`, `POST ?api=mcp`, and `to-do/ARCHITECTURE-MCP-SKILLS.md`. Chat UI remains site-published at `/mr-agent`; inventory tools read host `/var/lib/cpn` with owner authz.
 
 ## [2026-10-08] - Mr Agent AI chat
 
@@ -50,7 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-09-14] - Roundcube host-package redirect
 
 ### Changed
-- **roundcubeWebmail** (1.0.0 → **1.1.0**): Catalog entry no longer deploys under legacy panel public paths. Description and install hooks redirect operators to **Plugins > Host packages (Email)** / `cpn app install --name roundcube` (`/opt/cpn-webmail/roundcube`, panel proxy `/roundcube/`). Removed CPN path strings from `meta.xml` and path helpers.
+- **roundcubeWebmail** (1.0.0 -> **1.1.0**): Catalog entry no longer deploys under legacy panel public paths. Description and install hooks redirect operators to **Plugins > Host packages (Email)** / `cpn app install --name roundcube` (`/opt/cpn-webmail/roundcube`, panel proxy `/roundcube/`). Removed CPN path strings from `meta.xml` and path helpers.
 
 ## [2026-09-14] - Catalog dates and Featured metadata
 
@@ -60,8 +66,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-09-13] - MTA-STS and BIMI email enablement plugins
 
 ### Added
-- **mtaSts** (1.0.0): Free Email plugin that unlocks CPN **Email → MTA-STS** (policy/DNS UI already in the panel).
-- **bimi** (1.0.0): Free Email plugin that unlocks CPN **Email → BIMI**.
+- **mtaSts** (1.0.0): Free Email plugin that unlocks CPN **Email -> MTA-STS** (policy/DNS UI already in the panel).
+- **bimi** (1.0.0): Free Email plugin that unlocks CPN **Email -> BIMI**.
 - `catalog.json` entries for `mtaSts` and `bimi`.
 - Optional `install-host.sh` / `uninstall-host.sh` write or clear `/var/lib/cpn/features/*.enabled`.
 
@@ -79,9 +85,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-09-12] - ClamAV and paid malware API catalog packages
 
 ### Added
-- **clamav** (1.0.0): Free host ClamAV install package (`install-host.sh` / `uninstall-host.sh`) for CPN Security → Malware scan.
+- **clamav** (1.0.0): Free host ClamAV install package (`install-host.sh` / `uninstall-host.sh`) for CPN Security -> Malware scan.
 - **ntMalwareApi** (1.0.0): Paid News Targeted malware API docs and `malware.json.example` (no secrets). Token path: `/var/lib/cpn/malware.json`.
-- **fail2ban** (1.4.1 → **1.4.2**): CPN host install helper (`install-host.sh`), `CPN.md`, CPN-facing `meta.xml` description.
+- **fail2ban** (1.4.1 -> **1.4.2**): CPN host install helper (`install-host.sh`), `CPN.md`, CPN-facing `meta.xml` description.
 - `catalog.json` entries for `clamav` and `ntMalwareApi`.
 - `to-do/HOST-SECURITY-PLUGINS.md` epic notes.
 
@@ -92,7 +98,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-08-05] - Fail2ban 1.4.1 Security Logs polish
 
 ### Added
-- **fail2ban** (1.4.0 → **1.4.1**): Security Logs pagination (default 5 per page, go-to-page), dark mobile-friendly log cards, **Clear log** with confirmation (allowlisted sudo truncate of `/var/log/fail2ban.log`).
+- **fail2ban** (1.4.0 -> **1.4.1**): Security Logs pagination (default 5 per page, go-to-page), dark mobile-friendly log cards, **Clear log** with confirmation (allowlisted sudo truncate of `/var/log/fail2ban.log`).
 - `scripts/sudo/cpn-safe-fail2ban-logs` and `cpn-safe-fail2ban-logs-clear` helpers.
 
 ### Fixed
@@ -102,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-08-05] - CPN 2.5.5 sync (Fail2ban 1.4.0)
 
 ### Added
-- **fail2ban** (1.3.0 → **1.4.0**): Unified Fail2ban Security Manager UI with URL tabs, server-side banned-IP pagination/search, whitelist search/pagination, firewall trusted-IP sync into fail2ban `ignoreip`, batched firewall ban import, live statistics, and per-row **Manage** modal (unban layers, whitelist/blacklist moves, labels). Shared opaque modal CSS for dark mode (CPUI `cpui.css` 1.0.8).
+- **fail2ban** (1.3.0 -> **1.4.0**): Unified Fail2ban Security Manager UI with URL tabs, server-side banned-IP pagination/search, whitelist search/pagination, firewall trusted-IP sync into fail2ban `ignoreip`, batched firewall ban import, live statistics, and per-row **Manage** modal (unban layers, whitelist/blacklist moves, labels). Shared opaque modal CSS for dark mode (CPUI `cpui.css` 1.0.8).
 - **docs/cpui-assets**: Canonical `cpui.css` / `cpui_head.html` snapshot for CPN `pluginHolder` when mirroring into `v2.5.5-dev`.
 
 ### Changed
@@ -121,12 +127,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-03-27] - Firewall UI parity (CPN v2.5.5-dev)
 
 ### Note (core panel, not this repo’s plugin code)
-- **CPN `firewallManager.getBannedIPs`**: Merges **Auto Ban Security Alerts** `AutoBanLog` rows (latest event per IP) when an IP is not already listed from the firewall DB or `banned_ips.json`, so **Security → Firewall → Banned IPs** matches bans shown under `/plugins/autoBanSecurityAlerts/settings/`. Synthetic row ids use the form `ablog-<log_pk>`; unban/delete routes through the same IP unban flow and removes the log row.
+- **CPN `firewallManager.getBannedIPs`**: Merges **Auto Ban Security Alerts** `AutoBanLog` rows (latest event per IP) when an IP is not already listed from the firewall DB or `banned_ips.json`, so **Security -> Firewall -> Banned IPs** matches bans shown under `/plugins/autoBanSecurityAlerts/settings/`. Synthetic row ids use the form `ablog-<log_pk>`; unban/delete routes through the same IP unban flow and removes the log row.
 
 ## [2026-03-07] - PM2 Manager 1.2.0
 
 ### Fixed
-- **pm2Manager** (1.1.1 → 1.2.0): Dashboard table column alignment and data placement. Table rows are now built with DOM (`insertRow`/`insertCell`) so ID, App Name, Namespace, Version, Mode, Status, CPU, Memory, Uptime, Restarts, User, Watching, and Actions align correctly with headers. ID column shows only numeric PM2 id (or –). Fixed static file serving: after plugin updates, copy `pm2Manager/static/**` to CPN `STATIC_ROOT` (e.g. `/usr/local/cpn/static/pm2Manager/`) or run `collectstatic` so the panel serves the updated JS/CSS.
+- **pm2Manager** (1.1.1 -> 1.2.0): Dashboard table column alignment and data placement. Table rows are now built with DOM (`insertRow`/`insertCell`) so ID, App Name, Namespace, Version, Mode, Status, CPU, Memory, Uptime, Restarts, User, Watching, and Actions align correctly with headers. ID column shows only numeric PM2 id (or –). Fixed static file serving: after plugin updates, copy `pm2Manager/static/**` to CPN `STATIC_ROOT` (e.g. `/usr/local/cpn/static/pm2Manager/`) or run `collectstatic` so the panel serves the updated JS/CSS.
 
 ### Changed
 - **pm2Manager**: Sortable column headers; explicit table and column widths; cache-bust script tag (`dashboard.js?v=15`).
@@ -134,9 +140,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-02-15] - Settings routes and resilience
 
 ### Changed
-- **panelAccess** (1.0.0 → 1.0.1): Added `settings/` route so `/plugins/panelAccess/settings/` works in Plugin Store grid.
-- **cspManager** (1.0.1 → 1.0.2): Settings view handles missing DB table gracefully; prompts user to run `migrate cspManager` instead of 500.
-- **examplePlugin** (1.0.1 → 1.0.2): Template directory layout and compatibility with panel plugin URL routing; ensure template dirs are readable (755) when deployed.
+- **panelAccess** (1.0.0 -> 1.0.1): Added `settings/` route so `/plugins/panelAccess/settings/` works in Plugin Store grid.
+- **cspManager** (1.0.1 -> 1.0.2): Settings view handles missing DB table gracefully; prompts user to run `migrate cspManager` instead of 500.
+- **examplePlugin** (1.0.1 -> 1.0.2): Template directory layout and compatibility with panel plugin URL routing; ensure template dirs are readable (755) when deployed.
 
 ### Fixed
 - **emailMarketing**: Added `settings/` route (version already 1.0.2). All plugins with a settings page now expose `/plugins/<name>/settings/` for the store.
@@ -144,8 +150,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-02-02] - Redis Manager & Memcache Manager 1.1.0 (CPN 2.5.5-dev)
 
 ### Added
-- **Redis Manager** (1.0.0 → 1.1.0): Confirmations on all Actions (Start, Stop, Restart, Flush All) and Save Settings; Load Default button to restore Redis config defaults; Fix permissions button and API when config file is unreadable; auto-detect config path (Redis INFO, process, systemd, find); deploy script and fix-permissions script.
-- **Memcache Manager** (1.0.0 → 1.1.0): Version bump for CPN 2.5.5-dev compatibility.
+- **Redis Manager** (1.0.0 -> 1.1.0): Confirmations on all Actions (Start, Stop, Restart, Flush All) and Save Settings; Load Default button to restore Redis config defaults; Fix permissions button and API when config file is unreadable; auto-detect config path (Redis INFO, process, systemd, find); deploy script and fix-permissions script.
+- **Memcache Manager** (1.0.0 -> 1.1.0): Version bump for CPN 2.5.5-dev compatibility.
 - **README**: Added Redis Manager and Memcache Manager to Available Plugins table.
 
 ### Changed
@@ -154,7 +160,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-02-02] - Repository v1.2.0
 
 ### Changed
-- **Repository version**: 1.1.0 → 1.2.0
+- **Repository version**: 1.1.0 -> 1.2.0
 - **README**: Added contaboAutoSnapshot and cspManager to Available Plugins table
 
 ### Fixed
@@ -163,13 +169,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-02-02] - Unified verification for all premium plugins
 
 ### Changed (premiumPlugin, paypalPremiumPlugin)
-- **premiumPlugin** (1.0.1 → 1.0.2): Unified verification - Plugin Grants, activation key, Patreon, PayPal, AES-256-CBC encryption. Same flow as contaboAutoSnapshot.
-- **paypalPremiumPlugin** (1.0.1 → 1.0.2): Unified verification - Plugin Grants, activation key, Patreon, PayPal, AES-256-CBC encryption. Same flow as contaboAutoSnapshot.
+- **premiumPlugin** (1.0.1 -> 1.0.2): Unified verification - Plugin Grants, activation key, Patreon, PayPal, AES-256-CBC encryption. Same flow as contaboAutoSnapshot.
+- **paypalPremiumPlugin** (1.0.1 -> 1.0.2): Unified verification - Plugin Grants, activation key, Patreon, PayPal, AES-256-CBC encryption. Same flow as contaboAutoSnapshot.
 
 ## [2026-02-02] - contaboAutoSnapshot 1.0.2
 
 ### Changed (contaboAutoSnapshot)
-- **contaboAutoSnapshot** (1.0.1 → 1.0.2): Contabo API x-request-id fix (UUID4), max snapshots from plan, unified settings form, API credentials save once, activation key persistence, optional AES-256-CBC encryption for verification API, Plugin Grants auto-unlock
+- **contaboAutoSnapshot** (1.0.1 -> 1.0.2): Contabo API x-request-id fix (UUID4), max snapshots from plan, unified settings form, API credentials save once, activation key persistence, optional AES-256-CBC encryption for verification API, Plugin Grants auto-unlock
 
 ## [2026-02-01] - New categories added
 
@@ -181,18 +187,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Analytics** - Stats, GTM, reporting
 
 ### Changed (category reassignments)
-- **discordWebhooks** (1.0.1 → 1.0.2): Utility → Integration
-- **emailMarketing** (1.0.1 → 1.0.2): Utility → Email
-- **googleTagManager** (1.0.1 → 1.0.2): Utility → Analytics
-- **pm2Manager** (1.1.0 → 1.1.1): Utility → Development
+- **discordWebhooks** (1.0.1 -> 1.0.2): Utility -> Integration
+- **emailMarketing** (1.0.1 -> 1.0.2): Utility -> Email
+- **googleTagManager** (1.0.1 -> 1.0.2): Utility -> Analytics
+- **pm2Manager** (1.1.0 -> 1.1.1): Utility -> Development
 
 ## [2026-02-01] - Category updates and Plugin removal
 
 ### Changed
 - **Plugin categories**: Removed the generic "Plugin" category. Valid categories are now: **Utility**, **Security**, **Backup**, **Performance**.
-- **emailMarketing** (1.0.0 → 1.0.1): Updated `<type>` from `plugin` to `Utility`.
-- **examplePlugin** (1.0.0 → 1.0.1): Updated `<type>` from `plugin` to `Utility`.
-- **fail2ban** (1.0.1 → 1.0.2): Normalized `<type>` from `security` to `Security`.
+- **emailMarketing** (1.0.0 -> 1.0.1): Updated `<type>` from `plugin` to `Utility`.
+- **examplePlugin** (1.0.0 -> 1.0.1): Updated `<type>` from `plugin` to `Utility`.
+- **fail2ban** (1.0.1 -> 1.0.2): Normalized `<type>` from `security` to `Security`.
 
 ### Migration
 Plugins using `<type>plugin</type>` or `<type>Plugin</type>` will no longer appear in the Plugin Store. Update your meta.xml to use one of: Utility, Security, Backup, or Performance.

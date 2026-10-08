@@ -140,3 +140,69 @@ Opportunistic prune keeps chat logs under owner caps:
 3. If `chats/` exceeds `max_chat_disk_mb`, delete oldest until under cap
 
 Triggers: chat send, owner settings save, `install.sh`, bridge `action=prune`, or `php modules/cli_prune.php <domain>|--all`.
+
+## Install modes (1.6.0)
+
+| Mode | Command | Effect |
+|------|---------|--------|
+| folder (default) | `INSTALL_MODE=folder sudo bash install.sh <domain>` | Symlink `public/` to `docroot/mr-agent/` |
+| vhost | `INSTALL_MODE=vhost CONFIRM=yes sudo bash install.sh <domain>` | Point site docroot at `public/` (refuses without confirm) |
+| host | `sudo bash install-host.sh` | Host tree; panel chat only |
+
+## Install paths
+
+| Path | Role |
+|------|------|
+| `/var/lib/cpn/host-plugins/mrAgent/` | Host catalog install (when panel Host target is used) |
+| `/home/<domain>/plugins/mrAgent/` | Site catalog install tree |
+| `/home/<domain>/public_html/mr-agent` | Symlink to `public/` after `install.sh` |
+| `/var/lib/cpn/mr-agent/<domain>/` | Site secrets, keys, owner settings (mode 700/600) |
+| `/var/lib/cpn/mr-agent/_host/` | Host secrets when installed on Host |
+| `/var/lib/cpn/mr-agent/<domain>/chats/` | Conversation JSON (pruned by retention/count/disk MB) |
+| `/var/lib/cpn/mr-agent/<domain>/locks/` | Concurrent-request lock files |
+| `settings.json` (plugin dir) | CPN panel plugin settings fields |
+
+## Sideload (without Store cache)
+
+```bash
+# Copy folder into the site plugins directory, then:
+sudo bash /home/<domain>/plugins/mrAgent/install.sh <domain>
+sudo rm -f /var/lib/cpn/plugin-catalog-cache.json
+```
+
+Or install from Store after this plugin lands on `main` and the catalog cache refreshes.
+
+## Security
+
+- CSRF on POST APIs (`csrf` field or `X-CSRF-Token`)
+- Authz: login gate + visibility ACL + **per-user resource scope** (`modules/scope.php`)
+- Host inventory (DNS/PHP/Accounts stubs): owner/admin role only
+- Secrets never logged (redaction helper); mode 600 under `/var/lib/cpn/mr-agent/`
+- HTTP client blocks private/metadata hosts except explicit loopback local provider
+- Storage/resource caps: retention days, max conversations, disk MB, rate limit, max tokens, message length, concurrency 1 or 2, local timeout/response bytes, upload size
+- No `shell_exec` / command tools in MVP
+- Plugin root `.htaccess` denies direct access to PHP/modules
+- MFA material under `/var/lib/cpn/mfa/` is never read or cleared by Mr Agent
+
+## Panel sidebar vs floating bubble
+
+| Control | Effect |
+|---------|--------|
+| **Show in sidebar** | Nav link under Installed plugins (plugin dashboard) |
+| **Show floating chat bubble** | Bottom-right **Mr A** widget on CPN Panel pages (ACL gated) |
+| Sidebar footer speech icon | CPN **Feedback**, not Mr Agent |
+
+Day-to-day full chat remains at `/mr-agent` after `install.sh`. Compact panel chat uses `modules/panel_bridge.php` (CLI) via the panel float-chat route.
+
+Requires a CPN Panel build that injects Active plugin float assets (`panel_float` / `public/assets/panel-float/`).
+
+
+## Storage prune (1.3.0)
+
+Opportunistic prune keeps chat logs under owner caps:
+
+1. Delete conversations older than `chat_retention_days`
+2. If count exceeds `max_stored_conversations`, delete oldest
+3. If `chats/` exceeds `max_chat_disk_mb`, delete oldest until under cap
+
+Triggers: chat send, owner settings save, `install.sh`, bridge `action=prune`, or `php modules/cli_prune.php <domain>|--all`.
