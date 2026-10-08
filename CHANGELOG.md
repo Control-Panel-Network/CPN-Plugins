@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-08] - Proton Mail (external / Bridge)
+
+### Added
+- **protonMail** (**1.0.0**): Host-scoped Email plugin. Unlocks CPN Email → Proton Mail (`/email/proton`): Open Proton Mail (https://mail.proton.me), Bridge IMAP/SMTP guidance, and operator settings. Honest external integration (not a self-hosted Proton stack). Bridge automation is follow-up only (`protonMail/to-do/BRIDGE-FOLLOWUP.md`).
+
 ## [2026-10-08] - Mr Agent panel setup (no Operator notes)
 
 ### Changed
