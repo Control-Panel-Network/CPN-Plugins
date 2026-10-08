@@ -2,8 +2,8 @@
 <plugin>
     <name>Mr Agent</name>
     <type>Utility</type>
-    <version>1.1.0</version>
-    <description>AI chat assistant for CPN. MCP is the panel-wide tool protocol; Mr Agent skills cover Help/Menu, Websites, Packages, and stub areas (Email, DNS, PHP, Plugins, Accounts). Provider API keys optional for free help.</description>
+    <version>1.2.0</version>
+    <description>AI chat assistant for CPN. MCP is the panel-wide tool protocol; Mr Agent skills cover Help/Menu, Websites, Packages, and stub areas (Email, DNS, PHP, Plugins, Accounts). Optional floating chat bubble in the panel. Provider API keys optional for free help.</description>
     <keywords>ai, mcp, skills, assistant, openai, anthropic, chatbot, model context protocol</keywords>
     <keyword>ai</keyword>
     <keyword>mcp</keyword>
@@ -37,10 +37,12 @@
         <feature>Active skills: Help/Menu, Providers, Websites list, Packages list</feature>
         <feature>Stub skills: Email, DNS, PHP, Plugins, Accounts</feature>
         <feature>Owner ACL: admins only, all users, or package id list</feature>
+        <feature>Floating chat bubble in CPN Panel when enabled and ACL allows</feature>
         <feature>Provider API keys stored under /var/lib/cpn/mr-agent/ (mode 600)</feature>
     </features>
     <uninstall_impact>Site /mr-agent URL stops working</uninstall_impact>
     <uninstall_impact>Chat app under the site plugins folder is removed</uninstall_impact>
+    <uninstall_impact>Floating bubble disappears from CPN Panel</uninstall_impact>
     <uninstall_impact>Secrets under /var/lib/cpn/mr-agent/&lt;domain&gt;/ remain until cleaned manually</uninstall_impact>
     <url>/mr-agent</url>
     <settings_url>/plugins/settings</settings_url>

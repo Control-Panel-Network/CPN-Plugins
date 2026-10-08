@@ -16,6 +16,13 @@ Date: 08/10/2026
 - APIs: `?api=skills`, `?api=mcp`
 - Docs: `to-do/ARCHITECTURE-MCP-SKILLS.md`
 
+## Shipped (1.2.0)
+
+- Floating bubble assets under `public/assets/panel-float/`
+- Settings: `show_floating_bubble` (default on) + declared `panel_float` in `cpn-plugin.json`
+- CLI `modules/panel_bridge.php` for panel-proxied free chat
+- ACL: bubble only for users who pass visibility (admins_only / all_authenticated / packages)
+
 ## Later (not blocking)
 
 - Native CPN session SSO (instead of access password gate)

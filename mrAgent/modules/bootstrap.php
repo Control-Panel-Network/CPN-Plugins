@@ -7,7 +7,7 @@ if (!defined('MRA_INIT')) {
 }
 
 define('MRA_ROOT', dirname(__DIR__));
-define('MRA_VERSION', '1.1.0');
+define('MRA_VERSION', '1.2.0');
 define('MRA_PLUGIN_ID', 'mrAgent');
 
 require_once __DIR__ . '/helpers.php';
