@@ -203,6 +203,7 @@ function mra_api_dispatch($api, array $cfg)
             mra_json(['ok' => false, 'error' => 'Owner only'], 403);
         }
         $diskBytes = mra_chats_disk_bytes($cfg['domain'] ?? null);
+        $hostPolicy = mra_load_host_policy();
         mra_json([
             'ok' => true,
             'settings' => [
@@ -226,6 +227,7 @@ function mra_api_dispatch($api, array $cfg)
                 'local_max_response_bytes' => (int) ($cfg['local_max_response_bytes'] ?? 1048576),
                 'max_upload_bytes' => (int) ($cfg['max_upload_bytes'] ?? 262144),
             ],
+            'host_policy' => $hostPolicy,
             'storage' => [
                 'chat_disk_bytes' => $diskBytes,
                 'chat_disk_mb' => round($diskBytes / 1048576, 2),
@@ -275,6 +277,24 @@ function mra_api_dispatch($api, array $cfg)
         if (!mra_save_owner_settings($next, $cfg['domain'] ?? null)) {
             mra_json(['ok' => false, 'error' => 'Could not save settings'], 500);
         }
+        $hostPolicySaved = null;
+        if (array_key_exists('allow_host_chat', $body) || array_key_exists('allow_site_install', $body)) {
+            $hostPolicy = [
+                'allow_host_chat' => array_key_exists('allow_host_chat', $body)
+                    ? !empty($body['allow_host_chat'])
+                    : mra_host_policy_allow_host_chat(),
+                'allow_site_install' => array_key_exists('allow_site_install', $body)
+                    ? !empty($body['allow_site_install'])
+                    : mra_host_policy_allow_site_install(),
+            ];
+            if (!mra_save_host_policy($hostPolicy)) {
+                mra_json([
+                    'ok' => false,
+                    'error' => 'Owner settings saved, but host policy could not be written (check /var/lib/cpn/mr-agent permissions). Prefer panel /plugins/mr-agent.',
+                ], 500);
+            }
+            $hostPolicySaved = $hostPolicy;
+        }
         $pruned = mra_prune_storage($next, $cfg['domain'] ?? null);
         if (!empty($body['access_password']) && is_file(MRA_ROOT . '/config.php') && is_writable(MRA_ROOT . '/config.php')) {
             // Prefer var/lib settings; config.php remains for bootstrap.
@@ -283,6 +303,7 @@ function mra_api_dispatch($api, array $cfg)
             'ok' => true,
             'message' => 'Owner settings saved',
             'pruned' => $pruned,
+            'host_policy' => $hostPolicySaved !== null ? $hostPolicySaved : mra_load_host_policy(),
         ]);
     }
 

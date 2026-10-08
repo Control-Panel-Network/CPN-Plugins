@@ -158,6 +158,28 @@
       .then(function (res) {
         var s = res.settings || {};
         var disk = res.storage || {};
+        var hp = res.host_policy || {};
+        if (document.getElementById("mra-allow-host-chat")) {
+          document.getElementById("mra-allow-host-chat").checked =
+            hp.allow_host_chat !== false;
+        }
+        if (document.getElementById("mra-allow-site-install")) {
+          document.getElementById("mra-allow-site-install").checked =
+            !!hp.allow_site_install;
+        }
+        var modeEl = document.getElementById("mra-host-policy-mode");
+        if (modeEl) {
+          var chatOn = hp.allow_host_chat !== false;
+          var siteOn = !!hp.allow_site_install;
+          var mode = !chatOn && !siteOn
+            ? "Off"
+            : chatOn && !siteOn
+              ? "Panel only"
+              : chatOn && siteOn
+                ? "Panel + optional site"
+                : "Site install only (unusual)";
+          modeEl.textContent = "Current mode: " + mode;
+        }
         if (document.getElementById("mra-enabled")) {
           document.getElementById("mra-enabled").checked = !!s.plugin_enabled;
         }
@@ -230,6 +252,14 @@
       api("?api=owner-settings", {
         method: "POST",
         body: {
+          allow_host_chat: !!(
+            document.getElementById("mra-allow-host-chat") &&
+            document.getElementById("mra-allow-host-chat").checked
+          ),
+          allow_site_install: !!(
+            document.getElementById("mra-allow-site-install") &&
+            document.getElementById("mra-allow-site-install").checked
+          ),
           plugin_enabled: document.getElementById("mra-enabled").checked,
           visibility: document.getElementById("mra-visibility").value,
           package_ids: document.getElementById("mra-packages").value,

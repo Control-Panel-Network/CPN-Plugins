@@ -1,11 +1,11 @@
-# Mr Agent changelog (plugin-local)
+﻿# Mr Agent changelog (plugin-local)
 
-## 1.7.0 (08/10/2026)
+## 1.8.0 (08/10/2026)
 
-- Removed Operator notes settings field (no CLI dump in Plugin settings)
-- Panel Install / Activate / Enable runs setup (secrets + folder or confirmed vhost publish)
-- Plugin settings actions: Run setup / Publish folder, Prune chat logs (panel-mediated)
-- CLI `install.sh` / `cli_prune.php` remain in README for operators only
+- Host policy file `/var/lib/cpn/mr-agent/host-policy.json`: `allow_host_chat` (default on), `allow_site_install` (default off)
+- Owner settings UI + API for the two switches; prefer panel `/plugins/mr-agent` for server owner
+- Modes: Off, Panel only, Panel + optional site (visibility ACL remains separate)
+- Turning off site install does not uninstall existing site copies
 
 ## 1.6.0 (08/10/2026)
 
@@ -35,3 +35,4 @@
 ## 1.2.0 (08/10/2026)
 
 - Floating chat bubble + `panel_bridge.php`
+

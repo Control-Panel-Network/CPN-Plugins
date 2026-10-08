@@ -100,6 +100,15 @@ APIs: `GET ?api=skills`, `POST ?api=mcp` (`list_tools` / `call_tool`).
 
 Keys live under `/var/lib/cpn/mr-agent/<domain>/keys.json` (mode 600). Never commit secrets.
 
+## Host policy (server owner)
+
+Stored at `/var/lib/cpn/mr-agent/host-policy.json` (independent of Host install):
+
+- `allow_host_chat` (default **on**): panel bubble and `/plugins/mr-agent`
+- `allow_site_install` (default **off**): Store Site Install for site users
+
+Modes: **Off**, **Panel only**, **Panel + optional site**. Prefer panel `/plugins/mr-agent` (panel owner). Existing site installs stay when site install is turned off.
+
 ## Owner ACL
 
 Configure in CPN Plugin settings and/or Mr Agent Owner settings:
