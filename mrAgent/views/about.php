@@ -5,11 +5,17 @@ if (!defined('MRA_INIT')) {
 ?>
 <section class="card">
   <h1>About Mr Agent</h1>
-  <p>Friendly AI chat for CPN Panel. <strong>MCP</strong> is the panel-wide tool protocol. <strong>Skills</strong> are per-area modules (Help, Websites, Packages, and more). User-facing copy always says <strong>provider API keys</strong> for LLM credentials (never "MCP keys").</p>
+  <p>Friendly AI chat for CPN Panel. <strong>Provider</strong> generates text (Local LLM on this server, or cloud provider API keys). <strong>MCP</strong> is the panel-wide tool protocol. <strong>Skills</strong> are per-area modules (Help, Websites, Packages, and more). Never call provider API keys "MCP keys".</p>
+  <h2>Local LLM (first-class)</h2>
+  <ul>
+    <li>Ollama, LM Studio, Bionic, or any OpenAI-compatible API on the CPN server</li>
+    <li>Defaults: <code>http://127.0.0.1:11434/v1</code> (Ollama) or <code>http://127.0.0.1:1235/v1</code> (LM Studio)</li>
+    <li>Windows browser Ollama is not reachable from the guest; install the model on the lab host</li>
+  </ul>
   <h2>Free lightweight</h2>
   <ul>
-    <li>Help skill: bundled CPN route/help search (no GPU, no paid key)</li>
-    <li>Optional local OpenAI-compatible endpoint on loopback (Ollama / LM Studio) if present</li>
+    <li>CPN navigation only (menu/route search) when the question is about the panel</li>
+    <li>General chat (dates, small talk) prefers a configured local model; otherwise explains that free helper is CPN-only</li>
     <li>Does not call cloud providers unless you configure keys</li>
   </ul>
   <h2>Skills</h2>

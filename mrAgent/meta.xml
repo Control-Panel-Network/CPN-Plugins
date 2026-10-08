@@ -2,9 +2,9 @@
 <plugin>
     <name>Mr Agent</name>
     <type>Utility</type>
-    <version>1.4.0</version>
-    <description>AI chat for CPN. MCP skills with per-user Host isolation, floating bubble, and storage/resource limits (retention, disk cap, rate/token/concurrency) so chat logs cannot fill the host.</description>
-    <keywords>ai, mcp, skills, assistant, openai, anthropic, chatbot, model context protocol</keywords>
+    <version>1.5.0</version>
+    <description>AI chat for CPN. Local LLM (Ollama/LM Studio/Bionic) is first-class. MCP skills with per-user Host isolation, floating bubble, and storage/resource limits so chat logs cannot fill the host.</description>
+    <keywords>ai, mcp, skills, assistant, openai, anthropic, chatbot, local llm, ollama, model context protocol</keywords>
     <keyword>ai</keyword>
     <keyword>mcp</keyword>
     <keyword>skills</keyword>
@@ -32,6 +32,7 @@
     <features>
         <feature>In-site chat UI with provider and model picker</feature>
         <feature>OpenAI-compatible, Anthropic, and custom base URL providers</feature>
+        <feature>First-class local LLM (Ollama, LM Studio, Bionic) on the CPN server</feature>
         <feature>Free lightweight CPN help and menu search without a paid key</feature>
         <feature>Panel-wide MCP tool surface with per-area skills under skills/</feature>
         <feature>Active skills: Help/Menu, Providers, Websites, Packages, Email mailboxes</feature>

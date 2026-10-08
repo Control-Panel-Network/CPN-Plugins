@@ -140,7 +140,10 @@ try {
     }
 
     $message = (string) ($req['message'] ?? '');
-    $provider = (string) ($req['provider'] ?? 'free');
+    $provider = strtolower(trim((string) ($req['provider'] ?? 'auto')));
+    if ($provider === '') {
+        $provider = 'auto';
+    }
     $model = (string) ($req['model'] ?? '');
     $conversationId = (string) ($req['conversation_id'] ?? '');
     $result = mra_chat_handle($message, $provider, $model, $cfg, mra_user(), $conversationId);

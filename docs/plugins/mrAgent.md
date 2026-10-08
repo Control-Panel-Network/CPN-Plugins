@@ -8,4 +8,6 @@ Version **1.3.0** adds owner storage and resource limits so chat logs cannot fil
 
 Version **1.4.0** enforces **per-user data isolation** on Host (and Site) installs. Each CPN login only sees websites, mailboxes, and packages in their panel scope. Owner/admin broader access matches panel role, not a Mr Agent bypass. Verify with `php modules/cli_scope_check.php`.
 
+Version **1.5.0** makes **Local LLM** first-class (Ollama / LM Studio / Bionic on the CPN server): `local_base_url`, `local_model`, `local_only_mode`, `local_allow_lan`. Free/auto prefers local for general chat; float bubble uses panel `/plugins/float-chat` with `provider=auto`.
+
 See `mrAgent/README.md`, `mrAgent/CPN.md`, and `mrAgent/to-do/ARCHITECTURE-MCP-SKILLS.md`.

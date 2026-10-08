@@ -6,6 +6,9 @@ if (!defined('MRA_INIT')) {
 /**
  * Main chat entry (non-stream MVP).
  *
+ * Providers: free/auto (smart local + CPN help), local, openai, anthropic, custom.
+ * MCP skills are tools; providers generate text.
+ *
  * @param array<string,mixed> $cfg
  * @return array<string,mixed>
  */
@@ -22,8 +25,13 @@ function mra_chat_handle($message, $provider, $model, array $cfg, $username, $co
     }
 
     $provider = strtolower(trim((string) $provider));
-    if ($provider === '') {
-        $provider = strtolower((string) ($cfg['default_provider'] ?? 'free'));
+    // auto / empty: smart free path (local for general chat, CPN help for panel Qs).
+    // Explicit default_provider is for the full UI select, not float auto.
+    if ($provider === '' || $provider === 'auto') {
+        $provider = 'free';
+    }
+    if (!empty($cfg['local_only_mode'])) {
+        $provider = 'local';
     }
     $allowed = ['free', 'openai', 'anthropic', 'custom', 'local'];
     if (!in_array($provider, $allowed, true)) {
@@ -49,13 +57,16 @@ function mra_chat_handle($message, $provider, $model, array $cfg, $username, $co
             $result = mra_free_reply($message, $cfg, $username);
         } else {
             $system = 'You are Mr Agent, a friendly AI assistant inside CPN Panel. '
-                . 'MCP is the panel-wide tool protocol. Skills are per-area modules (Help, Websites, Packages, Email, DNS, etc.). '
+                . 'Three layers: (1) Provider = who generates text (local model or cloud API keys). '
+                . '(2) MCP = panel-wide tool protocol. (3) Skills = per-area modules (Help, Websites, Packages, Email, DNS, etc.). '
                 . 'Call list_skills to discover tools. Prefer Help skill for "where is X". '
                 . 'Use list_websites / list_packages only when the user asks for inventory (owner tools). '
                 . 'Never invent destructive admin actions. Never ask users to paste provider API keys into chat. '
                 . 'Call keys "provider API keys", not MCP keys.';
 
-            if ($provider === 'anthropic') {
+            if ($provider === 'local') {
+                $result = mra_chat_local($message, $model, $cfg, $username, $system);
+            } elseif ($provider === 'anthropic') {
                 $result = mra_chat_anthropic_with_tools($message, $model, $cfg, $username, $system);
             } else {
                 $result = mra_chat_openai_with_tools($message, $provider, $model, $cfg, $username, $system);
@@ -91,6 +102,66 @@ function mra_chat_handle($message, $provider, $model, array $cfg, $username, $co
 }
 
 /**
+ * Local OpenAI-compatible path (Ollama / LM Studio / Bionic). Plain chat first.
+ *
+ * @param array<string,mixed> $cfg
+ * @return array<string,mixed>
+ */
+function mra_chat_local($message, $model, array $cfg, $username, $system)
+{
+    $ep = mra_local_endpoint_cfg($cfg);
+    if ($model === '' || $model === 'cpn-help') {
+        $model = $ep['model'];
+    }
+    if (empty($ep['allow_private'])) {
+        return [
+            'ok' => false,
+            'error' => 'Local base URL is not allowed. Use http://127.0.0.1:11434/v1 (Ollama), '
+                . 'http://127.0.0.1:1235/v1 (LM Studio / Bionic), or enable Local allow LAN.',
+            'provider' => 'local',
+        ];
+    }
+
+    $hits = mra_search_corpus($message, 5);
+    $hint = '';
+    if (function_exists('mra_looks_like_cpn_query') && mra_looks_like_cpn_query($message, $hits) && !empty($hits)) {
+        foreach (array_slice($hits, 0, 4) as $hit) {
+            $hint .= '- ' . ($hit['title'] ?? '') . ' → ' . ($hit['path'] ?? '') . "\n";
+        }
+    }
+    $userContent = $message;
+    if ($hint !== '') {
+        $userContent .= "\n\nRelevant CPN routes:\n" . $hint;
+    }
+    $plain = mra_local_chat_messages(
+        [
+            ['role' => 'system', 'content' => $system],
+            ['role' => 'user', 'content' => $userContent],
+        ],
+        $cfg,
+        $model,
+        (int) ($cfg['local_timeout_seconds'] ?? 45)
+    );
+    if (!empty($plain['ok'])) {
+        return [
+            'ok' => true,
+            'reply' => (string) $plain['reply'],
+            'provider' => 'local',
+            'model' => $model,
+            'tools_used' => [],
+        ];
+    }
+
+    $err = isset($plain['error']) ? (string) $plain['error'] : 'Local model request failed';
+    return [
+        'ok' => false,
+        'error' => $err . ' Ensure the local LLM listens on ' . $ep['base']
+            . ' on this CPN server (browser Windows Ollama is not reachable unless you expose it and enable Local allow LAN).',
+        'provider' => 'local',
+    ];
+}
+
+/**
  * @return array<string,mixed>
  */
 function mra_chat_openai_with_tools($message, $provider, $model, array $cfg, $username, $system)
@@ -109,13 +180,6 @@ function mra_chat_openai_with_tools($message, $provider, $model, array $cfg, $us
         if ($base === '') {
             return ['ok' => false, 'error' => 'Set a custom OpenAI-compatible base URL in owner settings.'];
         }
-    } elseif ($provider === 'local') {
-        $base = (string) ($cfg['local_base_url'] ?? 'http://127.0.0.1:11434/v1');
-        $apiKey = mra_resolve_api_key('local', $username, $cfg);
-        $timeout = (int) ($cfg['local_timeout_seconds'] ?? 45);
-        $maxBytes = (int) ($cfg['local_max_response_bytes'] ?? 1048576);
-        $host = strtolower((string) parse_url($base, PHP_URL_HOST));
-        $allowPrivate = (bool) preg_match('/^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/', $host);
     }
 
     $maxTokens = (int) ($cfg['max_tokens_per_reply'] ?? 1024);

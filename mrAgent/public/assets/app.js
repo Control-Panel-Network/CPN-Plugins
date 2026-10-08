@@ -203,6 +203,18 @@
             (s.max_chat_disk_mb || 50) +
             " MB)";
         }
+        if (me.local_base_url && document.getElementById("mra-local-base")) {
+          document.getElementById("mra-local-base").value = me.local_base_url;
+        }
+        if (me.local_model && document.getElementById("mra-local-model")) {
+          document.getElementById("mra-local-model").value = me.local_model;
+        }
+        if (document.getElementById("mra-local-only")) {
+          document.getElementById("mra-local-only").checked = !!me.local_only_mode;
+        }
+        if (document.getElementById("mra-local-lan")) {
+          document.getElementById("mra-local-lan").checked = !!me.local_allow_lan;
+        }
       })
       .catch(function () {
         api("?api=me")
@@ -238,6 +250,10 @@
           custom_base_url: document.getElementById("mra-custom-base").value,
           local_base_url: document.getElementById("mra-local-base").value,
           local_model: document.getElementById("mra-local-model").value,
+          local_only_mode: !!(document.getElementById("mra-local-only") &&
+            document.getElementById("mra-local-only").checked),
+          local_allow_lan: !!(document.getElementById("mra-local-lan") &&
+            document.getElementById("mra-local-lan").checked),
           access_password: document.getElementById("mra-access-password").value,
           csrf: csrf(),
         },

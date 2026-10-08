@@ -19,6 +19,7 @@ require_once __DIR__ . '/acl.php';
 require_once __DIR__ . '/scope.php';
 require_once __DIR__ . '/rate_limit.php';
 require_once __DIR__ . '/http_client.php';
+require_once __DIR__ . '/local_endpoint.php';
 require_once __DIR__ . '/skills.php';
 require_once __DIR__ . '/tools.php';
 require_once __DIR__ . '/free_helper.php';

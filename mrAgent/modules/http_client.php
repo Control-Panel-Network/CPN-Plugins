@@ -23,8 +23,9 @@ function mra_http_json($method, $url, array $payload = null, array $headers = []
     }
     $maxBytes = (int) $maxBytes;
     if ($maxBytes <= 0) {
-        $maxBytes = 8388608;
+        $maxBytes = 8388608; // 8 MiB safety default
     }
+    // Block metadata targets. Loopback always OK. Private LAN only when allowPrivate.
     $host = parse_url($url, PHP_URL_HOST);
     $host = strtolower((string) $host);
     $isLoopback = in_array($host, ['127.0.0.1', 'localhost', '::1'], true);

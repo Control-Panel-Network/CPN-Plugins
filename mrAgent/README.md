@@ -1,6 +1,6 @@
 # Mr Agent
 
-AI chat assistant for **CPN Panel**. Users connect their own **provider API keys** (OpenAI, Anthropic Claude, custom OpenAI-compatible). A free lightweight helper answers simple CPN UI/help questions without a paid key.
+AI chat assistant for **CPN Panel**. **Local LLM** (Ollama / LM Studio / Bionic on the server) is first-class. Users may also connect **provider API keys** (OpenAI, Anthropic Claude, custom OpenAI-compatible). A free lightweight helper answers simple CPN UI/help questions without a paid key.
 
 - Plugin id: `mrAgent`
 - Display name: Mr Agent
@@ -14,7 +14,8 @@ AI chat assistant for **CPN Panel**. Users connect their own **provider API keys
 |------|---------|
 | **MCP** | Panel-wide tool protocol (list/call allowlisted tools with authz) |
 | **Skills** | Per CPN area: Help, Websites, Packages, Email, DNS, PHP, Plugins, Accounts |
-| **Provider API keys** | LLM credentials (not "MCP keys") |
+| **Local LLM** | Text generator on the CPN **server** (Ollama / LM Studio / Bionic) |
+| **Provider API keys** | Cloud LLM credentials (not "MCP keys") |
 | **Mr Agent** | Chat UI + keys + ACL that uses skills through MCP |
 
 ## Install
@@ -33,15 +34,15 @@ sudo bash /home/<domain>/plugins/mrAgent/install.sh <domain>
 /var/lib/cpn/mr-agent/<domain>/access.password
 ```
 
-## Free lightweight (MVP)
+## Free lightweight + local
 
-No provider API key required:
+No cloud provider API key required:
 
-- **Help** skill: keyword search over bundled CPN routes/help (`data/help/cpn-routes.json`)
-- Answers "where is X in CPN" style questions
-- Optionally uses a local OpenAI-compatible endpoint on loopback if configured
+- **Help** skill: keyword search over bundled CPN routes/help (`data/help/cpn-routes.json`) for panel navigation
+- General chat (dates, small talk) prefers a **local** model when `local_base_url` is reachable on the server
+- If no local model: free helper clearly says it only answers CPN navigation (does not dump unrelated website links)
 
-Cloud models are only used when you add provider API keys. Inventory tools (`list_websites`, `list_packages`, `list_mailboxes`) work without a paid key and are **scoped to the signed-in CPN user**.
+Cloud models are only used when you add provider API keys (unless Local-only mode is on). Inventory tools (`list_websites`, `list_packages`, `list_mailboxes`) work without a paid key and are **scoped to the signed-in CPN user**.
 
 ## Per-user isolation (Host and Site)
 
@@ -70,11 +71,11 @@ APIs: `GET ?api=skills`, `POST ?api=mcp` (`list_tools` / `call_tool`).
 
 | Provider | Notes |
 |----------|--------|
-| Free lightweight | Built-in CPN help/search |
+| Free lightweight | Built-in CPN navigation help |
+| Local | Server OpenAI-compatible (`local_base_url`; Ollama / LM Studio / Bionic) |
 | OpenAI | Official OpenAI-compatible API |
 | Anthropic | Claude Messages API |
-| Custom | Your OpenAI-compatible base URL |
-| Local | Loopback only (`local_base_url`) |
+| Custom | Your remote OpenAI-compatible base URL |
 
 Keys live under `/var/lib/cpn/mr-agent/<domain>/keys.json` (mode 600). Never commit secrets.
 
@@ -114,7 +115,7 @@ When the panel supports plugin float widgets and this plugin is Active:
 
 1. Keep **Enable Mr Agent chat** and **Show floating chat bubble** checked.
 2. Set **visibility** so your signed-in panel account is allowed.
-3. Refresh any CPN Panel page: a bottom-right **Mr A** bubble opens a compact chat (free helper via panel bridge). **Expand** opens the full site UI at `/mr-agent`.
+3. Refresh any CPN Panel page: a bottom-right **Mr A** bubble opens a compact chat via panel `/plugins/float-chat` (not the site origin). **Expand** opens the full site UI at `/mr-agent`.
 
 **Show in sidebar** only adds an Installed plugins nav link (dashboard). It is not the floating bubble. The sidebar footer speech icon is **Feedback**, not Mr Agent.
 

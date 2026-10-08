@@ -36,14 +36,47 @@ function mra_load_help_corpus()
 }
 
 /**
+ * Stopwords so "it"/"is" do not match "websites" / "list".
+ *
+ * @return array<string,bool>
+ */
+function mra_search_stopwords()
+{
+    static $map = null;
+    if (is_array($map)) {
+        return $map;
+    }
+    $words = [
+        'a', 'an', 'the', 'is', 'it', 'to', 'of', 'in', 'on', 'for', 'and', 'or', 'at', 'by',
+        'what', 'where', 'how', 'when', 'who', 'why', 'which', 'do', 'does', 'did', 'can',
+        'could', 'would', 'should', 'me', 'my', 'you', 'your', 'we', 'our', 'i', 'am', 'are',
+        'be', 'been', 'was', 'were', 'will', 'with', 'from', 'this', 'that', 'these', 'those',
+        'hello', 'hi', 'hey', 'please', 'thanks', 'thank', 'today', 'day', 'now', 'tell',
+        'about', 'just', 'like', 'also', 'any', 'some', 'there', 'here', 'then', 'than',
+        'ok', 'okay', 'yes', 'no', 'not', 'into', 'out', 'up', 'down', 'over', 'under',
+    ];
+    $map = [];
+    foreach ($words as $w) {
+        $map[$w] = true;
+    }
+    return $map;
+}
+
+/**
  * @return array<int,array<string,mixed>>
  */
 function mra_search_corpus($query, $limit = 8)
 {
     $query = strtolower(trim((string) $query));
-    $terms = preg_split('/\s+/', $query) ?: [];
-    $terms = array_values(array_filter($terms, function ($t) {
-        return strlen($t) >= 2;
+    $query = preg_replace('/[^a-z0-9\s\-\/]/', ' ', $query);
+    $terms = preg_split('/\s+/', (string) $query) ?: [];
+    $stop = mra_search_stopwords();
+    $terms = array_values(array_filter($terms, function ($t) use ($stop) {
+        $t = strtolower(trim((string) $t));
+        if (strlen($t) < 3) {
+            return false;
+        }
+        return empty($stop[$t]);
     }));
     if (empty($terms)) {
         return [];
@@ -53,25 +86,36 @@ function mra_search_corpus($query, $limit = 8)
         if (!is_array($item)) {
             continue;
         }
-        $hay = strtolower(
-            (string) ($item['title'] ?? '') . ' ' .
-            (string) ($item['path'] ?? '') . ' ' .
-            (string) ($item['help'] ?? '') . ' ' .
-            implode(' ', isset($item['tags']) && is_array($item['tags']) ? $item['tags'] : [])
-        );
+        $title = strtolower((string) ($item['title'] ?? ''));
+        $path = strtolower((string) ($item['path'] ?? ''));
+        $help = strtolower((string) ($item['help'] ?? ''));
+        $tags = strtolower(implode(' ', isset($item['tags']) && is_array($item['tags']) ? $item['tags'] : []));
+        $hay = $title . ' ' . $path . ' ' . $help . ' ' . $tags;
         $score = 0;
+        $matched = 0;
         foreach ($terms as $t) {
-            if (strpos($hay, $t) !== false) {
-                $score += 2;
-            }
-            if (isset($item['title']) && stripos((string) $item['title'], $t) !== false) {
+            $hitTerm = false;
+            if (preg_match('/(^|[^a-z0-9])' . preg_quote($t, '/') . '([^a-z0-9]|$)/', $title)) {
+                $score += 5;
+                $hitTerm = true;
+            } elseif (preg_match('/(^|[^a-z0-9])' . preg_quote($t, '/') . '([^a-z0-9]|$)/', $path)) {
+                $score += 4;
+                $hitTerm = true;
+            } elseif (preg_match('/(^|[^a-z0-9])' . preg_quote($t, '/') . '([^a-z0-9]|$)/', $tags)) {
                 $score += 3;
-            }
-            if (isset($item['path']) && stripos((string) $item['path'], $t) !== false) {
+                $hitTerm = true;
+            } elseif (preg_match('/(^|[^a-z0-9])' . preg_quote($t, '/') . '([^a-z0-9]|$)/', $help)) {
                 $score += 2;
+                $hitTerm = true;
+            } elseif (strlen($t) >= 5 && strpos($hay, $t) !== false) {
+                $score += 1;
+                $hitTerm = true;
+            }
+            if ($hitTerm) {
+                $matched++;
             }
         }
-        if ($score > 0) {
+        if ($matched > 0 && $score >= 3) {
             $scored[] = ['score' => $score, 'item' => $item];
         }
     }

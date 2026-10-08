@@ -65,6 +65,8 @@ function mra_config()
         'local_base_url' => 'http://127.0.0.1:11434/v1',
         'local_api_key' => '',
         'local_model' => 'llama3.2:1b',
+        'local_only_mode' => false,
+        'local_allow_lan' => false,
         'domain' => '',
         'plugin_enabled' => true,
         'visibility' => 'admins_only',
@@ -114,6 +116,10 @@ function mra_config()
         'allow_user_keys' => 'allow_user_keys',
         'default_provider' => 'default_provider',
         'rate_limit_per_hour' => 'rate_limit_per_hour',
+        'local_base_url' => 'local_base_url',
+        'local_model' => 'local_model',
+        'local_only_mode' => 'local_only_mode',
+        'local_allow_lan' => 'local_allow_lan',
         'max_history_messages' => 'max_history_messages',
         'max_stored_conversations' => 'max_stored_conversations',
         'chat_retention_days' => 'chat_retention_days',
@@ -129,7 +135,7 @@ function mra_config()
             continue;
         }
         $val = $panelSettings[$from];
-        if ($to === 'plugin_enabled' || $to === 'allow_user_keys') {
+        if (in_array($to, ['plugin_enabled', 'allow_user_keys', 'local_only_mode', 'local_allow_lan'], true)) {
             $cfg[$to] = ($val === '1' || $val === 1 || $val === true || $val === 'true' || $val === 'on');
         } elseif (in_array($to, $intKeys, true)) {
             $cfg[$to] = (int) $val;
@@ -152,6 +158,12 @@ function mra_config()
         }
     }
 
+    if (!empty($cfg['local_base_url']) && function_exists('mra_normalize_local_base_url')) {
+        $norm = mra_normalize_local_base_url((string) $cfg['local_base_url']);
+        if ($norm !== '') {
+            $cfg['local_base_url'] = $norm;
+        }
+    }
     if (function_exists('mra_normalize_limits')) {
         $cfg = mra_normalize_limits($cfg);
     }
