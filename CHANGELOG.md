@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-08] - Mr Agent floating bubble
+
+### Added
+- **mrAgent** (1.1.0 → **1.2.0**): Floating chat bubble in CPN Panel (bottom-right) when **Show floating chat bubble** is on, the plugin is Active/enabled, and the signed-in user passes visibility ACL (`admins_only` / `all_authenticated` / `packages`). Declares `panel_float` + `show_floating_bubble` settings fields. Ships `public/assets/panel-float/` and CLI `modules/panel_bridge.php` for panel-proxied free chat. Expand opens `https://<domain>/mr-agent`. Requires a panel build that injects Active plugin float widgets (CPN-Control-Panel-Network).
+
 ## [2026-10-08] - Mr Agent MCP skills
 
 ### Changed

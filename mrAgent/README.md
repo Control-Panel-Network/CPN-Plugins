@@ -6,7 +6,7 @@ AI chat assistant for **CPN Panel**. Users connect their own **provider API keys
 - Display name: Mr Agent
 - Author: master3395
 - Pricing: free
-- Version: 1.1.0
+- Version: 1.2.0
 
 ## MCP vs skills (tell others this)
 
@@ -76,11 +76,23 @@ Keys live under `/var/lib/cpn/mr-agent/<domain>/keys.json` (mode 600). Never com
 
 Configure in CPN Plugin settings and/or Mr Agent Owner settings:
 
+- `enabled`: site chat on/off
+- `show_floating_bubble`: floating bubble in CPN Panel (default on when Active)
 - `visibility`: `admins_only` | `all_authenticated` | `packages`
 - `package_ids`: comma list when visibility is `packages`
 - `allow_user_keys`: let users store their own provider API keys
 - `default_provider`: `free` | `openai` | `anthropic` | `custom` | `local`
 - `rate_limit_per_hour`: basic abuse control
+
+## Floating bubble (CPN Panel)
+
+When the panel supports plugin float widgets and this plugin is Active:
+
+1. Keep **Enable Mr Agent chat** and **Show floating chat bubble** checked.
+2. Set **visibility** so your signed-in panel account is allowed.
+3. Refresh any CPN Panel page: a bottom-right **Mr A** bubble opens a compact chat (free helper via panel bridge). **Expand** opens the full site UI at `/mr-agent`.
+
+**Show in sidebar** only adds an Installed plugins nav link (dashboard). It is not the floating bubble. The sidebar footer speech icon is **Feedback**, not Mr Agent.
 
 ## Uninstall
 

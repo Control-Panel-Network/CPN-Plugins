@@ -63,6 +63,14 @@ Or install from Store after this plugin lands on `main` and the catalog cache re
 - No `shell_exec` / command tools in MVP
 - Plugin root `.htaccess` denies direct access to PHP/modules
 
-## Panel sidebar
+## Panel sidebar vs floating bubble
 
-Enable **Show in sidebar** in Plugin settings. The panel dashboard for plugins is status-oriented today; day-to-day chat is at `/mr-agent`.
+| Control | Effect |
+|---------|--------|
+| **Show in sidebar** | Nav link under Installed plugins (plugin dashboard) |
+| **Show floating chat bubble** | Bottom-right **Mr A** widget on CPN Panel pages (ACL gated) |
+| Sidebar footer speech icon | CPN **Feedback**, not Mr Agent |
+
+Day-to-day full chat remains at `/mr-agent` after `install.sh`. Compact panel chat uses `modules/panel_bridge.php` (CLI) via the panel float-chat route.
+
+Requires a CPN Panel build that injects Active plugin float assets (`panel_float` / `public/assets/panel-float/`).
