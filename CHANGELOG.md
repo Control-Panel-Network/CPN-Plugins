@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-08] - Mr Agent tabbed settings and statistics
+
+### Added
+- **mrAgent** (1.7.0 -> **1.8.0**): Tabbed owner settings (General, Access, AI / Providers, Storage, Statistics). Privacy-safe Statistics via `?api=stats` and panel_bridge `stats` (conversation/message counts, 7d/30d, storage vs limit, distinct users, last activity as dd/mm/yyyy HH:mm; no message bodies). Host policy shown read-only on Access (edit in CPN Panel Host settings).
+
 ## [2026-10-08] - Mr Agent panel setup (no Operator notes)
 
 ### Changed

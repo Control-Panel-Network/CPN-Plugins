@@ -1,5 +1,11 @@
 # Mr Agent changelog (plugin-local)
 
+## 1.8.0 (08/10/2026)
+
+- Tabbed owner settings: General, Access, AI / Providers, Storage, Statistics
+- Privacy-safe Statistics tab and `?api=stats` / panel_bridge `stats` (counts, storage vs limit, distinct users, last activity as dd/mm/yyyy HH:mm; no message bodies)
+- Host policy shown read-only on Access tab (edit in CPN Panel Host settings)
+
 ## 1.7.0 (08/10/2026)
 
 - Removed Operator notes settings field (no CLI dump in Plugin settings)

@@ -146,6 +146,85 @@
     }
   }
 
+  var ownerTabs = document.getElementById("mra-owner-tabs");
+  if (ownerTabs) {
+    function activateOwnerTab(id, push) {
+      var tabs = [].slice.call(ownerTabs.querySelectorAll("[data-mra-tab]"));
+      var panels = [].slice.call(ownerTabs.querySelectorAll("[data-mra-panel]"));
+      var known = tabs.some(function (t) {
+        return t.getAttribute("data-mra-tab") === id;
+      });
+      if (!known) id = "general";
+      tabs.forEach(function (btn) {
+        var on = btn.getAttribute("data-mra-tab") === id;
+        btn.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      panels.forEach(function (p) {
+        var on = p.getAttribute("data-mra-panel") === id;
+        if (on) p.removeAttribute("hidden");
+        else p.setAttribute("hidden", "hidden");
+      });
+      if (push) {
+        try {
+          var u = new URL(window.location.href);
+          u.searchParams.set("tab", id);
+          history.replaceState(null, "", u.toString());
+        } catch (e) {}
+      }
+      if (id === "statistics") loadOwnerStats();
+    }
+    function loadOwnerStats() {
+      var box = document.getElementById("mra-stats-body");
+      if (!box || box.getAttribute("data-loaded") === "1") return;
+      box.textContent = "Loading statistics…";
+      api("?api=stats")
+        .then(function (s) {
+          if (s.empty) {
+            box.innerHTML =
+              '<p class="muted">No chat activity yet. Statistics appear after the first conversation.</p>';
+          } else {
+            function card(label, value) {
+              return (
+                '<div class="mra-stat"><div class="label">' +
+                label +
+                '</div><div class="value">' +
+                value +
+                "</div></div>"
+              );
+            }
+            var html = '<div class="mra-stats-grid">';
+            html += card("Conversations", String(s.conversations_total || 0));
+            html += card("Messages", String(s.messages_total || 0));
+            html += card("Conversations (7d)", String(s.conversations_7d || 0));
+            html += card("Messages (7d)", String(s.messages_7d || 0));
+            html += card("Conversations (30d)", String(s.conversations_30d || 0));
+            html += card("Messages (30d)", String(s.messages_30d || 0));
+            html += card("Distinct users", String(s.distinct_users || 0));
+            html += card(
+              "Storage",
+              (s.storage_mb != null ? s.storage_mb : 0) + " / " + (s.storage_limit_mb || 50) + " MB"
+            );
+            html += card("Last activity", s.last_activity || "n/a");
+            html += "</div>";
+            html +=
+              '<p class="muted" style="margin-top:12px;">Privacy-safe counts only. Message bodies and secrets are never shown.</p>';
+            box.innerHTML = html;
+          }
+          box.setAttribute("data-loaded", "1");
+        })
+        .catch(function (err) {
+          box.textContent = (err && err.message) || "Could not load statistics";
+        });
+    }
+    ownerTabs.addEventListener("click", function (ev) {
+      var btn = ev.target.closest("[data-mra-tab]");
+      if (!btn || !ownerTabs.contains(btn)) return;
+      activateOwnerTab(btn.getAttribute("data-mra-tab"), true);
+    });
+    var initial = ownerTabs.getAttribute("data-initial-tab") || "general";
+    activateOwnerTab(initial, false);
+  }
+
   var ownerForm = document.getElementById("mra-owner-form");
   if (ownerForm) {
     function setNum(id, val) {
@@ -158,6 +237,7 @@
       .then(function (res) {
         var s = res.settings || {};
         var disk = res.storage || {};
+        var hp = res.host_policy || {};
         if (document.getElementById("mra-enabled")) {
           document.getElementById("mra-enabled").checked = !!s.plugin_enabled;
         }
@@ -203,24 +283,26 @@
             (s.max_chat_disk_mb || 50) +
             " MB)";
         }
-        if (me.local_base_url && document.getElementById("mra-local-base")) {
-          document.getElementById("mra-local-base").value = me.local_base_url;
-        }
-        if (me.local_model && document.getElementById("mra-local-model")) {
-          document.getElementById("mra-local-model").value = me.local_model;
+        var hpEl = document.getElementById("mra-host-policy");
+        if (hpEl) {
+          hpEl.textContent =
+            "Allow host chat: " +
+            (hp.allow_host_chat ? "On" : "Off") +
+            " · Allow site install: " +
+            (hp.allow_site_install ? "On" : "Off");
         }
         if (document.getElementById("mra-local-only")) {
-          document.getElementById("mra-local-only").checked = !!me.local_only_mode;
+          document.getElementById("mra-local-only").checked = !!s.local_only_mode;
         }
         if (document.getElementById("mra-local-lan")) {
-          document.getElementById("mra-local-lan").checked = !!me.local_allow_lan;
+          document.getElementById("mra-local-lan").checked = !!s.local_allow_lan;
         }
       })
       .catch(function () {
         api("?api=me")
-          .then(function (me) {
-            if (me.default_provider) {
-              document.getElementById("mra-default-provider").value = me.default_provider;
+          .then(function (meRes) {
+            if (meRes.default_provider) {
+              document.getElementById("mra-default-provider").value = meRes.default_provider;
             }
           })
           .catch(function () {});
