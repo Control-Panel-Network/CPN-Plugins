@@ -6,7 +6,7 @@ AI chat assistant for **CPN Panel**. Users connect their own **provider API keys
 - Display name: Mr Agent
 - Author: master3395
 - Pricing: free
-- Version: 1.6.0
+- Version: 1.7.0
 - Catalog scope: **dual** (Host + Site)
 
 ## MCP vs skills (tell others this)
@@ -26,27 +26,34 @@ AI chat assistant for **CPN Panel**. Users connect their own **provider API keys
 | **Site folder** (default) | Site managers | `/mr-agent/` under docroot; index kept | No |
 | **Site vhost** | Confirmed only | Docroot points at Mr Agent `public/` | Yes |
 
+**Preferred:** Install or Activate from the Plugin Store. CPN Panel runs setup automatically (secrets, folder publish, host finalize). On Plugin settings, use **Run setup** / **Publish folder** and **Prune chat logs**. No SSH is required for normal use.
+
 If Host is not installed, site users can still Install on their site.
 
 ### Host
 
-Plugins → Store → Install target **Host** → **Install on Host**, or `sudo bash install-host.sh`.
+Plugins → Store → Install target **Host** → **Install on Host**.
 
 ### Site folder
 
-```bash
-INSTALL_MODE=folder sudo bash /home/<domain>/plugins/mrAgent/install.sh <domain>
-```
-
-Preferred full chat: CPN `/plugins/mr-agent?domain=<domain>`. Optional site URL: `https://<domain>/mr-agent`.
+Plugins → Store → Install target **Site** → choose domain → Install (folder mode is default). Preferred full chat: CPN `/plugins/mr-agent?domain=<domain>`. Optional site URL: `https://<domain>/mr-agent`.
 
 ### Site vhost (never silent)
 
-```bash
-INSTALL_MODE=vhost CONFIRM=yes sudo bash /home/<domain>/plugins/mrAgent/install.sh <domain>
-```
+In the Store Install form, choose vhost and tick **Confirm vhost takeover**. The panel never switches docroot without that confirm.
 
 Sign in as `owner` (or `admin` / `cpnowner`) with `/var/lib/cpn/mr-agent/<domain>/access.password` (Host: `_host`).
+
+### Optional operator CLI
+
+Advanced operators may still run scripts from SSH (documented only; not shown in Plugin settings):
+
+```bash
+INSTALL_MODE=folder sudo bash /home/<domain>/plugins/mrAgent/install.sh <domain>
+INSTALL_MODE=vhost CONFIRM=yes sudo bash /home/<domain>/plugins/mrAgent/install.sh <domain>
+sudo bash /var/lib/cpn/host-plugins/mrAgent/install-host.sh
+php /home/<domain>/plugins/mrAgent/modules/cli_prune.php <domain>
+```
 
 ## Free lightweight (MVP)
 
@@ -115,7 +122,7 @@ Configure in CPN Plugin settings and/or Mr Agent Owner settings:
 - `local_max_response_bytes`: refuse oversized local replies (default **1048576**)
 - `max_upload_bytes`: refuse huge POST bodies (default **262144**)
 
-Chat logs are written under `/var/lib/cpn/mr-agent/<domain>/chats/` (mode 600). Prune runs on each chat send, on owner settings save, during `install.sh`, via bridge action `prune`, or:
+Chat logs are written under `/var/lib/cpn/mr-agent/<domain>/chats/` (mode 600). Prune runs on each chat send, on owner settings save, during panel setup / `install.sh`, via bridge action `prune`, the Plugin settings **Prune chat logs** button, or optional CLI:
 
 ```bash
 php /home/<domain>/plugins/mrAgent/modules/cli_prune.php <domain>

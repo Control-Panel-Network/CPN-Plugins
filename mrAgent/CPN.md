@@ -79,22 +79,26 @@ Verify: `php modules/cli_scope_check.php` (two fake users + admin).
 |------|------|
 | `/var/lib/cpn/host-plugins/mrAgent/` | Host catalog install (when panel Host target is used) |
 | `/home/<domain>/plugins/mrAgent/` | Site catalog install tree |
-| `/home/<domain>/public_html/mr-agent` | Symlink to `public/` after `install.sh` |
+| `/home/<domain>/public_html/mr-agent` | Symlink to `public/` after panel setup / `install.sh` |
 | `/var/lib/cpn/mr-agent/<domain>/` | Site secrets, keys, owner settings (mode 700/600) |
 | `/var/lib/cpn/mr-agent/_host/` | Host secrets when installed on Host |
 | `/var/lib/cpn/mr-agent/<domain>/chats/` | Conversation JSON (pruned by retention/count/disk MB) |
 | `/var/lib/cpn/mr-agent/<domain>/locks/` | Concurrent-request lock files |
 | `settings.json` (plugin dir) | CPN panel plugin settings fields |
 
-## Sideload (without Store cache)
+## Install (preferred: Plugin Store)
+
+1. Plugins → Store → Install (Host or Site). Panel runs setup automatically.
+2. Plugin settings → **Run setup** / **Publish folder** to re-publish; **Prune chat logs** to reclaim disk.
+3. Open chat at `/plugins/mr-agent` or optional site `/mr-agent/` after folder publish.
+
+### Optional operator CLI (docs only)
 
 ```bash
-# Copy folder into the site plugins directory, then:
+# Sideload without Store cache, then:
 sudo bash /home/<domain>/plugins/mrAgent/install.sh <domain>
 sudo rm -f /var/lib/cpn/plugin-catalog-cache.json
 ```
-
-Or install from Store after this plugin lands on `main` and the catalog cache refreshes.
 
 ## Security
 
@@ -116,7 +120,7 @@ Opportunistic prune keeps chat logs under owner caps:
 2. If count exceeds `max_stored_conversations`, delete oldest
 3. If `chats/` exceeds `max_chat_disk_mb`, delete oldest until under cap
 
-Triggers: chat send, owner settings save, `install.sh`, bridge `action=prune`, or `php modules/cli_prune.php <domain>|--all`.
+Triggers: chat send, owner settings save, panel setup / `install.sh`, bridge `action=prune`, Plugin settings **Prune chat logs**, or optional `php modules/cli_prune.php <domain>|--all`.
 
 ## Panel sidebar vs floating bubble
 
@@ -126,7 +130,7 @@ Triggers: chat send, owner settings save, `install.sh`, bridge `action=prune`, o
 | **Show floating chat bubble** | Bottom-right **Mr A** widget on CPN Panel pages (ACL gated) |
 | Sidebar footer speech icon | CPN **Feedback**, not Mr Agent |
 
-Day-to-day full chat remains at `/mr-agent` after `install.sh`. Compact panel chat uses `modules/panel_bridge.php` (CLI) via the panel float-chat route.
+Day-to-day full chat: panel `/plugins/mr-agent` (preferred) or site `/mr-agent/` after folder publish. Compact panel chat uses `modules/panel_bridge.php` (CLI) via the panel float-chat route.
 
 Requires a CPN Panel build that injects Active plugin float assets (`panel_float` / `public/assets/panel-float/`).
 
@@ -155,22 +159,26 @@ Triggers: chat send, owner settings save, `install.sh`, bridge `action=prune`, o
 |------|------|
 | `/var/lib/cpn/host-plugins/mrAgent/` | Host catalog install (when panel Host target is used) |
 | `/home/<domain>/plugins/mrAgent/` | Site catalog install tree |
-| `/home/<domain>/public_html/mr-agent` | Symlink to `public/` after `install.sh` |
+| `/home/<domain>/public_html/mr-agent` | Symlink to `public/` after panel setup / `install.sh` |
 | `/var/lib/cpn/mr-agent/<domain>/` | Site secrets, keys, owner settings (mode 700/600) |
 | `/var/lib/cpn/mr-agent/_host/` | Host secrets when installed on Host |
 | `/var/lib/cpn/mr-agent/<domain>/chats/` | Conversation JSON (pruned by retention/count/disk MB) |
 | `/var/lib/cpn/mr-agent/<domain>/locks/` | Concurrent-request lock files |
 | `settings.json` (plugin dir) | CPN panel plugin settings fields |
 
-## Sideload (without Store cache)
+## Install (preferred: Plugin Store)
+
+1. Plugins → Store → Install (Host or Site). Panel runs setup automatically.
+2. Plugin settings → **Run setup** / **Publish folder** to re-publish; **Prune chat logs** to reclaim disk.
+3. Open chat at `/plugins/mr-agent` or optional site `/mr-agent/` after folder publish.
+
+### Optional operator CLI (docs only)
 
 ```bash
-# Copy folder into the site plugins directory, then:
+# Sideload without Store cache, then:
 sudo bash /home/<domain>/plugins/mrAgent/install.sh <domain>
 sudo rm -f /var/lib/cpn/plugin-catalog-cache.json
 ```
-
-Or install from Store after this plugin lands on `main` and the catalog cache refreshes.
 
 ## Security
 

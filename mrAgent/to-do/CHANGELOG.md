@@ -1,5 +1,12 @@
 # Mr Agent changelog (plugin-local)
 
+## 1.7.0 (08/10/2026)
+
+- Removed Operator notes settings field (no CLI dump in Plugin settings)
+- Panel Install / Activate / Enable runs setup (secrets + folder or confirmed vhost publish)
+- Plugin settings actions: Run setup / Publish folder, Prune chat logs (panel-mediated)
+- CLI `install.sh` / `cli_prune.php` remain in README for operators only
+
 ## 1.6.0 (08/10/2026)
 
 - Host/Site install modes: dual catalog scope, `install-host.sh`, folder publish under `/mr-agent/`

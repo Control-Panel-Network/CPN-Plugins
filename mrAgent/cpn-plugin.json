@@ -3,8 +3,8 @@
   "id": "mrAgent",
   "name": "Mr Agent",
   "category": "Utility",
-  "version": "1.6.0",
-  "description": "AI chat for CPN. Host or Site install with per-user Host isolation. Folder /mr-agent/ by default; vhost takeover only with confirm. MCP skills, floating bubble, storage/resource limits. Local LLM (Ollama/LM Studio/Bionic) first-class.",
+  "version": "1.7.0",
+  "description": "AI chat for CPN. Host or Site install with per-user Host isolation. Folder /mr-agent/ by default; vhost takeover only with confirm. Panel Install/Activate runs setup (no SSH). MCP skills, floating bubble, storage/resource limits. Local LLM first-class.",
   "keywords": [
     "ai",
     "mcp",
@@ -159,12 +159,6 @@
       "label": "Max HTTP request body bytes (refuse huge uploads)",
       "field_type": "number",
       "default": "262144"
-    },
-    {
-      "key": "notes",
-      "label": "Operator notes (optional)",
-      "field_type": "text",
-      "default": "Host: no site takeover. Site folder: /mr-agent/. Vhost: CONFIRM=yes. Prune: php modules/cli_prune.php <domain>"
     },
     {
       "key": "local_base_url",

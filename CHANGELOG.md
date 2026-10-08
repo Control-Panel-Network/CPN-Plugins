@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-08] - Mr Agent panel setup (no Operator notes)
+
+### Changed
+- **mrAgent** (1.6.0 -> **1.7.0**): Removed Operator notes settings field (no `install.sh` / prune CLI dump in Plugin settings). Store Install / Activate / Enable runs setup via the panel. Settings actions: Run setup / Publish folder and Prune chat logs. Optional SSH scripts stay in README only.
+
 ## [2026-10-08] - Mr Agent Host/Site install modes
 
 ### Added

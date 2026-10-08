@@ -2,8 +2,8 @@
 <plugin>
     <name>Mr Agent</name>
     <type>Utility</type>
-    <version>1.6.0</version>
-    <description>AI chat for CPN. Host or Site install with per-user Host isolation. Folder /mr-agent/ by default; vhost takeover only with CONFIRM=yes. MCP skills, floating bubble, storage/resource limits.</description>
+    <version>1.7.0</version>
+    <description>AI chat for CPN. Host or Site install with per-user Host isolation. Folder /mr-agent/ by default; vhost takeover only with CONFIRM=yes. Panel Install/Activate runs setup (no SSH). MCP skills, floating bubble, storage/resource limits.</description>
     <keywords>ai, mcp, skills, assistant, openai, anthropic, chatbot, model context protocol, host install, mr-agent</keywords>
     <keyword>ai</keyword>
     <keyword>mcp</keyword>
@@ -43,7 +43,8 @@
         <feature>Floating chat bubble in CPN Panel when enabled and ACL allows</feature>
         <feature>Provider API keys stored under /var/lib/cpn/mr-agent/ (mode 600)</feature>
         <feature>Storage and resource limits: retention, disk MB cap, rate/token/concurrency, local timeouts</feature>
-        <feature>CLI prune for chat logs under /var/lib/cpn/mr-agent/&lt;domain&gt;/chats/</feature>
+        <feature>Panel Prune chat logs button (optional CLI under /var/lib/cpn/mr-agent/&lt;domain&gt;/chats/)</feature>
+        <feature>Panel Install/Activate runs setup without SSH Operator notes</feature>
         <feature>Host install: panel chat without site docroot takeover</feature>
         <feature>Site folder mode under /mr-agent/ without replacing the site index</feature>
         <feature>Optional vhost mode with explicit CONFIRM=yes (never silent)</feature>
