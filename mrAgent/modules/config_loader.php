@@ -43,7 +43,20 @@ function mra_config()
         return $cfg;
     }
 
-    $defaults = [
+    $limitDefaults = function_exists('mra_limit_defaults') ? mra_limit_defaults() : [
+        'rate_limit_per_hour' => 60,
+        'max_history_messages' => 100,
+        'max_stored_conversations' => 200,
+        'chat_retention_days' => 30,
+        'max_chat_disk_mb' => 50,
+        'max_tokens_per_reply' => 1024,
+        'max_message_length' => 4000,
+        'concurrent_requests' => 2,
+        'local_timeout_seconds' => 45,
+        'local_max_response_bytes' => 1048576,
+        'max_upload_bytes' => 262144,
+    ];
+    $defaults = array_merge([
         'access_password' => '',
         'openai_api_key' => '',
         'anthropic_api_key' => '',
@@ -58,8 +71,7 @@ function mra_config()
         'package_ids' => '',
         'allow_user_keys' => true,
         'default_provider' => 'free',
-        'rate_limit_per_hour' => 60,
-    ];
+    ], $limitDefaults);
 
     $loaded = [];
     $candidates = [
@@ -89,6 +101,12 @@ function mra_config()
 
     // Overlay panel settings.json when present.
     $panelSettings = mra_load_panel_settings($domain);
+    $intKeys = [
+        'rate_limit_per_hour', 'max_history_messages', 'max_stored_conversations',
+        'chat_retention_days', 'max_chat_disk_mb', 'max_tokens_per_reply',
+        'max_message_length', 'concurrent_requests', 'local_timeout_seconds',
+        'local_max_response_bytes', 'max_upload_bytes',
+    ];
     foreach ([
         'enabled' => 'plugin_enabled',
         'visibility' => 'visibility',
@@ -96,6 +114,16 @@ function mra_config()
         'allow_user_keys' => 'allow_user_keys',
         'default_provider' => 'default_provider',
         'rate_limit_per_hour' => 'rate_limit_per_hour',
+        'max_history_messages' => 'max_history_messages',
+        'max_stored_conversations' => 'max_stored_conversations',
+        'chat_retention_days' => 'chat_retention_days',
+        'max_chat_disk_mb' => 'max_chat_disk_mb',
+        'max_tokens_per_reply' => 'max_tokens_per_reply',
+        'max_message_length' => 'max_message_length',
+        'concurrent_requests' => 'concurrent_requests',
+        'local_timeout_seconds' => 'local_timeout_seconds',
+        'local_max_response_bytes' => 'local_max_response_bytes',
+        'max_upload_bytes' => 'max_upload_bytes',
     ] as $from => $to) {
         if (!array_key_exists($from, $panelSettings)) {
             continue;
@@ -103,8 +131,8 @@ function mra_config()
         $val = $panelSettings[$from];
         if ($to === 'plugin_enabled' || $to === 'allow_user_keys') {
             $cfg[$to] = ($val === '1' || $val === 1 || $val === true || $val === 'true' || $val === 'on');
-        } elseif ($to === 'rate_limit_per_hour') {
-            $cfg[$to] = max(1, (int) $val);
+        } elseif (in_array($to, $intKeys, true)) {
+            $cfg[$to] = (int) $val;
         } else {
             $cfg[$to] = (string) $val;
         }
@@ -122,6 +150,10 @@ function mra_config()
                 }
             }
         }
+    }
+
+    if (function_exists('mra_normalize_limits')) {
+        $cfg = mra_normalize_limits($cfg);
     }
 
     return $cfg;

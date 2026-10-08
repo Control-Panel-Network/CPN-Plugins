@@ -90,6 +90,9 @@ function mra_try_local_chat($message, array $hits, array $cfg)
     }
     $system = 'You are Mr Agent, a helpful CPN Panel assistant. Answer briefly using the route hints. Never invent destructive actions. Never ask for or repeat API keys.';
     $user = "User question:\n" . $message . "\n\nCPN route hints:\n" . $context;
+    $maxTokens = min(500, (int) ($cfg['max_tokens_per_reply'] ?? 1024));
+    $timeout = min(15, (int) ($cfg['local_timeout_seconds'] ?? 45));
+    $maxBytes = (int) ($cfg['local_max_response_bytes'] ?? 1048576);
     $payload = [
         'model' => $model,
         'messages' => [
@@ -97,14 +100,14 @@ function mra_try_local_chat($message, array $hits, array $cfg)
             ['role' => 'user', 'content' => $user],
         ],
         'temperature' => 0.2,
-        'max_tokens' => 500,
+        'max_tokens' => max(64, $maxTokens),
     ];
     $headers = ['Content-Type: application/json'];
     $key = (string) ($cfg['local_api_key'] ?? '');
     if ($key !== '') {
         $headers[] = 'Authorization: Bearer ' . $key;
     }
-    $resp = mra_http_json('POST', $base . '/chat/completions', $payload, $headers, 8);
+    $resp = mra_http_json('POST', $base . '/chat/completions', $payload, $headers, max(5, $timeout), false, $maxBytes);
     if (empty($resp['ok'])) {
         return ['ok' => false];
     }

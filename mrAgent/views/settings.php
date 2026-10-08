@@ -9,7 +9,8 @@ if (!mra_is_owner()) {
 ?>
 <section class="card">
   <h1>Owner settings</h1>
-  <p class="muted">These settings are stored under <code>/var/lib/cpn/mr-agent/&lt;domain&gt;/settings.json</code>. CPN Plugin Store settings (visibility, rate limit) are also read from <code>settings.json</code> next to the plugin when present.</p>
+  <p class="muted">These settings are stored under <code>/var/lib/cpn/mr-agent/&lt;domain&gt;/settings.json</code>. CPN Plugin Store settings (visibility, rate limit, retention) are also read from <code>settings.json</code> next to the plugin when present.</p>
+  <p class="muted" id="mra-disk-usage">Chat log disk usage: loading…</p>
   <form id="mra-owner-form" class="stack">
     <label class="check"><input type="checkbox" id="mra-enabled" checked> Enable Mr Agent</label>
     <label>
@@ -35,9 +36,55 @@ if (!mra_is_owner()) {
         <option value="local">Local</option>
       </select>
     </label>
+
+    <h2>Request limits</h2>
     <label>
       Rate limit (messages / hour / user)
-      <input id="mra-rate" type="number" min="1" max="1000" value="60">
+      <input id="mra-rate" type="number" min="1" max="10000" value="60">
+    </label>
+    <label>
+      Max message length (characters)
+      <input id="mra-max-msg" type="number" min="256" max="32000" value="4000">
+    </label>
+    <label>
+      Max tokens per reply
+      <input id="mra-max-tokens" type="number" min="64" max="8192" value="1024">
+    </label>
+    <label>
+      Concurrent requests per user (1 or 2)
+      <input id="mra-concurrent" type="number" min="1" max="2" value="2">
+    </label>
+    <label>
+      Max upload body (bytes)
+      <input id="mra-max-upload" type="number" min="4096" max="2097152" value="262144">
+    </label>
+
+    <h2>Chat storage and retention</h2>
+    <label>
+      Max history messages per conversation
+      <input id="mra-max-history" type="number" min="10" max="500" value="100">
+    </label>
+    <label>
+      Max stored conversations
+      <input id="mra-max-convs" type="number" min="10" max="5000" value="200">
+    </label>
+    <label>
+      Auto-prune older than (days)
+      <input id="mra-retention" type="number" min="1" max="3650" value="30">
+    </label>
+    <label>
+      Max chat log disk (MB under /var/lib/cpn/mr-agent/)
+      <input id="mra-disk-mb" type="number" min="1" max="10240" value="50">
+    </label>
+
+    <h2>Local provider guards</h2>
+    <label>
+      Local request timeout (seconds)
+      <input id="mra-local-timeout" type="number" min="5" max="300" value="45">
+    </label>
+    <label>
+      Local max response bytes
+      <input id="mra-local-max-bytes" type="number" min="65536" max="16777216" value="1048576">
     </label>
     <label>
       Custom OpenAI-compatible base URL

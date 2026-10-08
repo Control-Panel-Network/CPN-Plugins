@@ -7,6 +7,7 @@ Date: 08/10/2026
 - Site plugin package `mrAgent` with chat UI, providers, ACL, free help corpus
 - Safe tools: search_menu, search_docs, list_providers
 - Secrets under `/var/lib/cpn/mr-agent/<domain>/`
+- Storage/resource caps (1.3.0): retention, disk MB, rate/token/concurrency, local guards, `cli_prune.php`
 
 ## Shipped (1.1.0)
 
