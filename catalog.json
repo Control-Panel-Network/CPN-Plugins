@@ -25,6 +25,7 @@
     { "id": "port_manager", "path": "port_manager" },
     { "id": "postgresManager", "path": "postgresManager" },
     { "id": "premiumPlugin", "path": "premiumPlugin" },
+    { "id": "protonMail", "path": "protonMail" },
     { "id": "redisManager", "path": "redisManager" },
     { "id": "roundcubeWebmail", "path": "roundcubeWebmail" },
     { "id": "snappymailAdmin", "path": "snappymailAdmin" },

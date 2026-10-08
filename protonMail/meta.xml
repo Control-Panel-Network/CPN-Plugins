@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>Proton Mail (external / Bridge)</name>
+    <type>Email</type>
+    <version>1.0.0</version>
+    <description>Unlocks Email → Proton Mail in CPN Panel: Open Proton Mail (https://mail.proton.me), Proton Mail Bridge IMAP/SMTP guidance for local clients, and operator settings. Honest external integration; CPN does not host Proton end-to-end encryption on the server.</description>
+    <keywords>email, proton, protonmail, webmail, bridge, imap, smtp, external</keywords>
+    <keyword>email</keyword>
+    <keyword>proton</keyword>
+    <keyword>protonmail</keyword>
+    <keyword>webmail</keyword>
+    <keyword>bridge</keyword>
+    <keyword>imap</keyword>
+    <author>master3395</author>
+    <website>https://newstargeted.com</website>
+    <license>MIT</license>
+    <category>Email</category>
+    <paid>false</paid>
+    <pricing>free</pricing>
+    <scope>host</scope>
+    <compatibility>
+        <min_version>0.2.0</min_version>
+    </compatibility>
+    <requirements>
+        <software>cpn-panel</software>
+    </requirements>
+    <features>
+        <feature>Enables CPN Email → Proton Mail UI</feature>
+        <feature>Open Proton Mail button (https://mail.proton.me)</feature>
+        <feature>Proton Mail Bridge host/port guidance for IMAP/SMTP</feature>
+        <feature>Operator settings without storing Proton passwords in git</feature>
+    </features>
+    <uninstall_impact>Hides Email → Proton Mail until the plugin is installed again</uninstall_impact>
+    <uninstall_impact>Removes the Open Proton Mail hub and sidebar entry</uninstall_impact>
+    <uninstall_impact>Clears the host proton-mail feature flag</uninstall_impact>
+    <uninstall_impact>Does not delete Proton accounts or Bridge on operator workstations</uninstall_impact>
+    <url>/email/proton</url>
+    <settings_url>/email/proton</settings_url>
+    <released>2026-10-08</released>
+    <updated>2026-10-08</updated>
+    <install_count>0</install_count>
+    <featured>false</featured>
+</plugin>

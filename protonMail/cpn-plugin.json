@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "protonMail",
+  "name": "Proton Mail (external / Bridge)",
+  "category": "Email",
+  "version": "1.0.0",
+  "description": "Unlocks Email → Proton Mail in CPN Panel: Open Proton Mail (mail.proton.me), Bridge IMAP/SMTP guidance, and operator settings. External Proton account; CPN does not host Proton encryption. Free.",
+  "author": "master3395",
+  "pricing": "free",
+  "show_in_sidebar": false,
+  "has_dashboard": false,
+  "uninstall_impacts": [
+    "Hides Email → Proton Mail until the plugin is installed again",
+    "Removes the Open Proton Mail hub/sidebar entry",
+    "Clears the host proton-mail feature flag",
+    "Does not delete Proton accounts or Bridge on operator workstations"
+  ],
+  "settings_fields": [
+    {
+      "key": "account_email",
+      "label": "Proton account email (display only)",
+      "field_type": "text",
+      "default": ""
+    },
+    {
+      "key": "display_name",
+      "label": "Display name (optional)",
+      "field_type": "text",
+      "default": ""
+    },
+    {
+      "key": "open_button_enabled",
+      "label": "Show Open Proton Mail button (1=yes, 0=no)",
+      "field_type": "text",
+      "default": "1"
+    },
+    {
+      "key": "open_button_label",
+      "label": "Custom Open button label (optional)",
+      "field_type": "text",
+      "default": ""
+    },
+    {
+      "key": "bridge_host",
+      "label": "Proton Mail Bridge host",
+      "field_type": "text",
+      "default": "127.0.0.1"
+    },
+    {
+      "key": "bridge_imap_port",
+      "label": "Bridge IMAP port",
+      "field_type": "text",
+      "default": "1143"
+    },
+    {
+      "key": "bridge_smtp_port",
+      "label": "Bridge SMTP port",
+      "field_type": "text",
+      "default": "1025"
+    },
+    {
+      "key": "notes",
+      "label": "Operator notes (optional)",
+      "field_type": "text",
+      "default": ""
+    }
+  ]
+}
