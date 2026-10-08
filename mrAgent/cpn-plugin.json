@@ -4,7 +4,16 @@
   "name": "Mr Agent",
   "category": "Utility",
   "version": "1.0.0",
-  "description": "AI chat assistant for CPN with provider API keys plus a free lightweight CPN help helper.",
+  "description": "AI chat assistant for CPN with MCP (Model Context Protocol) tool calling, provider API keys, plus a free lightweight CPN help helper.",
+  "keywords": [
+    "ai",
+    "mcp",
+    "assistant",
+    "openai",
+    "anthropic",
+    "chatbot",
+    "model context protocol"
+  ],
   "author": "master3395",
   "pricing": "free",
   "show_in_sidebar": true,
