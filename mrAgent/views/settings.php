@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 if (!defined('MRA_INIT')) {
     exit;
 }

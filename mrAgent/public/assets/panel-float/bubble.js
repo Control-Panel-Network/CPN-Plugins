@@ -1,6 +1,6 @@
 /**
  * Mr Agent floating chat bubble for CPN Panel chrome.
- * Boot config: window.CPN_PLUGIN_FLOAT.widgets[] entries for id=mrAgent.
+ * Chat MUST go through panel /plugins/float-chat (same-origin). Never hit site /mr-agent.
  */
 (function () {
   "use strict";
@@ -17,11 +17,21 @@
       break;
     }
   }
-  if (!widget) {
+  if (!widget || document.getElementById("mra-float-root")) {
     return;
   }
-  if (document.getElementById("mra-float-root")) {
-    return;
+
+  function panelChatUrl() {
+    var domain = encodeURIComponent(widget.domain || "");
+    var id = encodeURIComponent(widget.id || "mrAgent");
+    var fromCfg = (widget.chatUrl || "").trim();
+    if (fromCfg.indexOf("/plugins/float-chat") === 0) {
+      return fromCfg;
+    }
+    if (fromCfg.indexOf("plugins/float-chat") === 0) {
+      return "/" + fromCfg;
+    }
+    return "/plugins/float-chat?domain=" + domain + "&id=" + id;
   }
 
   function el(tag, attrs, children) {
@@ -30,8 +40,6 @@
       Object.keys(attrs).forEach(function (k) {
         if (k === "text") {
           node.textContent = attrs[k];
-        } else if (k === "html") {
-          node.innerHTML = attrs[k];
         } else if (k === "className") {
           node.className = attrs[k];
         } else if (attrs[k] !== undefined && attrs[k] !== null) {
@@ -75,7 +83,9 @@
   log.appendChild(
     el("div", {
       className: "mra-float-msg assistant",
-      text: "Ask about CPN menus, websites, packages, or plugins. Free help works without a provider API key.",
+      text:
+        "Ask about CPN menus, or general chat if a local model is configured on this server. " +
+        "Free helper = CPN navigation. Local LLM / cloud keys = text generation. MCP skills = panel tools.",
     })
   );
   var input = el("input", {
@@ -98,9 +108,7 @@
   function setOpen(open) {
     root.classList.toggle("is-open", open);
     btn.setAttribute("aria-expanded", open ? "true" : "false");
-    if (open) {
-      input.focus();
-    }
+    if (open) input.focus();
   }
 
   btn.addEventListener("click", function () {
@@ -111,8 +119,7 @@
   });
 
   function addMsg(role, text) {
-    var row = el("div", { className: "mra-float-msg " + role, text: text || "" });
-    log.appendChild(row);
+    log.appendChild(el("div", { className: "mra-float-msg " + role, text: text || "" }));
     log.scrollTop = log.scrollHeight;
   }
 
@@ -123,19 +130,26 @@
     addMsg("user", message);
     input.value = "";
     send.disabled = true;
-    fetch(widget.chatUrl, {
+    fetch(panelChatUrl(), {
       method: "POST",
       credentials: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message: message, provider: "free", model: "" }),
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ message: message, provider: "auto", model: "" }),
     })
       .then(function (res) {
-        return res.json().then(function (data) {
+        return res.text().then(function (raw) {
+          var data = {};
+          try {
+            data = raw ? JSON.parse(raw) : {};
+          } catch (e) {
+            throw new Error(
+              res.ok
+                ? "Invalid JSON from float-chat"
+                : "Chat proxy HTTP " + res.status + " (update panel float-chat route)"
+            );
+          }
           if (!res.ok || data.ok === false) {
-            throw new Error((data && data.error) || "Chat failed");
+            throw new Error((data && data.error) || "Chat failed (HTTP " + res.status + ")");
           }
           return data;
         });
@@ -144,7 +158,13 @@
         addMsg("assistant", data.reply || "(empty reply)");
       })
       .catch(function (err) {
-        addMsg("err", (err && err.message) || "Chat failed");
+        var msg = (err && err.message) || "Chat failed";
+        if (msg === "Failed to fetch" || /NetworkError|Load failed/i.test(msg)) {
+          msg =
+            "Failed to reach panel float-chat proxy. Use relative /plugins/float-chat " +
+            "(not the site /mr-agent URL). Refresh after updating the panel build.";
+        }
+        addMsg("err", msg);
       })
       .then(function () {
         send.disabled = false;

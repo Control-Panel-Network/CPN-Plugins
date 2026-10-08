@@ -82,6 +82,15 @@ if [[ ! -f "${SECRET_DIR}/keys.json" ]]; then
   chmod 600 "${SECRET_DIR}/keys.json"
 fi
 
+mkdir -p "${SECRET_DIR}/chats" "${SECRET_DIR}/locks"
+chmod 700 "${SECRET_DIR}/chats" "${SECRET_DIR}/locks"
+
+# Opportunistic prune so chat logs stay under owner disk/retention caps.
+if command -v php >/dev/null 2>&1 && [[ -f "${PLUGIN_SRC}/modules/cli_prune.php" ]]; then
+  log "Pruning Mr Agent chat logs for ${DOMAIN}..."
+  php "${PLUGIN_SRC}/modules/cli_prune.php" "${DOMAIN}" >/dev/null 2>&1 || true
+fi
+
 # Prefer OLS/LSE: ensure .php is executed under the symlink target.
 if command -v systemctl >/dev/null 2>&1; then
   if systemctl is-active --quiet lsws 2>/dev/null || systemctl is-active --quiet lshttpd 2>/dev/null; then
@@ -92,4 +101,5 @@ fi
 
 log "OK: open https://${DOMAIN}/mr-agent"
 log "Sign in with username owner (or admin) and the access password from ${SECRET_DIR}/access.password"
-log "CPN Plugin settings: visibility, package_ids, allow_user_keys, rate_limit_per_hour"
+log "CPN Plugin settings: visibility, package_ids, allow_user_keys, rate_limit_per_hour, retention/disk caps"
+log "Manual prune: php ${PLUGIN_SRC}/modules/cli_prune.php ${DOMAIN}"

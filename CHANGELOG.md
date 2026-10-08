@@ -5,6 +5,16 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-08] - Mr Agent storage and resource limits
+
+### Added
+- **mrAgent** (1.2.0 → **1.3.0**): Owner storage/resource restrictions so chat cannot clog host disk or abuse concurrency. New settings (Store fields + Owner UI): `max_history_messages` (100), `max_stored_conversations` (200), `chat_retention_days` (30), `max_chat_disk_mb` (50), `max_tokens_per_reply` (1024), `max_message_length` (4000), `concurrent_requests` (1 or 2, default 2), `local_timeout_seconds` (45), `local_max_response_bytes` (1 MiB), `max_upload_bytes` (256 KiB); keeps `rate_limit_per_hour` (60). Conversations under `/var/lib/cpn/mr-agent/<domain>/chats/`; opportunistic prune on chat send, settings save, `install.sh`, bridge `prune`, and `modules/cli_prune.php`. HTTP client caps request/response bytes; local provider uses timeout + max response bytes.
+
+## [2026-10-08] - Mr Agent local LLM + smarter free path
+
+### Added
+- **mrAgent** (1.2.0 → **1.3.0**): Local LLM is a first-class provider (Ollama / LM Studio / Bionic / any OpenAI-compatible on the CPN server). Owner settings: `local_base_url`, `local_model`, `local_only_mode`, `local_allow_lan`. Free/auto routing prefers local for general chat; CPN help only for panel navigation (no more unrelated websites dumps for "what day is it"). Float bubble always uses panel `/plugins/float-chat` proxy with `provider=auto`. Documents that the browser cannot reach Windows Ollama unless exposed to the server.
+
 ## [2026-10-08] - Mr Agent floating bubble
 
 ### Added

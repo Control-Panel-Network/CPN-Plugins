@@ -4,36 +4,56 @@ if (!defined('MRA_INIT')) {
 }
 
 /**
- * Free lightweight path: CPN-aware help/search without a paid provider API key.
- * Optionally tries a local OpenAI-compatible endpoint if configured and reachable.
+ * Free lightweight path: CPN help/search without a cloud provider API key.
+ * General chat prefers a configured local model; never dumps unrelated CPN
+ * route lists for non-panel questions.
  *
  * @param array<string,mixed> $cfg
- * @return array{ok:bool,reply:string,provider:string,tools_used:array}
+ * @return array<string,mixed>
  */
 function mra_free_reply($message, array $cfg, $username)
 {
     $message = trim((string) $message);
     $toolsUsed = [];
-
-    // Always run corpus search for grounding.
     $hits = mra_search_corpus($message, 6);
     $toolsUsed[] = ['tool' => 'search_menu', 'count' => count($hits)];
+    $isCpn = mra_looks_like_cpn_query($message, $hits);
 
-    // Optional tiny local model (Ollama / LM Studio style). Fail soft.
-    $local = mra_try_local_chat($message, $hits, $cfg);
+    $local = mra_try_local_chat($message, $isCpn ? $hits : [], $cfg);
     if (!empty($local['ok']) && !empty($local['reply'])) {
         return [
             'ok' => true,
             'reply' => (string) $local['reply'],
             'provider' => 'local',
+            'model' => isset($local['model']) ? (string) $local['model'] : (string) ($cfg['local_model'] ?? ''),
             'tools_used' => $toolsUsed,
         ];
     }
 
-    $reply = mra_format_help_reply($message, $hits);
+    if (!empty($cfg['local_only_mode'])) {
+        $base = (string) ($cfg['local_base_url'] ?? 'http://127.0.0.1:11434/v1');
+        $err = isset($local['error']) ? (string) $local['error'] : 'Local model is not reachable.';
+        return [
+            'ok' => false,
+            'error' => 'Local-only mode is on, but the local model failed: ' . $err
+                . ' Point local_base_url at Ollama/LM Studio/Bionic on this server (e.g. ' . $base . ').',
+            'provider' => 'local',
+            'tools_used' => $toolsUsed,
+        ];
+    }
+
+    if ($isCpn && !empty($hits)) {
+        return [
+            'ok' => true,
+            'reply' => mra_format_help_reply($message, $hits),
+            'provider' => 'free',
+            'tools_used' => $toolsUsed,
+        ];
+    }
+
     return [
         'ok' => true,
-        'reply' => $reply,
+        'reply' => mra_format_free_general_unavailable($message, $cfg),
         'provider' => 'free',
         'tools_used' => $toolsUsed,
     ];
@@ -42,15 +62,36 @@ function mra_free_reply($message, array $cfg, $username)
 /**
  * @param array<int,array<string,mixed>> $hits
  */
+function mra_looks_like_cpn_query($message, array $hits)
+{
+    $q = strtolower(trim((string) $message));
+    if ($q === '') {
+        return false;
+    }
+    if (preg_match('/\b(where|how|open|find|show|manage|list|goto|go to)\b.{0,40}\b(website|websites|email|plugin|plugins|docker|package|packages|ssl|dns|firewall|fail2ban|php|user|users|backup|wordpress|mail|domain|subdomain|settings|sidebar|panel|cpn)\b/i', $q)) {
+        return true;
+    }
+    if (preg_match('/\b(cpn|panel|websites?\/list|\/websites|\/email|\/plugins|\/docker|\/packages|open\s*litespeed|litespeed|phpmyadmin)\b/i', $q)) {
+        return true;
+    }
+    if (empty($hits)) {
+        return false;
+    }
+    return ((int) ($hits[0]['score'] ?? 0)) >= 6;
+}
+
+/**
+ * @param array<int,array<string,mixed>> $hits
+ */
 function mra_format_help_reply($message, array $hits)
 {
     $lines = [];
-    $lines[] = 'Mr Agent free helper (no provider API key required).';
+    $lines[] = 'Mr Agent free helper (CPN navigation; no cloud provider API key required).';
     $lines[] = '';
     if (empty($hits)) {
         $lines[] = 'I could not find a matching CPN menu item for: "' . $message . '".';
         $lines[] = 'Try words like websites, email, plugins, fail2ban, docker, ssl, users, or packages.';
-        $lines[] = 'For richer answers, add an OpenAI or Anthropic provider API key in Settings.';
+        $lines[] = 'For general chat (dates, small talk), configure a local model on this server, or add a cloud provider API key.';
         return implode("\n", $lines);
     }
     $lines[] = 'Here is where to look in CPN Panel:';
@@ -68,53 +109,71 @@ function mra_format_help_reply($message, array $hits)
 }
 
 /**
- * Best-effort local OpenAI-compatible call. Never throws to the user as a hard failure.
- *
+ * @param array<string,mixed> $cfg
+ */
+function mra_format_free_general_unavailable($message, array $cfg)
+{
+    $base = (string) ($cfg['local_base_url'] ?? 'http://127.0.0.1:11434/v1');
+    $model = (string) ($cfg['local_model'] ?? 'llama3.2:1b');
+    $lines = [];
+    $lines[] = 'Mr Agent free helper only answers CPN Panel navigation (menus, routes, where to click).';
+    $lines[] = '';
+    $lines[] = 'Your question looks like general chat, not a panel lookup:';
+    $lines[] = '"' . $message . '"';
+    $lines[] = '';
+    $lines[] = 'To answer this without a cloud provider API key:';
+    $lines[] = '1. Install Ollama, LM Studio, or Bionic on the CPN server (not only on your Windows PC).';
+    $lines[] = '2. Set Local base URL to something like ' . $base . ' (LM Studio often uses http://127.0.0.1:1235/v1).';
+    $lines[] = '3. Set Local model to ' . $model . ' (or your pulled model name).';
+    $lines[] = '4. Or pick Provider = Local in the full /mr-agent UI.';
+    $lines[] = '';
+    $lines[] = 'MCP skills are tools into CPN (search menus, list websites). They are not a substitute for a text-generating model.';
+    return implode("\n", $lines);
+}
+
+/**
  * @param array<int,array<string,mixed>> $hits
- * @return array{ok:bool,reply?:string}
+ * @param array<string,mixed> $cfg
+ * @return array{ok:bool,reply?:string,error?:string,model?:string}
  */
 function mra_try_local_chat($message, array $hits, array $cfg)
 {
     $base = rtrim((string) ($cfg['local_base_url'] ?? ''), '/');
     if ($base === '') {
-        return ['ok' => false];
+        return ['ok' => false, 'error' => 'Local base URL not set'];
     }
-    // Only allow loopback for free/local path to avoid SSRF.
-    if (!preg_match('#^https?://(127\.0\.0\.1|localhost)(:\d+)?(/|$)#i', $base)) {
-        return ['ok' => false];
+    if (function_exists('mra_local_base_allowed')) {
+        if (!mra_local_base_allowed($base, $cfg)) {
+            return ['ok' => false, 'error' => 'Local base URL blocked by policy'];
+        }
+    } elseif (!preg_match('#^https?://(127\.0\.0\.1|localhost|::1)(:\d+)?(/|$)#i', $base)) {
+        return ['ok' => false, 'error' => 'Local base URL blocked by policy'];
     }
     $model = (string) ($cfg['local_model'] ?? 'llama3.2:1b');
     $context = '';
     foreach (array_slice($hits, 0, 5) as $hit) {
         $context .= '- ' . ($hit['title'] ?? '') . ' (' . ($hit['path'] ?? '') . '): ' . ($hit['help'] ?? '') . "\n";
     }
-    $system = 'You are Mr Agent, a helpful CPN Panel assistant. Answer briefly using the route hints. Never invent destructive actions. Never ask for or repeat API keys.';
-    $user = "User question:\n" . $message . "\n\nCPN route hints:\n" . $context;
-    $payload = [
-        'model' => $model,
-        'messages' => [
+    $system = 'You are Mr Agent, a helpful assistant inside CPN Panel. '
+        . 'Answer briefly and accurately. '
+        . 'If CPN route hints are provided, use them for panel questions. '
+        . 'For general questions (date, small talk), answer normally. '
+        . 'Never invent destructive admin actions. Never ask for or repeat API keys.';
+    $user = "User question:\n" . $message;
+    if ($context !== '') {
+        $user .= "\n\nCPN route hints:\n" . $context;
+    }
+    if (!function_exists('mra_local_chat_messages')) {
+        return ['ok' => false, 'error' => 'Local endpoint helper missing'];
+    }
+    $timeout = min(15, (int) ($cfg['local_timeout_seconds'] ?? 45));
+    return mra_local_chat_messages(
+        [
             ['role' => 'system', 'content' => $system],
             ['role' => 'user', 'content' => $user],
         ],
-        'temperature' => 0.2,
-        'max_tokens' => 500,
-    ];
-    $headers = ['Content-Type: application/json'];
-    $key = (string) ($cfg['local_api_key'] ?? '');
-    if ($key !== '') {
-        $headers[] = 'Authorization: Bearer ' . $key;
-    }
-    $resp = mra_http_json('POST', $base . '/chat/completions', $payload, $headers, 8);
-    if (empty($resp['ok'])) {
-        return ['ok' => false];
-    }
-    $body = $resp['body'];
-    $text = '';
-    if (isset($body['choices'][0]['message']['content'])) {
-        $text = (string) $body['choices'][0]['message']['content'];
-    }
-    if ($text === '') {
-        return ['ok' => false];
-    }
-    return ['ok' => true, 'reply' => $text];
+        $cfg,
+        $model,
+        $timeout
+    );
 }
