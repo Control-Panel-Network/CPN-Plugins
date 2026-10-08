@@ -5,10 +5,15 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-08] - Mr Agent host policy (panel vs site)
+
+### Added
+- **mrAgent** (1.7.0 -> **1.8.0**): Server-wide host policy at `/var/lib/cpn/mr-agent/host-policy.json`. `allow_host_chat` (default on) for panel bubble and `/plugins/mr-agent`. `allow_site_install` (default off) for Store Site Install. Modes: Off, Panel only, Panel + optional site. Visibility ACL stays separate. Existing site installs are not mass-uninstalled when site install is turned off. Owner UI in Mr Agent settings plus panel `/plugins/mr-agent`.
+
 ## [2026-10-08] - Proton Mail (external / Bridge)
 
 ### Added
-- **protonMail** (**1.0.0**): Host-scoped Email plugin. Unlocks CPN Email → Proton Mail (`/email/proton`): Open Proton Mail (https://mail.proton.me), Bridge IMAP/SMTP guidance, and operator settings. Honest external integration (not a self-hosted Proton stack). Bridge automation is follow-up only (`protonMail/to-do/BRIDGE-FOLLOWUP.md`).
+- **protonMail** (**1.0.0**): Host-scoped Email plugin. Unlocks CPN Email -> Proton Mail (`/email/proton`): Open Proton Mail (https://mail.proton.me), Bridge IMAP/SMTP guidance, and operator settings. Honest external integration (not a self-hosted Proton stack). Bridge automation is follow-up only (`protonMail/to-do/BRIDGE-FOLLOWUP.md`).
 
 ## [2026-10-08] - Mr Agent panel setup (no Operator notes)
 
@@ -136,13 +141,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2026-03-27] - Firewall UI parity (CPN v2.5.5-dev)
 
-### Note (core panel, not this repo’s plugin code)
+### Note (core panel, not this repoÔÇÖs plugin code)
 - **CPN `firewallManager.getBannedIPs`**: Merges **Auto Ban Security Alerts** `AutoBanLog` rows (latest event per IP) when an IP is not already listed from the firewall DB or `banned_ips.json`, so **Security -> Firewall -> Banned IPs** matches bans shown under `/plugins/autoBanSecurityAlerts/settings/`. Synthetic row ids use the form `ablog-<log_pk>`; unban/delete routes through the same IP unban flow and removes the log row.
 
 ## [2026-03-07] - PM2 Manager 1.2.0
 
 ### Fixed
-- **pm2Manager** (1.1.1 -> 1.2.0): Dashboard table column alignment and data placement. Table rows are now built with DOM (`insertRow`/`insertCell`) so ID, App Name, Namespace, Version, Mode, Status, CPU, Memory, Uptime, Restarts, User, Watching, and Actions align correctly with headers. ID column shows only numeric PM2 id (or –). Fixed static file serving: after plugin updates, copy `pm2Manager/static/**` to CPN `STATIC_ROOT` (e.g. `/usr/local/cpn/static/pm2Manager/`) or run `collectstatic` so the panel serves the updated JS/CSS.
+- **pm2Manager** (1.1.1 -> 1.2.0): Dashboard table column alignment and data placement. Table rows are now built with DOM (`insertRow`/`insertCell`) so ID, App Name, Namespace, Version, Mode, Status, CPU, Memory, Uptime, Restarts, User, Watching, and Actions align correctly with headers. ID column shows only numeric PM2 id (or ÔÇô). Fixed static file serving: after plugin updates, copy `pm2Manager/static/**` to CPN `STATIC_ROOT` (e.g. `/usr/local/cpn/static/pm2Manager/`) or run `collectstatic` so the panel serves the updated JS/CSS.
 
 ### Changed
 - **pm2Manager**: Sortable column headers; explicit table and column widths; cache-bust script tag (`dashboard.js?v=15`).

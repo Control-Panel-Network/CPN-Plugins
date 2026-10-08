@@ -11,6 +11,14 @@ if (!mra_is_owner()) {
   <h1>Owner settings</h1>
   <p class="muted">These settings are stored under <code>/var/lib/cpn/mr-agent/&lt;domain&gt;/settings.json</code>. CPN Plugin Store settings (visibility, rate limit, retention) are also read from <code>settings.json</code> next to the plugin when present.</p>
   <p class="muted" id="mra-disk-usage">Chat log disk usage: loading…</p>
+
+  <h2>Host policy (server-wide)</h2>
+  <p class="muted">File: <code>/var/lib/cpn/mr-agent/host-policy.json</code>. Prefer the panel page <code>/plugins/mr-agent</code> (panel owner). Turning off site install does not uninstall existing site copies.</p>
+  <p class="muted" id="mra-host-policy-mode">Current mode: loading…</p>
+  <label class="check"><input type="checkbox" id="mra-allow-host-chat" checked> Allow host chat (panel bubble and /plugins/mr-agent). Default on.</label>
+  <label class="check"><input type="checkbox" id="mra-allow-site-install"> Allow site install (Store users may Install on their sites). Default off.</label>
+  <p class="muted">Visibility below still controls who can use chat when host chat is on.</p>
+
   <form id="mra-owner-form" class="stack">
     <label class="check"><input type="checkbox" id="mra-enabled" checked> Enable Mr Agent</label>
     <label>

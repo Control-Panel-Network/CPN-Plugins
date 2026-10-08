@@ -13,6 +13,7 @@ define('MRA_PLUGIN_ID', 'mrAgent');
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/config_loader.php';
 require_once __DIR__ . '/secrets.php';
+require_once __DIR__ . '/host_policy.php';
 require_once __DIR__ . '/storage.php';
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/acl.php';
