@@ -5,15 +5,15 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2026-10-08] - Mr Agent host policy (panel vs site)
+## [2026-10-08] - Mr Agent host policy, tabbed settings, and statistics
 
 ### Added
-- **mrAgent** (1.7.0 -> **1.8.0**): Server-wide host policy at `/var/lib/cpn/mr-agent/host-policy.json`. `allow_host_chat` (default on) for panel bubble and `/plugins/mr-agent`. `allow_site_install` (default off) for Store Site Install. Modes: Off, Panel only, Panel + optional site. Visibility ACL stays separate. Existing site installs are not mass-uninstalled when site install is turned off. Owner UI in Mr Agent settings plus panel `/plugins/mr-agent`.
+- **mrAgent** (1.7.0 -> **1.8.0**): Server-wide host policy at /var/lib/cpn/mr-agent/host-policy.json. llow_host_chat (default on) for panel bubble and /plugins/mr-agent. llow_site_install (default off) for Store Site Install. Modes: Off, Panel only, Panel + optional site. Visibility ACL stays separate. Existing site installs are not mass-uninstalled when site install is turned off. Owner UI: tabbed settings (General, Access, AI / Providers, Storage, Statistics); host policy read-only on Access (edit in CPN Panel Host settings / /plugins/mr-agent). Privacy-safe Statistics via ?api=stats and panel_bridge stats (counts, storage vs limit, distinct users, last activity as dd/mm/yyyy HH:mm; no message bodies).
 
 ## [2026-10-08] - Proton Mail (external / Bridge)
 
 ### Added
-- **protonMail** (**1.0.0**): Host-scoped Email plugin. Unlocks CPN Email -> Proton Mail (`/email/proton`): Open Proton Mail (https://mail.proton.me), Bridge IMAP/SMTP guidance, and operator settings. Honest external integration (not a self-hosted Proton stack). Bridge automation is follow-up only (`protonMail/to-do/BRIDGE-FOLLOWUP.md`).
+- **protonMail** (**1.0.0**): Host-scoped Email plugin. Unlocks CPN Email -> Proton Mail (/email/proton): Open Proton Mail (https://mail.proton.me), Bridge IMAP/SMTP guidance, and operator settings. Honest external integration (not a self-hosted Proton stack). Bridge automation is follow-up only (protonMail/to-do/BRIDGE-FOLLOWUP.md).
 
 ## [2026-10-08] - Mr Agent panel setup (no Operator notes)
 

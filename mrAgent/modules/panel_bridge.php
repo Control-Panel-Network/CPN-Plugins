@@ -120,6 +120,15 @@ try {
         ]);
     }
 
+    if ($action === 'stats') {
+        if (!mra_is_owner()) {
+            mra_bridge_out(['ok' => false, 'error' => 'Owner only'], 1);
+        }
+        $stats = mra_collect_stats($cfg, $cfg['domain'] ?? null);
+        $stats['version'] = MRA_VERSION;
+        mra_bridge_out($stats);
+    }
+
     // Trusted panel/CLI tool call (same session identity as chat).
     if ($action === 'call_tool' || $action === 'mcp_call') {
         $tool = isset($req['name']) ? (string) $req['name'] : (string) ($req['tool'] ?? '');

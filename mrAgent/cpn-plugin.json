@@ -1,194 +1,188 @@
-﻿{
-    "schema_version":  1,
-    "id":  "mrAgent",
-    "name":  "Mr Agent",
-    "category":  "Utility",
-    "version":  "1.8.0",
-    "description":  "AI chat for CPN. Host policy: allow_host_chat (default on) and allow_site_install (default off). Host or Site install with per-user isolation. Panel Install/Activate runs setup (no SSH). Folder /mr-agent/ by default; vhost with confirm. MCP skills, floating bubble, storage limits, local LLM.",
-    "keywords":  [
-                     "ai",
-                     "mcp",
-                     "skills",
-                     "assistant",
-                     "openai",
-                     "anthropic",
-                     "chatbot",
-                     "model context protocol",
-                     "floating bubble",
-                     "rate limit",
-                     "retention",
-                     "isolation",
-                     "multi-tenant",
-                     "ollama",
-                     "lm studio",
-                     "local llm",
-                     "bionic",
-                     "host install",
-                     "mr-agent"
-                 ],
-    "author":  "master3395",
-    "pricing":  "free",
-    "show_in_sidebar":  true,
-    "has_dashboard":  true,
-    "panel_float":  true,
-    "panel_float_asset":  "public/assets/panel-float/bubble.js",
-    "uninstall_impacts":  [
-                              "Site /mr-agent URL stops working when folder publish is removed",
-                              "Vhost mode restores the previous document root on uninstall.sh",
-                              "Mr Agent app under the site or host plugins folder is removed",
-                              "Floating bubble disappears from CPN Panel",
-                              "Secrets under /var/lib/cpn/mr-agent/ remain until cleaned manually"
-                          ],
-    "settings_fields":  [
-                            {
-                                "key":  "install_mode",
-                                "label":  "Site publish mode: folder (default, /mr-agent/) | vhost (takes over site docroot; needs confirm)",
-                                "field_type":  "text",
-                                "default":  "folder"
-                            },
-                            {
-                                "key":  "expand_via",
-                                "label":  "Bubble Expand target: panel (recommended) | site",
-                                "field_type":  "text",
-                                "default":  "panel"
-                            },
-                            {
-                                "key":  "public_path",
-                                "label":  "Public URL path for site folder mode",
-                                "field_type":  "text",
-                                "default":  "/mr-agent"
-                            },
-                            {
-                                "key":  "enabled",
-                                "label":  "Enable Mr Agent chat for this site",
-                                "field_type":  "checkbox",
-                                "default":  "1"
-                            },
-                            {
-                                "key":  "show_floating_bubble",
-                                "label":  "Show floating chat bubble in CPN Panel",
-                                "field_type":  "checkbox",
-                                "default":  "1"
-                            },
-                            {
-                                "key":  "visibility",
-                                "label":  "Who can use chat: admins_only | all_authenticated | packages",
-                                "field_type":  "text",
-                                "default":  "admins_only"
-                            },
-                            {
-                                "key":  "package_ids",
-                                "label":  "Allowed package ids (comma list when visibility=packages)",
-                                "field_type":  "text",
-                                "default":  ""
-                            },
-                            {
-                                "key":  "allow_user_keys",
-                                "label":  "Allow users to add their own provider API keys",
-                                "field_type":  "checkbox",
-                                "default":  "1"
-                            },
-                            {
-                                "key":  "default_provider",
-                                "label":  "Default provider: free | local | openai | anthropic | custom",
-                                "field_type":  "text",
-                                "default":  "free"
-                            },
-                            {
-                                "key":  "rate_limit_per_hour",
-                                "label":  "Max chat messages per user per hour",
-                                "field_type":  "number",
-                                "default":  "60"
-                            },
-                            {
-                                "key":  "max_message_length",
-                                "label":  "Max characters per user message",
-                                "field_type":  "number",
-                                "default":  "4000"
-                            },
-                            {
-                                "key":  "max_tokens_per_reply",
-                                "label":  "Max tokens per model reply",
-                                "field_type":  "number",
-                                "default":  "1024"
-                            },
-                            {
-                                "key":  "concurrent_requests",
-                                "label":  "Max concurrent chat requests per user (1 or 2)",
-                                "field_type":  "number",
-                                "default":  "2"
-                            },
-                            {
-                                "key":  "max_history_messages",
-                                "label":  "Max stored messages per conversation",
-                                "field_type":  "number",
-                                "default":  "100"
-                            },
-                            {
-                                "key":  "max_stored_conversations",
-                                "label":  "Max stored conversations (oldest pruned)",
-                                "field_type":  "number",
-                                "default":  "200"
-                            },
-                            {
-                                "key":  "chat_retention_days",
-                                "label":  "Auto-prune chat logs older than N days",
-                                "field_type":  "number",
-                                "default":  "30"
-                            },
-                            {
-                                "key":  "max_chat_disk_mb",
-                                "label":  "Max chat log disk MB under /var/lib/cpn/mr-agent/",
-                                "field_type":  "number",
-                                "default":  "50"
-                            },
-                            {
-                                "key":  "local_timeout_seconds",
-                                "label":  "Local provider request timeout (seconds)",
-                                "field_type":  "number",
-                                "default":  "45"
-                            },
-                            {
-                                "key":  "local_max_response_bytes",
-                                "label":  "Local provider max response bytes",
-                                "field_type":  "number",
-                                "default":  "1048576"
-                            },
-                            {
-                                "key":  "max_upload_bytes",
-                                "label":  "Max HTTP request body bytes (refuse huge uploads)",
-                                "field_type":  "number",
-                                "default":  "262144"
-                            },
-                            {
-                                "key":  "notes",
-                                "label":  "Operator notes (optional)",
-                                "field_type":  "text",
-                                "default":  "Host: no site takeover. Site folder: /mr-agent/. Vhost: CONFIRM=yes. Prune: php modules/cli_prune.php \u003cdomain\u003e"
-                            },
-                            {
-                                "key":  "local_base_url",
-                                "label":  "Local OpenAI-compatible base URL (server; Ollama 11434, LM Studio 1235)",
-                                "field_type":  "text",
-                                "default":  "http://127.0.0.1:11434/v1"
-                            },
-                            {
-                                "key":  "local_model",
-                                "label":  "Local model name (e.g. llama3.2:1b)",
-                                "field_type":  "text",
-                                "default":  "llama3.2:1b"
-                            },
-                            {
-                                "key":  "local_only_mode",
-                                "label":  "Local-only mode (never call cloud providers)",
-                                "field_type":  "checkbox",
-                                "default":  "0"
-                            },
-                            {
-                                "key":  "local_allow_lan",
-                                "label":  "Allow local LLM on private LAN IPs",
-                                "field_type":  "checkbox",
-                                "default":  "0"
-                            }
-                        ]
+{
+  "schema_version": 1,
+  "id": "mrAgent",
+  "name": "Mr Agent",
+  "category": "Utility",
+  "version": "1.8.0",
+  "description": "AI chat for CPN. Host or Site install with per-user Host isolation. Folder /mr-agent/ by default; vhost takeover only with confirm. Panel Install/Activate runs setup (no SSH). MCP skills, floating bubble, storage/resource limits. Local LLM first-class.",
+  "keywords": [
+    "ai",
+    "mcp",
+    "skills",
+    "assistant",
+    "openai",
+    "anthropic",
+    "chatbot",
+    "model context protocol",
+    "floating bubble",
+    "rate limit",
+    "retention",
+    "isolation",
+    "multi-tenant",
+    "ollama",
+    "lm studio",
+    "local llm",
+    "bionic",
+    "host install",
+    "mr-agent"
+  ],
+  "author": "master3395",
+  "pricing": "free",
+  "show_in_sidebar": true,
+  "has_dashboard": true,
+  "panel_float": true,
+  "panel_float_asset": "public/assets/panel-float/bubble.js",
+  "uninstall_impacts": [
+    "Site /mr-agent URL stops working when folder publish is removed",
+    "Vhost mode restores the previous document root on uninstall.sh",
+    "Mr Agent app under the site or host plugins folder is removed",
+    "Floating bubble disappears from CPN Panel",
+    "Secrets under /var/lib/cpn/mr-agent/ remain until cleaned manually"
+  ],
+  "settings_fields": [
+    {
+      "key": "install_mode",
+      "label": "Site publish mode: folder (default, /mr-agent/) | vhost (takes over site docroot; needs confirm)",
+      "field_type": "text",
+      "default": "folder"
+    },
+    {
+      "key": "expand_via",
+      "label": "Bubble Expand target: panel (recommended) | site",
+      "field_type": "text",
+      "default": "panel"
+    },
+    {
+      "key": "public_path",
+      "label": "Public URL path for site folder mode",
+      "field_type": "text",
+      "default": "/mr-agent"
+    },
+    {
+      "key": "enabled",
+      "label": "Enable Mr Agent chat for this site",
+      "field_type": "checkbox",
+      "default": "1"
+    },
+    {
+      "key": "show_floating_bubble",
+      "label": "Show floating chat bubble in CPN Panel",
+      "field_type": "checkbox",
+      "default": "1"
+    },
+    {
+      "key": "visibility",
+      "label": "Who can use chat: admins_only | all_authenticated | packages",
+      "field_type": "text",
+      "default": "admins_only"
+    },
+    {
+      "key": "package_ids",
+      "label": "Allowed package ids (comma list when visibility=packages)",
+      "field_type": "text",
+      "default": ""
+    },
+    {
+      "key": "allow_user_keys",
+      "label": "Allow users to add their own provider API keys",
+      "field_type": "checkbox",
+      "default": "1"
+    },
+    {
+      "key": "default_provider",
+      "label": "Default provider: free | local | openai | anthropic | custom",
+      "field_type": "text",
+      "default": "free"
+    },
+    {
+      "key": "rate_limit_per_hour",
+      "label": "Max chat messages per user per hour",
+      "field_type": "number",
+      "default": "60"
+    },
+    {
+      "key": "max_message_length",
+      "label": "Max characters per user message",
+      "field_type": "number",
+      "default": "4000"
+    },
+    {
+      "key": "max_tokens_per_reply",
+      "label": "Max tokens per model reply",
+      "field_type": "number",
+      "default": "1024"
+    },
+    {
+      "key": "concurrent_requests",
+      "label": "Max concurrent chat requests per user (1 or 2)",
+      "field_type": "number",
+      "default": "2"
+    },
+    {
+      "key": "max_history_messages",
+      "label": "Max stored messages per conversation",
+      "field_type": "number",
+      "default": "100"
+    },
+    {
+      "key": "max_stored_conversations",
+      "label": "Max stored conversations (oldest pruned)",
+      "field_type": "number",
+      "default": "200"
+    },
+    {
+      "key": "chat_retention_days",
+      "label": "Auto-prune chat logs older than N days",
+      "field_type": "number",
+      "default": "30"
+    },
+    {
+      "key": "max_chat_disk_mb",
+      "label": "Max chat log disk MB under /var/lib/cpn/mr-agent/",
+      "field_type": "number",
+      "default": "50"
+    },
+    {
+      "key": "local_timeout_seconds",
+      "label": "Local provider request timeout (seconds)",
+      "field_type": "number",
+      "default": "45"
+    },
+    {
+      "key": "local_max_response_bytes",
+      "label": "Local provider max response bytes",
+      "field_type": "number",
+      "default": "1048576"
+    },
+    {
+      "key": "max_upload_bytes",
+      "label": "Max HTTP request body bytes (refuse huge uploads)",
+      "field_type": "number",
+      "default": "262144"
+    },
+    {
+      "key": "local_base_url",
+      "label": "Local OpenAI-compatible base URL (server; Ollama 11434, LM Studio 1235)",
+      "field_type": "text",
+      "default": "http://127.0.0.1:11434/v1"
+    },
+    {
+      "key": "local_model",
+      "label": "Local model name (e.g. llama3.2:1b)",
+      "field_type": "text",
+      "default": "llama3.2:1b"
+    },
+    {
+      "key": "local_only_mode",
+      "label": "Local-only mode (never call cloud providers)",
+      "field_type": "checkbox",
+      "default": "0"
+    },
+    {
+      "key": "local_allow_lan",
+      "label": "Allow local LLM on private LAN IPs",
+      "field_type": "checkbox",
+      "default": "0"
+    }
+  ]
 }

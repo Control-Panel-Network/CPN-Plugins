@@ -226,6 +226,8 @@ function mra_api_dispatch($api, array $cfg)
                 'local_timeout_seconds' => (int) ($cfg['local_timeout_seconds'] ?? 45),
                 'local_max_response_bytes' => (int) ($cfg['local_max_response_bytes'] ?? 1048576),
                 'max_upload_bytes' => (int) ($cfg['max_upload_bytes'] ?? 262144),
+                'local_only_mode' => !empty($cfg['local_only_mode']),
+                'local_allow_lan' => !empty($cfg['local_allow_lan']),
             ],
             'host_policy' => $hostPolicy,
             'storage' => [
@@ -234,6 +236,13 @@ function mra_api_dispatch($api, array $cfg)
             ],
             'csrf' => mra_csrf_token(),
         ]);
+    }
+
+    if ($api === 'stats' && $method === 'GET') {
+        if (!mra_is_owner()) {
+            mra_json(['ok' => false, 'error' => 'Owner only'], 403);
+        }
+        mra_json(mra_collect_stats($cfg, $cfg['domain'] ?? null));
     }
 
     if ($api === 'owner-settings' && $method === 'POST') {

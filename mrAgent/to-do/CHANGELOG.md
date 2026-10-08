@@ -1,11 +1,20 @@
-﻿# Mr Agent changelog (plugin-local)
+# Mr Agent changelog
 
 ## 1.8.0 (08/10/2026)
 
+- Tabbed owner settings: General, Access, AI / Providers, Storage, Statistics
+- Privacy-safe Statistics tab and `?api=stats` / panel_bridge `stats` (counts, storage vs limit, distinct users, last activity as dd/mm/yyyy HH:mm; no message bodies)
 - Host policy file `/var/lib/cpn/mr-agent/host-policy.json`: `allow_host_chat` (default on), `allow_site_install` (default off)
+- Host policy shown read-only on Access tab (edit in CPN Panel Host settings / `/plugins/mr-agent`)
 - Owner settings UI + API for the two switches; prefer panel `/plugins/mr-agent` for server owner
 - Modes: Off, Panel only, Panel + optional site (visibility ACL remains separate)
 - Turning off site install does not uninstall existing site copies
+
+## 1.7.0 (08/10/2026)
+
+- Panel setup buttons and drop Operator notes / CLI dump fields
+- Store Install / Activate / Enable run setup without SSH
+- Optional CLI prune remains for operators
 
 ## 1.6.0 (08/10/2026)
 
