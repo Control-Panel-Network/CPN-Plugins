@@ -6,7 +6,7 @@ AI chat assistant for **CPN Panel**. Users connect their own **provider API keys
 - Display name: Mr Agent
 - Author: master3395
 - Pricing: free
-- Version: 1.3.0
+- Version: 1.4.0
 
 ## MCP vs skills (tell others this)
 
@@ -41,7 +41,13 @@ No provider API key required:
 - Answers "where is X in CPN" style questions
 - Optionally uses a local OpenAI-compatible endpoint on loopback if configured
 
-Cloud models are only used when you add provider API keys. Owner inventory tools (`list_websites`, `list_packages`) also work without a paid key when you are signed in as owner/admin.
+Cloud models are only used when you add provider API keys. Inventory tools (`list_websites`, `list_packages`, `list_mailboxes`) work without a paid key and are **scoped to the signed-in CPN user**.
+
+## Per-user isolation (Host and Site)
+
+On a Host install, user2 must never see user1 websites, mailboxes, or packages. Identity comes from the panel float-chat bridge (`username` / `role` / `package_id`) or the Mr Agent session. See **Host install isolation** in `CPN.md`.
+
+Check: `php modules/cli_scope_check.php`
 
 ## Skills tree
 
@@ -49,13 +55,13 @@ Cloud models are only used when you add provider API keys. Owner inventory tools
 skills/
   help/        # search_menu, search_docs
   providers/   # list_providers
-  websites/    # list_websites (read-only, owner)
-  packages/    # list_packages (read-only, owner)
-  email/       # stub
-  dns/         # stub
-  php/         # stub
-  plugins/     # stub
-  accounts/    # stub
+  websites/    # list_websites (scoped)
+  packages/    # list_packages (scoped)
+  email/       # list_mailboxes (scoped)
+  dns/         # stub (admin for host-wide)
+  php/         # stub (admin for host-wide)
+  plugins/     # stub (scoped note)
+  accounts/    # stub (admin)
 ```
 
 APIs: `GET ?api=skills`, `POST ?api=mcp` (`list_tools` / `call_tool`).

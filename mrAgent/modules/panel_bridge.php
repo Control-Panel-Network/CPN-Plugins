@@ -35,16 +35,20 @@ function mra_bridge_read_stdin()
 function mra_bridge_impersonate(array $req)
 {
     mra_session_start();
+    // Panel float-chat passes the signed-in CPN account (never a shared owner token).
     $username = strtolower(trim((string) ($req['username'] ?? '')));
+    if ($username === '') {
+        $username = strtolower(trim((string) ($req['userid'] ?? $req['user_id'] ?? '')));
+    }
     if ($username === '' || !preg_match('/^[a-z0-9_.\-]{1,64}$/', $username)) {
         return [false, 'Invalid username'];
     }
     $role = strtolower(trim((string) ($req['role'] ?? 'user')));
-    if (!in_array($role, ['owner', 'user'], true)) {
+    if (!in_array($role, ['owner', 'admin', 'user'], true)) {
         $role = 'user';
     }
-    // Panel admin is treated as owner for inventory skills.
-    if ($role === 'owner' || in_array($username, ['owner', 'admin', 'cpnowner'], true)) {
+    // Panel admin is treated as owner for broader inventory (same as panel pages).
+    if ($role === 'owner' || $role === 'admin' || in_array($username, ['owner', 'admin', 'cpnowner'], true)) {
         $role = 'owner';
     }
     $_SESSION['mra_user'] = $username;
@@ -94,12 +98,16 @@ try {
     }
 
     if ($action === 'ping') {
+        $actor = mra_scope_actor();
         mra_bridge_out([
             'ok' => true,
             'plugin' => 'mrAgent',
             'version' => MRA_VERSION,
             'user' => mra_user(),
             'role' => mra_role(),
+            'package_id' => $actor['package_id'],
+            'is_admin' => !empty($actor['is_admin']),
+            'isolation' => 'per_user',
         ]);
     }
 
@@ -110,6 +118,21 @@ try {
             'pruned' => $pruned,
             'version' => MRA_VERSION,
         ]);
+    }
+
+    // Trusted panel/CLI tool call (same session identity as chat).
+    if ($action === 'call_tool' || $action === 'mcp_call') {
+        $tool = isset($req['name']) ? (string) $req['name'] : (string) ($req['tool'] ?? '');
+        $args = isset($req['arguments']) && is_array($req['arguments']) ? $req['arguments'] : [];
+        if ($tool === '') {
+            mra_bridge_out(['ok' => false, 'error' => 'Tool name required'], 1);
+        }
+        $result = mra_tool_execute($tool, $args, $cfg, mra_user());
+        mra_bridge_out([
+            'ok' => !empty($result['ok']),
+            'result' => $result,
+            'version' => MRA_VERSION,
+        ], !empty($result['ok']) ? 0 : 1);
     }
 
     if ($action !== 'chat') {

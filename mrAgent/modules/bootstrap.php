@@ -7,7 +7,7 @@ if (!defined('MRA_INIT')) {
 }
 
 define('MRA_ROOT', dirname(__DIR__));
-define('MRA_VERSION', '1.3.0');
+define('MRA_VERSION', '1.4.0');
 define('MRA_PLUGIN_ID', 'mrAgent');
 
 require_once __DIR__ . '/helpers.php';
@@ -16,6 +16,7 @@ require_once __DIR__ . '/secrets.php';
 require_once __DIR__ . '/storage.php';
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/acl.php';
+require_once __DIR__ . '/scope.php';
 require_once __DIR__ . '/rate_limit.php';
 require_once __DIR__ . '/http_client.php';
 require_once __DIR__ . '/skills.php';

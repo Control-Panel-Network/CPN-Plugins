@@ -10,28 +10,33 @@ if (!defined('MRA_INIT')) {
  */
 function mra_skill_accounts_run($tool, array $args, array $cfg, $username)
 {
-    return [
+    $actor = mra_scope_actor();
+    $gate = mra_scope_require_admin_for_host($actor);
+    if (empty($gate['ok'])) {
+        return array_merge(['tool' => strtolower(trim((string) $tool))], $gate);
+    }
+    return mra_scope_annotate([
         'ok' => true,
         'tool' => strtolower(trim((string) $tool)),
         'stub' => true,
         'planned' => ['list_accounts'],
-        'note' => 'Accounts skill stub. Never expose passwords or MFA secrets. Use Help for /account/users.',
-    ];
+        'note' => 'Accounts skill stub (admin only). Never expose passwords or MFA secrets. Use Help for /account/users.',
+    ], $actor);
 }
 
 return [
     'id' => 'accounts',
     'name' => 'Accounts',
-    'description' => 'CPN users and accounts (stub). Planned: username/role list only (no secrets).',
+    'description' => 'CPN users and accounts (stub). Admin only; never secrets/MFA.',
     'area' => 'accounts',
     'free' => true,
-    'authz' => 'owner',
+    'authz' => 'any',
     'status' => 'stub',
     'run' => 'mra_skill_accounts_run',
     'tools' => [
         [
             'name' => 'accounts_skill_status',
-            'description' => 'Report Accounts skill stub status and planned MCP tools.',
+            'description' => 'Report Accounts skill stub status (admin only).',
             'parameters' => [
                 'type' => 'object',
                 'properties' => (object) [],

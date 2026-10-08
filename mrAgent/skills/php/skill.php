@@ -10,28 +10,33 @@ if (!defined('MRA_INIT')) {
  */
 function mra_skill_php_run($tool, array $args, array $cfg, $username)
 {
-    return [
+    $actor = mra_scope_actor();
+    $gate = mra_scope_require_admin_for_host($actor);
+    if (empty($gate['ok'])) {
+        return array_merge(['tool' => strtolower(trim((string) $tool))], $gate);
+    }
+    return mra_scope_annotate([
         'ok' => true,
         'tool' => strtolower(trim((string) $tool)),
         'stub' => true,
         'planned' => ['php_default_version', 'list_php_extensions'],
-        'note' => 'PHP skill stub. Use Help skill for /server/php paths.',
-    ];
+        'note' => 'PHP skill stub (admin/owner only for host defaults). Use Help skill for /server/php paths.',
+    ], $actor);
 }
 
 return [
     'id' => 'php',
     'name' => 'PHP',
-    'description' => 'CPN PHP host tooling (stub). Planned: default version and extensions (read-only first).',
+    'description' => 'CPN PHP host tooling (stub). Host defaults require admin (same as panel PHP pages).',
     'area' => 'php',
     'free' => true,
-    'authz' => 'owner',
+    'authz' => 'any',
     'status' => 'stub',
     'run' => 'mra_skill_php_run',
     'tools' => [
         [
             'name' => 'php_skill_status',
-            'description' => 'Report PHP skill stub status and planned MCP tools.',
+            'description' => 'Report PHP skill stub status and planned MCP tools (admin for host-wide).',
             'parameters' => [
                 'type' => 'object',
                 'properties' => (object) [],
