@@ -3,7 +3,14 @@
     <name>Mr Agent</name>
     <type>Utility</type>
     <version>1.0.0</version>
-    <description>AI chat assistant for CPN. Users connect their own provider API keys (OpenAI, Anthropic, custom OpenAI-compatible). Includes a free lightweight CPN help and menu search path that needs no paid key. Owner settings control who can see chat.</description>
+    <description>AI chat assistant for CPN with MCP (Model Context Protocol) tool calling. Users connect their own provider API keys (OpenAI, Anthropic, custom OpenAI-compatible). Includes a free lightweight CPN help and menu search path that needs no paid key. Owner settings control who can see chat.</description>
+    <keywords>ai, mcp, assistant, openai, anthropic, chatbot, model context protocol</keywords>
+    <keyword>ai</keyword>
+    <keyword>mcp</keyword>
+    <keyword>assistant</keyword>
+    <keyword>openai</keyword>
+    <keyword>anthropic</keyword>
+    <keyword>chatbot</keyword>
     <author>master3395</author>
     <website>https://newstargeted.com</website>
     <license>MIT</license>
