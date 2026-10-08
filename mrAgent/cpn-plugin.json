@@ -3,8 +3,8 @@
   "id": "mrAgent",
   "name": "Mr Agent",
   "category": "Utility",
-  "version": "1.5.0",
-  "description": "AI chat for CPN. Local LLM (Ollama/LM Studio/Bionic) is first-class. MCP skills with per-user Host isolation; provider API keys = cloud text. Optional floating bubble and storage/resource limits.",
+  "version": "1.6.0",
+  "description": "AI chat for CPN. Host or Site install with per-user Host isolation. Folder /mr-agent/ by default; vhost takeover only with confirm. MCP skills, floating bubble, storage/resource limits. Local LLM (Ollama/LM Studio/Bionic) first-class.",
   "keywords": [
     "ai",
     "mcp",
@@ -22,7 +22,9 @@
     "ollama",
     "lm studio",
     "local llm",
-    "bionic"
+    "bionic",
+    "host install",
+    "mr-agent"
   ],
   "author": "master3395",
   "pricing": "free",
@@ -31,15 +33,28 @@
   "panel_float": true,
   "panel_float_asset": "public/assets/panel-float/bubble.js",
   "uninstall_impacts": [
-    "Site /mr-agent URL stops working",
-    "Mr Agent app under the site plugins folder is removed",
+    "Site /mr-agent URL stops working when folder publish is removed",
+    "Vhost mode restores the previous document root on uninstall.sh",
+    "Mr Agent app under the site or host plugins folder is removed",
     "Floating bubble disappears from CPN Panel",
-    "Secrets under /var/lib/cpn/mr-agent/<domain>/ remain until cleaned manually"
+    "Secrets under /var/lib/cpn/mr-agent/ remain until cleaned manually"
   ],
   "settings_fields": [
     {
+      "key": "install_mode",
+      "label": "Site publish mode: folder (default, /mr-agent/) | vhost (takes over site docroot; needs confirm)",
+      "field_type": "text",
+      "default": "folder"
+    },
+    {
+      "key": "expand_via",
+      "label": "Bubble Expand target: panel (recommended) | site",
+      "field_type": "text",
+      "default": "panel"
+    },
+    {
       "key": "public_path",
-      "label": "Public URL path (after install.sh)",
+      "label": "Public URL path for site folder mode",
       "field_type": "text",
       "default": "/mr-agent"
     },
@@ -149,7 +164,7 @@
       "key": "notes",
       "label": "Operator notes (optional)",
       "field_type": "text",
-      "default": "After Store install, run: sudo bash install.sh <domain>. Prune: php modules/cli_prune.php <domain>"
+      "default": "Host: no site takeover. Site folder: /mr-agent/. Vhost: CONFIRM=yes. Prune: php modules/cli_prune.php <domain>"
     },
     {
       "key": "local_base_url",

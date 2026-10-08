@@ -1,5 +1,11 @@
 # Mr Agent changelog (plugin-local)
 
+## 1.6.0 (08/10/2026)
+
+- Host/Site install modes: dual catalog scope, `install-host.sh`, folder publish under `/mr-agent/`
+- Vhost takeover only with `CONFIRM=yes`; settings `install_mode`, `expand_via`
+- Uninstall restores previous docroot after vhost mode
+
 ## 1.5.0 (08/10/2026)
 
 - First-class **Local LLM** provider (Ollama / LM Studio / Bionic / OpenAI-compatible on the CPN server)
