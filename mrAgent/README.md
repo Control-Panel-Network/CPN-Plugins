@@ -1,6 +1,6 @@
 # Mr Agent
 
-AI chat assistant for **CPN Panel**. Users connect their own **provider API keys** (OpenAI, Anthropic Claude, custom OpenAI-compatible). A free lightweight helper answers simple CPN UI/help questions without a paid key.
+AI chat assistant for **CPN Panel**. **Local LLM** (Ollama / LM Studio / Bionic on the server) is first-class. Users may also connect **provider API keys** (OpenAI, Anthropic Claude, custom OpenAI-compatible). A free lightweight helper answers simple CPN UI/help questions without a paid key.
 
 - Plugin id: `mrAgent`
 - Display name: Mr Agent

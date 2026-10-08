@@ -25,11 +25,10 @@ function mra_chat_handle($message, $provider, $model, array $cfg, $username, $co
     }
 
     $provider = strtolower(trim((string) $provider));
+    // auto / empty: smart free path (local for general chat, CPN help for panel Qs).
+    // Explicit default_provider is for the full UI select, not float auto.
     if ($provider === '' || $provider === 'auto') {
-        $provider = strtolower((string) ($cfg['default_provider'] ?? 'free'));
-        if ($provider === '' || $provider === 'auto') {
-            $provider = 'free';
-        }
+        $provider = 'free';
     }
     if (!empty($cfg['local_only_mode'])) {
         $provider = 'local';

@@ -9,11 +9,11 @@ $defaultProvider = (string) ($cfg['default_provider'] ?? 'free');
     <label>
       Provider
       <select id="mra-provider">
-        <option value="free" <?php echo $defaultProvider === 'free' ? 'selected' : ''; ?>>Free lightweight</option>
+        <option value="free" <?php echo $defaultProvider === 'free' ? 'selected' : ''; ?>>Free / auto (CPN help + local)</option>
+        <option value="local" <?php echo $defaultProvider === 'local' ? 'selected' : ''; ?>>Local LLM (server)</option>
         <option value="openai" <?php echo $defaultProvider === 'openai' ? 'selected' : ''; ?>>OpenAI</option>
         <option value="anthropic" <?php echo $defaultProvider === 'anthropic' ? 'selected' : ''; ?>>Anthropic Claude</option>
         <option value="custom" <?php echo $defaultProvider === 'custom' ? 'selected' : ''; ?>>Custom OpenAI-compatible</option>
-        <option value="local" <?php echo $defaultProvider === 'local' ? 'selected' : ''; ?>>Local (loopback)</option>
       </select>
     </label>
     <label>
@@ -31,8 +31,8 @@ $defaultProvider = (string) ($cfg['default_provider'] ?? 'free');
   </div>
   <div id="mra-transcript" class="transcript" aria-live="polite">
     <div class="bubble assistant">
-      Hi, I am <strong>Mr Agent</strong>. Ask where something is in CPN, or chat with your own provider API keys.
-      The free lightweight path searches bundled CPN help (no paid key). Tool calling uses Model Context Protocol style tools for menu and docs search only.
+      Hi, I am <strong>Mr Agent</strong>. Ask where something is in CPN, chat with a <strong>Local LLM</strong> on this server, or use cloud provider API keys.
+      Free / auto: CPN navigation help, or local model for general chat when configured. MCP skills are panel tools (not a text model).
     </div>
   </div>
   <form id="mra-chat-form" class="composer">
