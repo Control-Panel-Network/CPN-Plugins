@@ -5,6 +5,12 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026-10-08] - Mr Agent AI chat
+
+### Added
+- **mrAgent** (1.0.0): Free site plugin **Mr Agent**, an AI chat assistant for CPN. Supports OpenAI-compatible, Anthropic, custom base URL, and local loopback providers via **provider API keys**. Includes a free lightweight CPN help/menu search path (no paid key). Owner ACL (admins only / all authenticated / package ids), CSRF, rate limits, and safe read-oriented tools (`search_menu`, `search_docs`, `list_providers`). Secrets under `/var/lib/cpn/mr-agent/<domain>/` (mode 600). Run `install.sh` after Store install to publish `/mr-agent`.
+- `catalog.json` entry for `mrAgent`.
+
 ## [2026-10-03] - FileGator site file manager
 
 ### Added

@@ -37,6 +37,7 @@ sudo cpn plugin list --catalog
 | Id | Pricing | Role |
 |----|---------|------|
 | `fileGator` | free | Enhanced multi-user FileGator for one site; see `fileGator/CPN.md` (`install.sh` after Store install) |
+| `mrAgent` | free | Mr Agent AI chat: provider API keys + free lightweight CPN help/search; see `mrAgent/CPN.md` |
 
 Host packages such as MariaDB, OpenLiteSpeed, and phpMyAdmin stay on the panel **Plugins → Host packages** tab (`cpn app`), not as separate catalog folders unless a site-scoped drop-in exists.
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>Mr Agent</name>
+    <type>Utility</type>
+    <version>1.0.0</version>
+    <description>AI chat assistant for CPN. Users connect their own provider API keys (OpenAI, Anthropic, custom OpenAI-compatible). Includes a free lightweight CPN help and menu search path that needs no paid key. Owner settings control who can see chat.</description>
+    <author>master3395</author>
+    <website>https://newstargeted.com</website>
+    <license>MIT</license>
+    <category>Utility</category>
+    <paid>false</paid>
+    <pricing>free</pricing>
+    <compatibility>
+        <min_version>0.2.0</min_version>
+    </compatibility>
+    <requirements>
+        <os>AlmaLinux 8+</os>
+        <os>AlmaLinux 9+</os>
+        <os>AlmaLinux 10+</os>
+        <software>php</software>
+        <software>php-curl</software>
+        <software>cpn-panel</software>
+    </requirements>
+    <features>
+        <feature>In-site chat UI with provider and model picker</feature>
+        <feature>OpenAI-compatible, Anthropic, and custom base URL providers</feature>
+        <feature>Free lightweight CPN help and menu search without a paid key</feature>
+        <feature>Safe read-oriented tools (menu search, docs hints) for tool calling</feature>
+        <feature>Owner ACL: admins only, all users, or package id list</feature>
+        <feature>Provider API keys stored under /var/lib/cpn/mr-agent/ (mode 600)</feature>
+    </features>
+    <uninstall_impact>Site /mr-agent URL stops working</uninstall_impact>
+    <uninstall_impact>Chat app under the site plugins folder is removed</uninstall_impact>
+    <uninstall_impact>Secrets under /var/lib/cpn/mr-agent/&lt;domain&gt;/ remain until cleaned manually</uninstall_impact>
+    <url>/mr-agent</url>
+    <settings_url>/plugins/settings</settings_url>
+    <released>2026-10-08</released>
+    <updated>2026-10-08</updated>
+    <install_count>0</install_count>
+    <featured>true</featured>
+</plugin>

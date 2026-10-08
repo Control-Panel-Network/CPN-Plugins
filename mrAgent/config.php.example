@@ -1,0 +1,22 @@
+<?php
+/**
+ * Example config for Mr Agent.
+ * Copy to config.php next to this file, or place secrets under
+ * /var/lib/cpn/mr-agent/<domain>/config.php (mode 600).
+ * Never commit real provider API keys.
+ */
+return [
+    // Shared gate password for the chat UI (change after install).
+    'access_password' => 'CHANGE_ME',
+    // Optional host default provider API keys (owner-level). Prefer keys.json under /var/lib/cpn/.
+    'openai_api_key' => '',
+    'anthropic_api_key' => '',
+    'custom_api_key' => '',
+    'custom_base_url' => '',
+    // Optional local OpenAI-compatible endpoint (Ollama, LM Studio, etc.).
+    'local_base_url' => 'http://127.0.0.1:11434/v1',
+    'local_api_key' => '',
+    'local_model' => 'llama3.2:1b',
+    // Domain label used for secret paths when not auto-detected.
+    'domain' => '',
+];
