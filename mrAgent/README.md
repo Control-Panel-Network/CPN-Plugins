@@ -14,7 +14,8 @@ AI chat assistant for **CPN Panel**. **Local LLM** (Ollama / LM Studio / Bionic 
 |------|---------|
 | **MCP** | Panel-wide tool protocol (list/call allowlisted tools with authz) |
 | **Skills** | Per CPN area: Help, Websites, Packages, Email, DNS, PHP, Plugins, Accounts |
-| **Provider API keys** | LLM credentials (not "MCP keys") |
+| **Local LLM** | Text generator on the CPN **server** (Ollama / LM Studio / Bionic) |
+| **Provider API keys** | Cloud LLM credentials (not "MCP keys") |
 | **Mr Agent** | Chat UI + keys + ACL that uses skills through MCP |
 
 ## Install
