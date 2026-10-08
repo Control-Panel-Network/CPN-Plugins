@@ -12,4 +12,6 @@ Version **1.6.0** adds dual Host + Site install: Host panel chat with no site ta
 
 Version **1.5.0** makes **Local LLM** first-class (Ollama / LM Studio / Bionic on the CPN server): `local_base_url`, `local_model`, `local_only_mode`, `local_allow_lan`. Free/auto prefers local for general chat; float bubble uses panel `/plugins/float-chat` with `provider=auto`.
 
+Version **1.7.0** removes Operator notes from Plugin settings. Install / Activate from the Store runs setup in the panel (no SSH). Settings offer **Run setup** and **Prune chat logs**. Optional CLI remains in README only.
+
 See `mrAgent/README.md`, `mrAgent/CPN.md`, and `mrAgent/to-do/ARCHITECTURE-MCP-SKILLS.md`.
