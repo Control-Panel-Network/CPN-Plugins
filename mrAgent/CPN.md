@@ -104,3 +104,14 @@ Triggers: chat send, owner settings save, `install.sh`, bridge `action=prune`, o
 Day-to-day full chat remains at `/mr-agent` after `install.sh`. Compact panel chat uses `modules/panel_bridge.php` (CLI) via the panel float-chat route.
 
 Requires a CPN Panel build that injects Active plugin float assets (`panel_float` / `public/assets/panel-float/`).
+
+
+## Storage prune (1.3.0)
+
+Opportunistic prune keeps chat logs under owner caps:
+
+1. Delete conversations older than `chat_retention_days`
+2. If count exceeds `max_stored_conversations`, delete oldest
+3. If `chats/` exceeds `max_chat_disk_mb`, delete oldest until under cap
+
+Triggers: chat send, owner settings save, `install.sh`, bridge `action=prune`, or `php modules/cli_prune.php <domain>|--all`.

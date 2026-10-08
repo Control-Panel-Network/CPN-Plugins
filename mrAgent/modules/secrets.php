@@ -99,6 +99,10 @@ function mra_save_owner_settings(array $settings, $domain = null)
         'default_provider', 'rate_limit_per_hour', 'access_password',
         'custom_base_url', 'local_base_url', 'local_model',
         'local_only_mode', 'local_allow_lan',
+        'max_history_messages', 'max_stored_conversations', 'chat_retention_days',
+        'max_chat_disk_mb', 'max_tokens_per_reply', 'max_message_length',
+        'concurrent_requests', 'local_timeout_seconds', 'local_max_response_bytes',
+        'max_upload_bytes',
     ];
     $out = [];
     foreach ($allowed as $k) {

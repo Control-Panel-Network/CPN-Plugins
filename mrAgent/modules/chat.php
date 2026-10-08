@@ -58,7 +58,7 @@ function mra_chat_handle($message, $provider, $model, array $cfg, $username, $co
         } else {
             $system = 'You are Mr Agent, a friendly AI assistant inside CPN Panel. '
                 . 'Three layers: (1) Provider = who generates text (local model or cloud API keys). '
-                . '(2) MCP = panel-wide tool protocol. (3) Skills = per-area modules. '
+                . '(2) MCP = panel-wide tool protocol. (3) Skills = per-area modules (Help, Websites, Packages, Email, DNS, etc.). '
                 . 'Call list_skills to discover tools. Prefer Help skill for "where is X". '
                 . 'Use list_websites / list_packages only when the user asks for inventory (owner tools). '
                 . 'Never invent destructive admin actions. Never ask users to paste provider API keys into chat. '

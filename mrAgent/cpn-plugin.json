@@ -3,8 +3,8 @@
   "id": "mrAgent",
   "name": "Mr Agent",
   "category": "Utility",
-  "version": "1.3.0",
-  "description": "AI chat for CPN. Local LLM (Ollama/LM Studio/Bionic) is first-class. MCP skills = panel tools; provider API keys = cloud text. Optional floating bubble.",
+  "version": "1.4.0",
+  "description": "AI chat for CPN. Local LLM (Ollama/LM Studio/Bionic) is first-class. MCP skills = panel tools; provider API keys = cloud text. Optional floating bubble and owner storage/resource limits.",
   "keywords": [
     "ai",
     "mcp",

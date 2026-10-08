@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-10-08] - Mr Agent local LLM + smarter free path
 
 ### Added
-- **mrAgent** (1.2.0 → **1.3.0**): Local LLM is a first-class provider (Ollama / LM Studio / Bionic / any OpenAI-compatible on the CPN server). Owner settings: `local_base_url`, `local_model`, `local_only_mode`, `local_allow_lan`. Free/auto routing prefers local for general chat; CPN help only for panel navigation (no more unrelated websites dumps for "what day is it"). Float bubble always uses panel `/plugins/float-chat` proxy with `provider=auto`. Documents that the browser cannot reach Windows Ollama unless exposed to the server.
+- **mrAgent** (1.3.0 → **1.4.0**): Local LLM is a first-class provider (Ollama / LM Studio / Bionic / any OpenAI-compatible on the CPN server). Owner settings: `local_base_url`, `local_model`, `local_only_mode`, `local_allow_lan`. Free/auto routing prefers local for general chat; CPN help only for panel navigation (no more unrelated websites dumps for "what day is it"). Float bubble always uses panel `/plugins/float-chat` proxy with `provider=auto`. Documents that the browser cannot reach Windows Ollama unless exposed to the server.
 
 ## [2026-10-08] - Mr Agent floating bubble
 
