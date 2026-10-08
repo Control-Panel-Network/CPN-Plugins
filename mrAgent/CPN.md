@@ -10,9 +10,30 @@ Site-scoped PHP chat app published at clean URL `/mr-agent`. Complements the pan
 |---------|------|
 | UI / friendly | **Mr Agent** |
 | LLM credentials | **provider API keys** |
-| Tool calling | Model Context Protocol (**MCP**) style tools |
+| Tool protocol | **MCP** (Model Context Protocol style), panel-wide |
+| Per-area modules | **Skills** (Help, Websites, Packages, Email, ...) |
 
 Do not call provider API keys "MCP keys".
+
+## Architecture
+
+1. **MCP**: allowlisted tools the assistant (or `?api=mcp`) can call with authz.
+2. **Skills**: one folder per CPN area under `skills/<id>/skill.php`.
+3. **Mr Agent**: chat UI, providers, ACL; loads skills into the MCP surface.
+
+See `to-do/ARCHITECTURE-MCP-SKILLS.md`.
+
+## Skills (1.1.0)
+
+| Skill | Status | Tools (examples) |
+|-------|--------|------------------|
+| Help and Menu | active (free) | `search_menu`, `search_docs` |
+| Providers | active | `list_providers` |
+| Websites | active (owner) | `list_websites` |
+| Packages | active (owner) | `list_packages` |
+| Email, DNS, PHP, Plugins, Accounts | stub | `*_skill_status` |
+
+Builtin: `list_skills`.
 
 ## Install paths
 
@@ -36,7 +57,7 @@ Or install from Store after this plugin lands on `main` and the catalog cache re
 ## Security
 
 - CSRF on POST APIs (`csrf` field or `X-CSRF-Token`)
-- Authz: login gate + visibility ACL
+- Authz: login gate + visibility ACL; owner role for host inventory skills
 - Secrets never logged (redaction helper)
 - HTTP client blocks private/metadata hosts except explicit loopback local provider
 - No `shell_exec` / command tools in MVP

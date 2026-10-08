@@ -1,5 +1,5 @@
 # Mr Agent (`mrAgent`)
 
-Free site plugin: AI chat for CPN with provider API keys and a free lightweight CPN help path.
+AI chat for CPN. **MCP** = panel-wide tool protocol. **Skills** = per-area modules under `mrAgent/skills/`. **Provider API keys** = LLM credentials.
 
-See `mrAgent/README.md` and `mrAgent/CPN.md` in the catalog repo.
+See `mrAgent/README.md`, `mrAgent/CPN.md`, and `mrAgent/to-do/ARCHITECTURE-MCP-SKILLS.md`.
