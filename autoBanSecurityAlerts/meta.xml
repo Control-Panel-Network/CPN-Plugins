@@ -31,4 +31,6 @@
     <updated>2026-06-01</updated>
     <install_count>55</install_count>
     <featured>false</featured>
+    <scope>host+cpn</scope>
+    <install_scope>host+cpn</install_scope>
 </plugin>
