@@ -9,16 +9,16 @@ if (!defined('MRA_INIT')) {
  * @param array<string,mixed> $cfg
  * @return array<string,mixed>
  */
-function mra_chat_handle($message, $provider, $model, array $cfg, $username)
+function mra_chat_handle($message, $provider, $model, array $cfg, $username, $conversationId = '')
 {
+    $cfg = mra_normalize_limits($cfg);
     $message = trim((string) $message);
-    if ($message === '' || strlen($message) > 8000) {
-        return ['ok' => false, 'error' => 'Message must be between 1 and 8000 characters.'];
+    $maxLen = (int) ($cfg['max_message_length'] ?? 4000);
+    if ($message === '' || strlen($message) > $maxLen) {
+        return ['ok' => false, 'error' => 'Message must be between 1 and ' . $maxLen . ' characters.'];
     }
-    // Soft prompt-injection guard: never pass messages to shell.
     if (preg_match('/\b(rm\s+-rf|curl\s+|wget\s+|powershell\b|Invoke-Expression)\b/i', $message)) {
         mra_log('blocked_shellish_prompt', ['user' => $username]);
-        // Still answer via free help; do not execute anything.
     }
 
     $provider = strtolower(trim((string) $provider));
@@ -33,27 +33,61 @@ function mra_chat_handle($message, $provider, $model, array $cfg, $username)
         $model = mra_default_model_for($provider);
     }
 
-    list($rlOk, $rlErr) = mra_rate_limit_check($cfg, $username);
-    if (!$rlOk) {
-        return ['ok' => false, 'error' => $rlErr];
+    list($concOk, $concErr, $lockFh) = mra_concurrent_acquire($cfg, $username);
+    if (!$concOk) {
+        return ['ok' => false, 'error' => $concErr];
     }
 
-    if ($provider === 'free') {
-        return mra_free_reply($message, $cfg, $username);
+    try {
+        list($rlOk, $rlErr) = mra_rate_limit_check($cfg, $username);
+        if (!$rlOk) {
+            mra_concurrent_release($lockFh);
+            return ['ok' => false, 'error' => $rlErr];
+        }
+
+        if ($provider === 'free') {
+            $result = mra_free_reply($message, $cfg, $username);
+        } else {
+            $system = 'You are Mr Agent, a friendly AI assistant inside CPN Panel. '
+                . 'MCP is the panel-wide tool protocol. Skills are per-area modules (Help, Websites, Packages, Email, DNS, etc.). '
+                . 'Call list_skills to discover tools. Prefer Help skill for "where is X". '
+                . 'Use list_websites / list_packages only when the user asks for inventory (owner tools). '
+                . 'Never invent destructive admin actions. Never ask users to paste provider API keys into chat. '
+                . 'Call keys "provider API keys", not MCP keys.';
+
+            if ($provider === 'anthropic') {
+                $result = mra_chat_anthropic_with_tools($message, $model, $cfg, $username, $system);
+            } else {
+                $result = mra_chat_openai_with_tools($message, $provider, $model, $cfg, $username, $system);
+            }
+        }
+
+        if (!empty($result['ok']) && isset($result['reply'])) {
+            $store = mra_conversation_append(
+                $cfg,
+                $username,
+                $conversationId,
+                $message,
+                (string) $result['reply'],
+                (string) ($result['provider'] ?? $provider)
+            );
+            if (!empty($store['conversation_id'])) {
+                $result['conversation_id'] = $store['conversation_id'];
+            }
+            if (!empty($store['pruned']['deleted'])) {
+                $result['pruned'] = (int) $store['pruned']['deleted'];
+            }
+        } else {
+            mra_prune_storage($cfg, $cfg['domain'] ?? null);
+        }
+
+        mra_concurrent_release($lockFh);
+        return $result;
+    } catch (Throwable $e) {
+        mra_concurrent_release($lockFh);
+        mra_log('chat_handle_failed', ['error' => mra_redact($e->getMessage())]);
+        return ['ok' => false, 'error' => 'Chat failed'];
     }
-
-    $system = 'You are Mr Agent, a friendly AI assistant inside CPN Panel. '
-        . 'MCP is the panel-wide tool protocol. Skills are per-area modules (Help, Websites, Packages, Email, DNS, etc.). '
-        . 'Call list_skills to discover tools. Prefer Help skill for "where is X". '
-        . 'Use list_websites / list_packages only when the user asks for inventory (owner tools). '
-        . 'Never invent destructive admin actions. Never ask users to paste provider API keys into chat. '
-        . 'Call keys "provider API keys", not MCP keys.';
-
-    if ($provider === 'anthropic') {
-        return mra_chat_anthropic_with_tools($message, $model, $cfg, $username, $system);
-    }
-
-    return mra_chat_openai_with_tools($message, $provider, $model, $cfg, $username, $system);
 }
 
 /**
@@ -63,6 +97,9 @@ function mra_chat_openai_with_tools($message, $provider, $model, array $cfg, $us
 {
     $apiKey = mra_resolve_api_key($provider, $username, $cfg);
     $base = 'https://api.openai.com/v1';
+    $allowPrivate = false;
+    $timeout = 60;
+    $maxBytes = 0;
     if ($provider === 'custom') {
         $store = mra_keys_store($cfg['domain'] ?? null);
         $base = (string) ($cfg['custom_base_url'] ?? '');
@@ -75,8 +112,13 @@ function mra_chat_openai_with_tools($message, $provider, $model, array $cfg, $us
     } elseif ($provider === 'local') {
         $base = (string) ($cfg['local_base_url'] ?? 'http://127.0.0.1:11434/v1');
         $apiKey = mra_resolve_api_key('local', $username, $cfg);
+        $timeout = (int) ($cfg['local_timeout_seconds'] ?? 45);
+        $maxBytes = (int) ($cfg['local_max_response_bytes'] ?? 1048576);
+        $host = strtolower((string) parse_url($base, PHP_URL_HOST));
+        $allowPrivate = (bool) preg_match('/^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/', $host);
     }
 
+    $maxTokens = (int) ($cfg['max_tokens_per_reply'] ?? 1024);
     $messages = [
         ['role' => 'system', 'content' => $system],
         ['role' => 'user', 'content' => $message],
@@ -84,7 +126,7 @@ function mra_chat_openai_with_tools($message, $provider, $model, array $cfg, $us
     $toolsUsed = [];
     $maxRounds = 3;
     for ($i = 0; $i < $maxRounds; $i++) {
-        $resp = mra_openai_chat($messages, $model, $apiKey, $base, true);
+        $resp = mra_openai_chat($messages, $model, $apiKey, $base, true, $maxTokens, $timeout, $allowPrivate, $maxBytes);
         if (empty($resp['ok'])) {
             return ['ok' => false, 'error' => $resp['error'] ?? 'Provider error', 'provider' => $provider];
         }
@@ -124,19 +166,19 @@ function mra_chat_openai_with_tools($message, $provider, $model, array $cfg, $us
 function mra_chat_anthropic_with_tools($message, $model, array $cfg, $username, $system)
 {
     $apiKey = mra_resolve_api_key('anthropic', $username, $cfg);
+    $maxTokens = (int) ($cfg['max_tokens_per_reply'] ?? 1024);
     $messages = [
         ['role' => 'system', 'content' => $system],
         ['role' => 'user', 'content' => $message],
     ];
     $toolsUsed = [];
-    $resp = mra_anthropic_chat($messages, $model, $apiKey, true);
+    $resp = mra_anthropic_chat($messages, $model, $apiKey, true, $maxTokens);
     if (empty($resp['ok'])) {
         return ['ok' => false, 'error' => $resp['error'] ?? 'Anthropic error', 'provider' => 'anthropic'];
     }
     $body = is_array($resp['raw']) ? $resp['raw'] : [];
     $uses = mra_anthropic_extract_tool_uses($body);
     if (!empty($uses)) {
-        // One tool round then ask for final text (simplified MVP).
         $toolResults = [];
         foreach ($uses as $use) {
             $result = mra_tool_execute($use['name'], $use['input'], $cfg, $username);
@@ -148,7 +190,7 @@ function mra_chat_anthropic_with_tools($message, $model, array $cfg, $username, 
         $resp2 = mra_anthropic_chat([
             ['role' => 'system', 'content' => $system],
             ['role' => 'user', 'content' => $follow],
-        ], $model, $apiKey, false);
+        ], $model, $apiKey, false, $maxTokens);
         if (empty($resp2['ok'])) {
             return ['ok' => false, 'error' => $resp2['error'] ?? 'Anthropic follow-up failed', 'provider' => 'anthropic', 'tools_used' => $toolsUsed];
         }

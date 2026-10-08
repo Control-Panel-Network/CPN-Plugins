@@ -12,9 +12,17 @@ function mra_api_dispatch($api, array $cfg)
 {
     $api = strtolower(trim((string) $api));
     $method = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+    $cfg = mra_normalize_limits($cfg);
 
     if ($api === 'health') {
         mra_json(['ok' => true, 'plugin' => 'mrAgent', 'version' => MRA_VERSION]);
+    }
+
+    if ($method === 'POST') {
+        list($upOk, $upErr) = mra_check_upload_size($cfg);
+        if (!$upOk) {
+            mra_json(['ok' => false, 'error' => $upErr], 413);
+        }
     }
 
     if ($api === 'csrf') {
@@ -79,6 +87,16 @@ function mra_api_dispatch($api, array $cfg)
             'allow_user_keys' => !empty($cfg['allow_user_keys']),
             'is_owner' => mra_is_owner(),
             'providers' => mra_provider_status($cfg, mra_user()),
+            'limits' => [
+                'rate_limit_per_hour' => (int) ($cfg['rate_limit_per_hour'] ?? 60),
+                'max_message_length' => (int) ($cfg['max_message_length'] ?? 4000),
+                'max_tokens_per_reply' => (int) ($cfg['max_tokens_per_reply'] ?? 1024),
+                'concurrent_requests' => (int) ($cfg['concurrent_requests'] ?? 2),
+                'max_history_messages' => (int) ($cfg['max_history_messages'] ?? 100),
+                'max_stored_conversations' => (int) ($cfg['max_stored_conversations'] ?? 200),
+                'chat_retention_days' => (int) ($cfg['chat_retention_days'] ?? 30),
+                'max_chat_disk_mb' => (int) ($cfg['max_chat_disk_mb'] ?? 50),
+            ],
             'csrf' => mra_csrf_token(),
             'version' => MRA_VERSION,
         ]);
@@ -96,7 +114,8 @@ function mra_api_dispatch($api, array $cfg)
         $message = isset($body['message']) ? (string) $body['message'] : '';
         $provider = isset($body['provider']) ? (string) $body['provider'] : '';
         $model = isset($body['model']) ? (string) $body['model'] : '';
-        $result = mra_chat_handle($message, $provider, $model, $cfg, mra_user());
+        $conversationId = isset($body['conversation_id']) ? (string) $body['conversation_id'] : '';
+        $result = mra_chat_handle($message, $provider, $model, $cfg, mra_user(), $conversationId);
         $code = !empty($result['ok']) ? 200 : 400;
         mra_json($result, $code);
     }
@@ -175,6 +194,42 @@ function mra_api_dispatch($api, array $cfg)
         mra_json(['ok' => true, 'message' => 'Saved']);
     }
 
+    if ($api === 'owner-settings' && $method === 'GET') {
+        if (!mra_is_owner()) {
+            mra_json(['ok' => false, 'error' => 'Owner only'], 403);
+        }
+        $diskBytes = mra_chats_disk_bytes($cfg['domain'] ?? null);
+        mra_json([
+            'ok' => true,
+            'settings' => [
+                'plugin_enabled' => !empty($cfg['plugin_enabled']),
+                'visibility' => (string) ($cfg['visibility'] ?? 'admins_only'),
+                'package_ids' => (string) ($cfg['package_ids'] ?? ''),
+                'allow_user_keys' => !empty($cfg['allow_user_keys']),
+                'default_provider' => (string) ($cfg['default_provider'] ?? 'free'),
+                'rate_limit_per_hour' => (int) ($cfg['rate_limit_per_hour'] ?? 60),
+                'custom_base_url' => (string) ($cfg['custom_base_url'] ?? ''),
+                'local_base_url' => (string) ($cfg['local_base_url'] ?? 'http://127.0.0.1:11434/v1'),
+                'local_model' => (string) ($cfg['local_model'] ?? 'llama3.2:1b'),
+                'max_history_messages' => (int) ($cfg['max_history_messages'] ?? 100),
+                'max_stored_conversations' => (int) ($cfg['max_stored_conversations'] ?? 200),
+                'chat_retention_days' => (int) ($cfg['chat_retention_days'] ?? 30),
+                'max_chat_disk_mb' => (int) ($cfg['max_chat_disk_mb'] ?? 50),
+                'max_tokens_per_reply' => (int) ($cfg['max_tokens_per_reply'] ?? 1024),
+                'max_message_length' => (int) ($cfg['max_message_length'] ?? 4000),
+                'concurrent_requests' => (int) ($cfg['concurrent_requests'] ?? 2),
+                'local_timeout_seconds' => (int) ($cfg['local_timeout_seconds'] ?? 45),
+                'local_max_response_bytes' => (int) ($cfg['local_max_response_bytes'] ?? 1048576),
+                'max_upload_bytes' => (int) ($cfg['max_upload_bytes'] ?? 262144),
+            ],
+            'storage' => [
+                'chat_disk_bytes' => $diskBytes,
+                'chat_disk_mb' => round($diskBytes / 1048576, 2),
+            ],
+            'csrf' => mra_csrf_token(),
+        ]);
+    }
+
     if ($api === 'owner-settings' && $method === 'POST') {
         if (!mra_is_owner()) {
             mra_json(['ok' => false, 'error' => 'Owner only'], 403);
@@ -189,11 +244,22 @@ function mra_api_dispatch($api, array $cfg)
             'package_ids' => trim((string) ($body['package_ids'] ?? '')),
             'allow_user_keys' => !empty($body['allow_user_keys']),
             'default_provider' => strtolower(trim((string) ($body['default_provider'] ?? 'free'))),
-            'rate_limit_per_hour' => max(1, (int) ($body['rate_limit_per_hour'] ?? 60)),
+            'rate_limit_per_hour' => (int) ($body['rate_limit_per_hour'] ?? 60),
             'custom_base_url' => trim((string) ($body['custom_base_url'] ?? '')),
             'local_base_url' => trim((string) ($body['local_base_url'] ?? 'http://127.0.0.1:11434/v1')),
             'local_model' => trim((string) ($body['local_model'] ?? 'llama3.2:1b')),
+            'max_history_messages' => (int) ($body['max_history_messages'] ?? 100),
+            'max_stored_conversations' => (int) ($body['max_stored_conversations'] ?? 200),
+            'chat_retention_days' => (int) ($body['chat_retention_days'] ?? 30),
+            'max_chat_disk_mb' => (int) ($body['max_chat_disk_mb'] ?? 50),
+            'max_tokens_per_reply' => (int) ($body['max_tokens_per_reply'] ?? 1024),
+            'max_message_length' => (int) ($body['max_message_length'] ?? 4000),
+            'concurrent_requests' => (int) ($body['concurrent_requests'] ?? 2),
+            'local_timeout_seconds' => (int) ($body['local_timeout_seconds'] ?? 45),
+            'local_max_response_bytes' => (int) ($body['local_max_response_bytes'] ?? 1048576),
+            'max_upload_bytes' => (int) ($body['max_upload_bytes'] ?? 262144),
         ];
+        $next = mra_normalize_limits($next);
         if (!in_array($next['visibility'], ['admins_only', 'all_authenticated', 'packages'], true)) {
             mra_json(['ok' => false, 'error' => 'Invalid visibility'], 400);
         }
@@ -203,11 +269,15 @@ function mra_api_dispatch($api, array $cfg)
         if (!mra_save_owner_settings($next, $cfg['domain'] ?? null)) {
             mra_json(['ok' => false, 'error' => 'Could not save settings'], 500);
         }
-        // Also update config.php access password when provided and file is writable.
+        $pruned = mra_prune_storage($next, $cfg['domain'] ?? null);
         if (!empty($body['access_password']) && is_file(MRA_ROOT . '/config.php') && is_writable(MRA_ROOT . '/config.php')) {
             // Prefer var/lib settings; config.php remains for bootstrap.
         }
-        mra_json(['ok' => true, 'message' => 'Owner settings saved']);
+        mra_json([
+            'ok' => true,
+            'message' => 'Owner settings saved',
+            'pruned' => $pruned,
+        ]);
     }
 
     if ($api === 'search' && $method === 'GET') {

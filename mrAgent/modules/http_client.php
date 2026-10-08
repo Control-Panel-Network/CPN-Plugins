@@ -6,11 +6,13 @@ if (!defined('MRA_INIT')) {
 /**
  * JSON HTTP helper (curl). Does not log Authorization headers or bodies with keys.
  *
- * @param array<string,mixed> $payload
+ * @param array<string,mixed>|null $payload
  * @param array<int,string> $headers
+ * @param bool $allowPrivate When true, allow RFC1918 hosts (local LLM on LAN only).
+ * @param int $maxBytes Cap request JSON and response body size (0 = default 8 MiB).
  * @return array{ok:bool,status:int,body:mixed,error?:string}
  */
-function mra_http_json($method, $url, array $payload = null, array $headers = [], $timeout = 45)
+function mra_http_json($method, $url, array $payload = null, array $headers = [], $timeout = 45, $allowPrivate = false, $maxBytes = 0)
 {
     if (!function_exists('curl_init')) {
         return ['ok' => false, 'status' => 0, 'body' => null, 'error' => 'php-curl is required'];
@@ -19,15 +21,22 @@ function mra_http_json($method, $url, array $payload = null, array $headers = []
     if (!preg_match('#^https?://#i', $url)) {
         return ['ok' => false, 'status' => 0, 'body' => null, 'error' => 'Invalid URL scheme'];
     }
-    // Block obvious private metadata targets except explicit loopback local provider.
+    $maxBytes = (int) $maxBytes;
+    if ($maxBytes <= 0) {
+        $maxBytes = 8388608;
+    }
     $host = parse_url($url, PHP_URL_HOST);
     $host = strtolower((string) $host);
-    $isLoopback = in_array($host, ['127.0.0.1', 'localhost'], true);
+    $isLoopback = in_array($host, ['127.0.0.1', 'localhost', '::1'], true);
     if ($host === '169.254.169.254' || $host === 'metadata.google.internal') {
         return ['ok' => false, 'status' => 0, 'body' => null, 'error' => 'Blocked host'];
     }
-    if (!$isLoopback && preg_match('/^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/', $host)) {
+    $isPrivate = (bool) preg_match('/^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/', $host);
+    if (!$isLoopback && $isPrivate && !$allowPrivate) {
         return ['ok' => false, 'status' => 0, 'body' => null, 'error' => 'Private hosts are not allowed for remote providers'];
+    }
+    if (!$isLoopback && !$isPrivate && $allowPrivate) {
+        return ['ok' => false, 'status' => 0, 'body' => null, 'error' => 'allowPrivate is limited to loopback and LAN hosts'];
     }
 
     $ch = curl_init($url);
@@ -41,6 +50,12 @@ function mra_http_json($method, $url, array $payload = null, array $headers = []
     ];
     if ($payload !== null) {
         $json = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        if ($json === false) {
+            return ['ok' => false, 'status' => 0, 'body' => null, 'error' => 'Could not encode request'];
+        }
+        if (strlen($json) > $maxBytes) {
+            return ['ok' => false, 'status' => 0, 'body' => null, 'error' => 'Request payload too large (max ' . $maxBytes . ' bytes)'];
+        }
         $opts[CURLOPT_POSTFIELDS] = $json;
         $hasCt = false;
         foreach ($headers as $h) {
@@ -63,6 +78,10 @@ function mra_http_json($method, $url, array $payload = null, array $headers = []
     if ($errno) {
         mra_log('http_error', ['status' => 0, 'error' => mra_redact($err)]);
         return ['ok' => false, 'status' => 0, 'body' => null, 'error' => 'Upstream request failed'];
+    }
+    if (strlen((string) $raw) > $maxBytes) {
+        mra_log('http_response_too_large', ['bytes' => strlen((string) $raw), 'max' => $maxBytes]);
+        return ['ok' => false, 'status' => $status, 'body' => null, 'error' => 'Upstream response too large (max ' . $maxBytes . ' bytes)'];
     }
     $body = json_decode((string) $raw, true);
     if (!is_array($body)) {

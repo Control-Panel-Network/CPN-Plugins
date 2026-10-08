@@ -42,6 +42,8 @@ Builtin: `list_skills`.
 | `/home/<domain>/plugins/mrAgent/` | Catalog install tree |
 | `/home/<domain>/public_html/mr-agent` | Symlink to `public/` after `install.sh` |
 | `/var/lib/cpn/mr-agent/<domain>/` | Secrets, keys, owner settings (mode 700/600) |
+| `/var/lib/cpn/mr-agent/<domain>/chats/` | Conversation JSON (pruned by retention/count/disk MB) |
+| `/var/lib/cpn/mr-agent/<domain>/locks/` | Concurrent-request lock files |
 | `settings.json` (plugin dir) | CPN panel plugin settings fields |
 
 ## Sideload (without Store cache)
@@ -60,6 +62,7 @@ Or install from Store after this plugin lands on `main` and the catalog cache re
 - Authz: login gate + visibility ACL; owner role for host inventory skills
 - Secrets never logged (redaction helper)
 - HTTP client blocks private/metadata hosts except explicit loopback local provider
+- Storage/resource caps: retention days, max conversations, disk MB, rate limit, max tokens, message length, concurrency 1 or 2, local timeout/response bytes, upload size
 - No `shell_exec` / command tools in MVP
 - Plugin root `.htaccess` denies direct access to PHP/modules
 
@@ -74,3 +77,14 @@ Or install from Store after this plugin lands on `main` and the catalog cache re
 Day-to-day full chat remains at `/mr-agent` after `install.sh`. Compact panel chat uses `modules/panel_bridge.php` (CLI) via the panel float-chat route.
 
 Requires a CPN Panel build that injects Active plugin float assets (`panel_float` / `public/assets/panel-float/`).
+
+
+## Storage prune (1.3.0)
+
+Opportunistic prune keeps chat logs under owner caps:
+
+1. Delete conversations older than `chat_retention_days`
+2. If count exceeds `max_stored_conversations`, delete oldest
+3. If `chats/` exceeds `max_chat_disk_mb`, delete oldest until under cap
+
+Triggers: chat send, owner settings save, `install.sh`, bridge `action=prune`, or `php modules/cli_prune.php <domain>|--all`.

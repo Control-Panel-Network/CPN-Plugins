@@ -6,7 +6,7 @@ AI chat assistant for **CPN Panel**. Users connect their own **provider API keys
 - Display name: Mr Agent
 - Author: master3395
 - Pricing: free
-- Version: 1.2.0
+- Version: 1.3.0
 
 ## MCP vs skills (tell others this)
 
@@ -82,7 +82,25 @@ Configure in CPN Plugin settings and/or Mr Agent Owner settings:
 - `package_ids`: comma list when visibility is `packages`
 - `allow_user_keys`: let users store their own provider API keys
 - `default_provider`: `free` | `openai` | `anthropic` | `custom` | `local`
-- `rate_limit_per_hour`: basic abuse control
+- `rate_limit_per_hour`: messages per user per hour (default **60**)
+- `max_message_length`: characters per user message (default **4000**)
+- `max_tokens_per_reply`: model completion cap (default **1024**)
+- `concurrent_requests`: in-flight chats per user, **1** or **2** (default **2**)
+- `max_history_messages`: messages kept per conversation file (default **100**)
+- `max_stored_conversations`: conversation files kept (default **200**)
+- `chat_retention_days`: delete conversations older than N days (default **30**)
+- `max_chat_disk_mb`: hard cap for `/var/lib/cpn/mr-agent/<domain>/chats/` (default **50**)
+- `local_timeout_seconds`: local provider HTTP timeout (default **45**)
+- `local_max_response_bytes`: refuse oversized local replies (default **1048576**)
+- `max_upload_bytes`: refuse huge POST bodies (default **262144**)
+
+Chat logs are written under `/var/lib/cpn/mr-agent/<domain>/chats/` (mode 600). Prune runs on each chat send, on owner settings save, during `install.sh`, via bridge action `prune`, or:
+
+```bash
+php /home/<domain>/plugins/mrAgent/modules/cli_prune.php <domain>
+# or all domains:
+php /home/<domain>/plugins/mrAgent/modules/cli_prune.php --all
+```
 
 ## Floating bubble (CPN Panel)
 

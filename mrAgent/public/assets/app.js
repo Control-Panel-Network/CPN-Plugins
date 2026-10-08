@@ -148,13 +148,71 @@
 
   var ownerForm = document.getElementById("mra-owner-form");
   if (ownerForm) {
-    api("?api=me")
-      .then(function (me) {
-        if (me.default_provider) {
-          document.getElementById("mra-default-provider").value = me.default_provider;
+    function setNum(id, val) {
+      var el = document.getElementById(id);
+      if (el && val !== undefined && val !== null) {
+        el.value = String(val);
+      }
+    }
+    api("?api=owner-settings")
+      .then(function (res) {
+        var s = res.settings || {};
+        var disk = res.storage || {};
+        if (document.getElementById("mra-enabled")) {
+          document.getElementById("mra-enabled").checked = !!s.plugin_enabled;
+        }
+        if (s.visibility) {
+          document.getElementById("mra-visibility").value = s.visibility;
+        }
+        if (document.getElementById("mra-packages")) {
+          document.getElementById("mra-packages").value = s.package_ids || "";
+        }
+        if (document.getElementById("mra-allow-user-keys")) {
+          document.getElementById("mra-allow-user-keys").checked = !!s.allow_user_keys;
+        }
+        if (s.default_provider) {
+          document.getElementById("mra-default-provider").value = s.default_provider;
+        }
+        setNum("mra-rate", s.rate_limit_per_hour);
+        setNum("mra-max-msg", s.max_message_length);
+        setNum("mra-max-tokens", s.max_tokens_per_reply);
+        setNum("mra-concurrent", s.concurrent_requests);
+        setNum("mra-max-upload", s.max_upload_bytes);
+        setNum("mra-max-history", s.max_history_messages);
+        setNum("mra-max-convs", s.max_stored_conversations);
+        setNum("mra-retention", s.chat_retention_days);
+        setNum("mra-disk-mb", s.max_chat_disk_mb);
+        setNum("mra-local-timeout", s.local_timeout_seconds);
+        setNum("mra-local-max-bytes", s.local_max_response_bytes);
+        if (document.getElementById("mra-custom-base")) {
+          document.getElementById("mra-custom-base").value = s.custom_base_url || "";
+        }
+        if (document.getElementById("mra-local-base")) {
+          document.getElementById("mra-local-base").value =
+            s.local_base_url || "http://127.0.0.1:11434/v1";
+        }
+        if (document.getElementById("mra-local-model")) {
+          document.getElementById("mra-local-model").value = s.local_model || "llama3.2:1b";
+        }
+        var diskEl = document.getElementById("mra-disk-usage");
+        if (diskEl) {
+          diskEl.textContent =
+            "Chat log disk usage: " +
+            (disk.chat_disk_mb != null ? disk.chat_disk_mb : 0) +
+            " MB (cap " +
+            (s.max_chat_disk_mb || 50) +
+            " MB)";
         }
       })
-      .catch(function () {});
+      .catch(function () {
+        api("?api=me")
+          .then(function (me) {
+            if (me.default_provider) {
+              document.getElementById("mra-default-provider").value = me.default_provider;
+            }
+          })
+          .catch(function () {});
+      });
     ownerForm.addEventListener("submit", function (ev) {
       ev.preventDefault();
       api("?api=owner-settings", {
@@ -166,6 +224,17 @@
           allow_user_keys: document.getElementById("mra-allow-user-keys").checked,
           default_provider: document.getElementById("mra-default-provider").value,
           rate_limit_per_hour: parseInt(document.getElementById("mra-rate").value, 10) || 60,
+          max_message_length: parseInt(document.getElementById("mra-max-msg").value, 10) || 4000,
+          max_tokens_per_reply: parseInt(document.getElementById("mra-max-tokens").value, 10) || 1024,
+          concurrent_requests: parseInt(document.getElementById("mra-concurrent").value, 10) || 2,
+          max_upload_bytes: parseInt(document.getElementById("mra-max-upload").value, 10) || 262144,
+          max_history_messages: parseInt(document.getElementById("mra-max-history").value, 10) || 100,
+          max_stored_conversations: parseInt(document.getElementById("mra-max-convs").value, 10) || 200,
+          chat_retention_days: parseInt(document.getElementById("mra-retention").value, 10) || 30,
+          max_chat_disk_mb: parseInt(document.getElementById("mra-disk-mb").value, 10) || 50,
+          local_timeout_seconds: parseInt(document.getElementById("mra-local-timeout").value, 10) || 45,
+          local_max_response_bytes:
+            parseInt(document.getElementById("mra-local-max-bytes").value, 10) || 1048576,
           custom_base_url: document.getElementById("mra-custom-base").value,
           local_base_url: document.getElementById("mra-local-base").value,
           local_model: document.getElementById("mra-local-model").value,
@@ -175,6 +244,7 @@
       })
         .then(function () {
           alert("Owner settings saved");
+          location.reload();
         })
         .catch(function (err) {
           alert((err && err.message) || "Save failed");

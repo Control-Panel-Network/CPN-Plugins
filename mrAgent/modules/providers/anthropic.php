@@ -9,7 +9,7 @@ if (!defined('MRA_INIT')) {
  * @param array<int,array<string,string>> $messages OpenAI-style roles
  * @return array{ok:bool,reply?:string,error?:string,raw?:mixed}
  */
-function mra_anthropic_chat($messages, $model, $apiKey, $withTools = true)
+function mra_anthropic_chat($messages, $model, $apiKey, $withTools = true, $maxTokens = 1024)
 {
     if ($apiKey === '') {
         return ['ok' => false, 'error' => 'Missing Anthropic provider API key.'];
@@ -32,7 +32,7 @@ function mra_anthropic_chat($messages, $model, $apiKey, $withTools = true)
     }
     $payload = [
         'model' => (string) $model,
-        'max_tokens' => 1024,
+        'max_tokens' => max(64, min(8192, (int) $maxTokens)),
         'system' => $system,
         'messages' => $converted,
     ];

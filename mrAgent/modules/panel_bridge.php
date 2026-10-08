@@ -103,6 +103,15 @@ try {
         ]);
     }
 
+    if ($action === 'prune') {
+        $pruned = mra_prune_storage($cfg, $cfg['domain'] ?? null);
+        mra_bridge_out([
+            'ok' => true,
+            'pruned' => $pruned,
+            'version' => MRA_VERSION,
+        ]);
+    }
+
     if ($action !== 'chat') {
         mra_bridge_out(['ok' => false, 'error' => 'Unknown bridge action'], 1);
     }
@@ -110,7 +119,8 @@ try {
     $message = (string) ($req['message'] ?? '');
     $provider = (string) ($req['provider'] ?? 'free');
     $model = (string) ($req['model'] ?? '');
-    $result = mra_chat_handle($message, $provider, $model, $cfg, mra_user());
+    $conversationId = (string) ($req['conversation_id'] ?? '');
+    $result = mra_chat_handle($message, $provider, $model, $cfg, mra_user(), $conversationId);
     if (empty($result['ok'])) {
         mra_bridge_out([
             'ok' => false,
@@ -122,6 +132,7 @@ try {
         'reply' => isset($result['reply']) ? (string) $result['reply'] : '',
         'provider' => isset($result['provider']) ? (string) $result['provider'] : $provider,
         'tools_used' => isset($result['tools_used']) ? $result['tools_used'] : [],
+        'conversation_id' => isset($result['conversation_id']) ? (string) $result['conversation_id'] : '',
         'version' => MRA_VERSION,
     ]);
 } catch (Throwable $e) {
