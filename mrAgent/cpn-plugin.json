@@ -3,7 +3,7 @@
   "id": "mrAgent",
   "name": "Mr Agent",
   "category": "Utility",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "AI chat for CPN. Host or Site install with per-user Host isolation. Folder /mr-agent/ by default; vhost takeover only with confirm. Panel Install/Activate runs setup (no SSH). MCP skills, floating bubble, storage/resource limits. Local LLM first-class.",
   "keywords": [
     "ai",
