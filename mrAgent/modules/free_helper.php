@@ -15,6 +15,19 @@ function mra_free_reply($message, array $cfg, $username)
 {
     $message = trim((string) $message);
     $toolsUsed = [];
+
+    // Date / time / weekday questions: answer from the server clock. Fast, exact,
+    // needs no provider key, and avoids a local LLM timeout or a hallucinated date.
+    $clock = mra_free_clock_answer($message);
+    if ($clock !== '') {
+        return [
+            'ok' => true,
+            'reply' => $clock,
+            'provider' => 'free',
+            'tools_used' => [['tool' => 'server_clock']],
+        ];
+    }
+
     $hits = mra_search_corpus($message, 6);
     $toolsUsed[] = ['tool' => 'search_menu', 'count' => count($hits)];
     $isCpn = mra_looks_like_cpn_query($message, $hits);
@@ -60,6 +73,97 @@ function mra_free_reply($message, array $cfg, $username)
 }
 
 /**
+ * Detect "what day / date / time is it" style questions (English and Norwegian).
+ * Returns true only for short clock questions so panel queries that merely mention
+ * "today" (for example "which websites were created today") are not hijacked.
+ */
+function mra_is_clock_question($message)
+{
+    $q = strtolower(trim((string) $message));
+    if ($q === '' || strlen($q) > 120) {
+        return false;
+    }
+    $q = rtrim($q, " \t\n\r?!.");
+    // English: what day is it (today), what's the date, what is today's date, what time is it,
+    // current time, which day of the week is it, what year / month / week is it.
+    if (preg_match('/^(?:hey|hi|hello|please|mr agent|mr\.? agent)?[\s,]*(?:what|which)(?:\'s| is| are)?\s+(?:the\s+)?(?:current\s+|today\'?s\s+)?(?:day|date|time|year|month|week(?:\s*number)?|weekday|day of the week|day of week)(?:\s+(?:is it|it is|today|now|is it today|is it now|is today|is now))?(?:\s+(?:today|now|please))?$/', $q)) {
+        return true;
+    }
+    if (preg_match('/^(?:today\'?s date|the date today|the time now|current (?:date|time|year)|date today|time now|day today|what day today|what date today|what time now)$/', $q)) {
+        return true;
+    }
+    if (preg_match('/^(?:do you know|can you tell me|tell me)\s+(?:what\s+)?(?:the\s+)?(?:day|date|time|year)(?:\s+(?:it is|is it|today|now))?$/', $q)) {
+        return true;
+    }
+    // Norwegian (bokmål / nynorsk): hvilken dag er det (i dag), hva er datoen, hva er klokka,
+    // hvilken dato er det, hvilket år er det, hvilken uke er det.
+    if (preg_match('/^(?:hei|hallo)?[\s,]*(?:hvilken|hvilket|hva|kva|kor)\s+(?:dag|dato|tid|klokke|klokka|klokken|år|måned|uke|veke|ukedag)(?:\s+er\s+(?:det|den|klokka|klokken))?(?:\s+(?:i dag|idag|nå|no))?$/u', $q)) {
+        return true;
+    }
+    if (preg_match('/^(?:hva|kva)\s+er\s+(?:dagen|datoen|klokka|klokken|tiden|tida|året|uken|uka)(?:\s+(?:i dag|idag|nå|no))?$/u', $q)) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Timezone for clock answers. "Server time" should match what `date` prints on the
+ * host, so prefer the operating system zone (/etc/localtime symlink or /etc/timezone).
+ * PHP CLI frequently reports UTC from php.ini defaults, so php.ini comes after the OS
+ * zone, and PHP's runtime default is the last fallback.
+ */
+function mra_server_timezone()
+{
+    $candidates = [];
+    $link = @readlink('/etc/localtime');
+    if (is_string($link) && $link !== '') {
+        $pos = strpos($link, 'zoneinfo/');
+        if ($pos !== false) {
+            $candidates[] = substr($link, $pos + strlen('zoneinfo/'));
+        }
+    }
+    if (is_readable('/etc/timezone')) {
+        $candidates[] = trim((string) @file_get_contents('/etc/timezone'));
+    }
+    $ini = trim((string) ini_get('date.timezone'));
+    if ($ini !== '') {
+        $candidates[] = $ini;
+    }
+    $candidates[] = date_default_timezone_get();
+    foreach ($candidates as $name) {
+        $name = trim((string) $name);
+        if ($name === '' || !preg_match('#^[A-Za-z0-9_+\-/]{1,64}$#', $name)) {
+            continue;
+        }
+        try {
+            return new DateTimeZone($name);
+        } catch (Throwable $e) {
+            continue;
+        }
+    }
+    return new DateTimeZone('UTC');
+}
+
+/**
+ * Server-clock answer for date / time questions. Norwegian order (dd/mm/yyyy, 24h),
+ * English copy so it matches the rest of the free helper.
+ */
+function mra_free_clock_answer($message)
+{
+    if (!mra_is_clock_question($message)) {
+        return '';
+    }
+    $now = new DateTime('now', mra_server_timezone());
+    $tz = $now->getTimezone()->getName();
+    $lines = [];
+    $lines[] = 'Today is ' . $now->format('l') . ' ' . $now->format('d/m/Y') . ' (week ' . $now->format('W') . ').';
+    $lines[] = 'Server time: ' . $now->format('H:i') . ' (' . $tz . ').';
+    $lines[] = '';
+    $lines[] = 'Answered from the CPN server clock by the free helper; no provider API key or local model needed.';
+    return implode("\n", $lines);
+}
+
+/**
  * @param array<int,array<string,mixed>> $hits
  */
 function mra_looks_like_cpn_query($message, array $hits)
@@ -91,7 +195,7 @@ function mra_format_help_reply($message, array $hits)
     if (empty($hits)) {
         $lines[] = 'I could not find a matching CPN menu item for: "' . $message . '".';
         $lines[] = 'Try words like websites, email, plugins, fail2ban, docker, ssl, users, or packages.';
-        $lines[] = 'For general chat (dates, small talk), configure a local model on this server, or add a cloud provider API key.';
+        $lines[] = 'Date and time questions are answered from the server clock. For other general chat (small talk), configure a local model on this server, or add a cloud provider API key.';
         return implode("\n", $lines);
     }
     $lines[] = 'Here is where to look in CPN Panel:';
@@ -116,7 +220,7 @@ function mra_format_free_general_unavailable($message, array $cfg)
     $base = (string) ($cfg['local_base_url'] ?? 'http://127.0.0.1:11434/v1');
     $model = (string) ($cfg['local_model'] ?? 'llama3.2:1b');
     $lines = [];
-    $lines[] = 'Mr Agent free helper only answers CPN Panel navigation (menus, routes, where to click).';
+    $lines[] = 'Mr Agent free helper answers CPN Panel navigation (menus, routes, where to click) and date / time questions from the server clock.';
     $lines[] = '';
     $lines[] = 'Your question looks like general chat, not a panel lookup:';
     $lines[] = '"' . $message . '"';
