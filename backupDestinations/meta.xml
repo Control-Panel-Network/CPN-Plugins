@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
     <name>Backup Destinations</name>
-    <type>Backups</type>
+    <type>Backup</type>
     <version>1.0.0</version>
     <description>Unlocks remote backup destination UIs in CPN Panel: Google Drive OAuth upload, remote SFTP/SCP, S3-compatible object storage, and Incremental restic jobs. Create, Restore, Schedule, and local Destinations remain core. Free Host package.</description>
     <keywords>backup, backups, google drive, gdrive, sftp, scp, remote, s3, aws, restic, incremental, destinations</keywords>
@@ -16,7 +16,7 @@
     <author>master3395</author>
     <website>https://newstargeted.com</website>
     <license>MIT</license>
-    <category>Backups</category>
+    <category>Backup</category>
     <paid>false</paid>
     <pricing>free</pricing>
     <scope>host</scope>
