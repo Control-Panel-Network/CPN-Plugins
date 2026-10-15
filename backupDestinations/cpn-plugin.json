@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "backupDestinations",
+  "name": "Backup Destinations",
+  "category": "Backups",
+  "version": "1.0.0",
+  "description": "Unlocks remote backup destination UIs in CPN Panel: Google Drive, remote SFTP/SCP, S3-compatible object storage, and Incremental (restic) jobs. Create, Restore, Schedule, and local Destinations stay in core. Free Host package.",
+  "author": "master3395",
+  "pricing": "free",
+  "show_in_sidebar": false,
+  "has_dashboard": false,
+  "uninstall_impacts": [
+    "Hides Google Drive, Remote SFTP/SCP, S3, and Incremental backup UIs until the plugin is installed again",
+    "Clears the host backup-destinations feature flag",
+    "Create, Restore, Schedule, and local Destinations stay available",
+    "Does not delete existing local backup archives or stored destination secrets"
+  ],
+  "settings_fields": []
+}
