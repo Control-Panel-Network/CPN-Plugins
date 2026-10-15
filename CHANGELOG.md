@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **backupDestinations** (**1.0.0**): Host-scoped Backups plugin. Unlocks CPN Backups Google Drive, Remote SFTP/SCP, S3-compatible, and Incremental (restic) UIs via feature flag `backup-destinations`. Create, Restore, Schedule, and local Destinations stay in core. Soft restic/aws-cli hints on install (do not hard-fail). Catalog entry registered.
 
+## [2026-10-09] - Mr Agent free helper answers date and time
+
+### Fixed
+- **mrAgent** (1.8.0 -> **1.8.1**): The free lightweight path now answers date / time / weekday questions (English and Norwegian, for example "What day is it today?", "Hva er klokka?") directly from the server clock: `Today is Friday 09/10/2026 (week 41). Server time: 23:15 (Europe/Oslo).` No provider API key or local model is needed, and the bubble no longer waits on a local LLM timeout before replying with an unrelated CPN menu list. Server time prefers the operating system zone (`/etc/localtime`, `/etc/timezone`) over PHP CLI `date.timezone` defaults (often UTC). Only short clock questions trigger this, so panel queries that merely mention "today" still go to CPN help. Free helper copy updated to say dates are handled locally. Companion panel fix: `POST /plugins/float-chat` now surfaces the bridge JSON error instead of an empty `PHP bridge exited 1:` and sends `provider=free` (older 1.4.x site installs rejected `auto`).
+
 ## [2026-10-08] - Mr Agent host policy, tabbed settings, and statistics
 
 ### Added

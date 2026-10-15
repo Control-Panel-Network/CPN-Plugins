@@ -2,7 +2,7 @@
 <plugin>
     <name>Mr Agent</name>
     <type>Utility</type>
-    <version>1.8.0</version>
+    <version>1.8.1</version>
     <description>AI chat for CPN. Host policy allow_host_chat (default on) and allow_site_install (default off). Tabbed owner settings and Statistics. Host or Site install with per-user isolation. Panel Install/Activate runs setup (no SSH). Folder /mr-agent/ by default; vhost with CONFIRM=yes. MCP skills, floating bubble, storage limits.</description>
     <keywords>ai, mcp, skills, assistant, openai, anthropic, chatbot, model context protocol, host install, mr-agent</keywords>
     <keyword>ai</keyword>
