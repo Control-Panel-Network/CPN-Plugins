@@ -2,6 +2,7 @@
   "schema_version": 1,
   "plugins": [
     { "id": "autoBanSecurityAlerts", "path": "autoBanSecurityAlerts" },
+    { "id": "backupDestinations", "path": "backupDestinations" },
     { "id": "bimi", "path": "bimi" },
     { "id": "clamav", "path": "clamav" },
     { "id": "contaboAutoSnapshot", "path": "contaboAutoSnapshot" },
