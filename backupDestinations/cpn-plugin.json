@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "backupDestinations",
   "name": "Backup Destinations",
-  "category": "Backups",
+  "category": "Backup",
   "version": "1.0.0",
   "description": "Unlocks remote backup destination UIs in CPN Panel: Google Drive, remote SFTP/SCP, S3-compatible object storage, and Incremental (restic) jobs. Create, Restore, Schedule, and local Destinations stay in core. Free Host package.",
   "author": "master3395",
