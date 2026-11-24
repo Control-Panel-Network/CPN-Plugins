@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "tachyonVirusTotal",
+  "name": "Tachyon VirusTotal",
+  "category": "Email",
+  "version": "1.0.0",
+  "description": "Free Tachyon extension for VirusTotal attachment/link checks. No API key required for GUI links; optional free key for inline results. Get key: https://www.virustotal.com/gui/my-apikey",
+  "author": "master3395",
+  "pricing": "free",
+  "show_in_sidebar": false,
+  "has_dashboard": false,
+  "settings_fields": [
+    {
+      "key": "notes",
+      "label": "Operator notes (optional)",
+      "field_type": "text",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>Tachyon VirusTotal</name>
+    <type>Email</type>
+    <version>1.0.0</version>
+    <description>Free Tachyon webmail extension: check attachments and links on VirusTotal. Works without an API key via GUI links; optional free public API key for inline results. Create account: https://www.virustotal.com/gui/join-us | Get API key: https://www.virustotal.com/gui/my-apikey | API docs: https://docs.virustotal.com/docs/api-overview. Run install-host.sh as root after catalog install.</description>
+    <author>master3395</author>
+    <website>https://github.com/Control-Panel-Network/CPN-Plugins</website>
+    <license>AGPL-3.0</license>
+    <category>Email</category>
+    <paid>false</paid>
+    <pricing>free</pricing>
+    <compatibility>
+        <min_version>0.2.0</min_version>
+    </compatibility>
+    <requirements>
+        <software>cpn-panel</software>
+        <software>tachyon</software>
+    </requirements>
+    <features>
+        <feature>Installs Tachyon plugins/virustotal into webmail data</feature>
+        <feature>No API key required (GUI hash/URL links)</feature>
+        <feature>Optional free VirusTotal public API key for inline stats</feature>
+        <feature>API key help links: join-us, my-apikey, docs</feature>
+    </features>
+    <url>/plugins/tachyonVirusTotal/</url>
+    <settings_url>/plugins/tachyonVirusTotal/</settings_url>
+    <released>2026-11-24</released>
+    <updated>2026-11-24</updated>
+    <install_count>0</install_count>
+    <featured>false</featured>
+</plugin>

@@ -31,6 +31,7 @@
     { "id": "roundcubeWebmail", "path": "roundcubeWebmail" },
     { "id": "snappymailAdmin", "path": "snappymailAdmin" },
     { "id": "snappymailWebmail", "path": "snappymailWebmail" },
+    { "id": "tachyonVirusTotal", "path": "tachyonVirusTotal" },
     { "id": "testPlugin", "path": "testPlugin" }
   ],
   "catalog": "CPN-Plugins"
