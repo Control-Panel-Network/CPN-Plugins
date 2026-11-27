@@ -2,19 +2,22 @@
 <plugin>
     <name>Backup Destinations</name>
     <type>Backup</type>
-    <version>1.0.0</version>
-    <description>Unlocks remote backup destination UIs in CPN Panel: Google Drive OAuth upload, remote SFTP/SCP, S3-compatible object storage, and Incremental restic jobs. Create, Restore, Schedule, and local Destinations remain core. Free Host package.</description>
-    <keywords>backup, backups, google drive, gdrive, sftp, scp, remote, s3, aws, restic, incremental, destinations</keywords>
+    <version>1.1.0</version>
+    <description>Unlocks remote backup destination UIs in CPN Panel: Google Drive (Disk), remote SFTP/SCP, FTP, S3-compatible object storage, Dropbox, and Incremental restic jobs. Create, Restore, Schedule, and local Destinations remain core. Free Host package.</description>
+    <keywords>backup, backups, google drive, gdrive, disk, sftp, scp, ftp, remote, s3, aws, dropbox, restic, incremental, destinations</keywords>
     <keyword>backup</keyword>
     <keyword>backups</keyword>
     <keyword>gdrive</keyword>
+    <keyword>google drive</keyword>
     <keyword>sftp</keyword>
+    <keyword>ftp</keyword>
     <keyword>s3</keyword>
+    <keyword>dropbox</keyword>
     <keyword>restic</keyword>
     <keyword>incremental</keyword>
     <keyword>destinations</keyword>
     <author>master3395</author>
-    <website>https://newstargeted.com</website>
+    <website>https://github.com/Control-Panel-Network/CPN-Plugins</website>
     <license>MIT</license>
     <category>Backup</category>
     <paid>false</paid>
@@ -27,19 +30,21 @@
         <software>cpn-panel</software>
     </requirements>
     <features>
-        <feature>Enables CPN Backups → Google Drive UI</feature>
+        <feature>Enables CPN Backups → Google Drive (Disk) UI</feature>
         <feature>Enables CPN Backups → Remote SFTP/SCP UI</feature>
+        <feature>Enables CPN Backups → FTP UI</feature>
         <feature>Enables CPN Backups → S3-compatible UI</feature>
+        <feature>Enables CPN Backups → Dropbox UI</feature>
         <feature>Enables CPN Backups → Incremental (restic) jobs</feature>
     </features>
-    <uninstall_impact>Hides Google Drive, Remote SFTP/SCP, S3, and Incremental backup UIs until the plugin is installed again</uninstall_impact>
+    <uninstall_impact>Hides Google Drive, Remote SFTP/SCP, FTP, S3, Dropbox, and Incremental backup UIs until the plugin is installed again</uninstall_impact>
     <uninstall_impact>Clears the host backup-destinations feature flag</uninstall_impact>
     <uninstall_impact>Create, Restore, Schedule, and local Destinations stay available</uninstall_impact>
     <uninstall_impact>Does not delete existing local backup archives or stored destination secrets</uninstall_impact>
     <url>/backups/destinations</url>
     <settings_url>/backups/destinations</settings_url>
     <released>15/10/2026</released>
-    <updated>15/10/2026</updated>
+    <updated>27/11/2026</updated>
     <install_count>0</install_count>
-    <featured>false</featured>
+    <featured>true</featured>
 </plugin>
