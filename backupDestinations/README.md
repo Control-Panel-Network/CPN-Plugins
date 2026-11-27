@@ -5,8 +5,11 @@ Free Host-scoped Plugin Store package for CPN Panel.
 ## What it unlocks
 
 - `/backups/google-drive` (Google Drive OAuth destination)
+- `/backups/onedrive` (Microsoft OneDrive via Graph OAuth)
 - `/backups/remote` (SFTP/SCP)
+- `/backups/ftp`
 - `/backups/s3` (S3-compatible object storage)
+- `/backups/dropbox`
 - `/backups/incremental` (restic jobs)
 
 ## Always available in core (no plugin required)
@@ -14,8 +17,8 @@ Free Host-scoped Plugin Store package for CPN Panel.
 - `/backups` hub
 - `/backups/create`
 - `/backups/restore`
-- `/backups/schedule`
-- `/backups/destinations` (local toggles; remote links unlock with this plugin)
+- `/backups/schedule` (includes Destination select; Local always available)
+- `/backups/destinations` and `/backups/local` (local storage path + toggle; remote links unlock with this plugin)
 
 ## Install
 
